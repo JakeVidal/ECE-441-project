@@ -1,0 +1,6 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../ECE-441-VHDL-project.srcs/sources_1/imports/Desktop/top.vhdl" \
+
+# Do not sort compile order
+nosort

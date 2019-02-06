@@ -1,0 +1,4 @@
+Running: xsim.dir/full_adder_vhdl_code_behav/xsimk.exe -simmode gui -wdb full_adder_vhdl_code_behav.wdb -simrunnum 0 -socket 53334
+Design successfully loaded
+Design Loading Memory Usage: 6072 KB (Peak: 6072 KB)
+Design Loading CPU Usage: 62 ms
