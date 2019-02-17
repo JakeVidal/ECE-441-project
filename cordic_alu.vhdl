@@ -20,20 +20,63 @@ end cordic_alu;
 
 
 architecture behav of cordic_alu is
-	signal 
+	signal x_done: std_logic;
+	signal y_done: std_logic;
+	signal z_done: std_logic;
 begin
 
 x_calc: process ( trigger ) is
-	-- not implemented yet
+begin	
+	if rising_edge(trigger) then
+		x_done <= '0';
+	
+		if mu = true then
+			x_out <= x_in - (y_in / 2**i);
+		else
+			x_out <= x_in + (y_in / 2**i);
+		end if;
+	
+		x_done <= '1';
+		
+	end if;
+	
 end process;
 
 y_calc: process ( trigger ) is
-
+begin
+	
+	if rising_edge(trigger) then
+		y_done <= '0';
+	
+		if mu = true then
+			y_out <= y_in + (x_in / 2**i);
+		else
+			y_out <= y_in - (x_in / 2**i);
+		end if;
+	
+		y_done <= '1';
+	end if;
+	
 end process;
 
 z_calc: process ( trigger ) is
-
+begin
+	if rising_edge(trigger) is
+		z_done <= '0';
+	
+		if mu = true then
+			z_out <= z_in - theta;
+		else
+			z_out <= z_in + theta;
+		end if;
+	
+		z_done <= '1';
+	
+	end if;
+	
 end process;
+
+done <= x_done and y_done and z_done;
 
 end
 
