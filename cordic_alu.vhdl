@@ -9,18 +9,31 @@ use ieee.numeric_std.all;
 entity cordic_alu is 
 
 	Port (
-		clk								:	in	std_logic;
-		x_in, y_in, z_in, theta, i		:	in	signed ( 15 downto 0 );
+		trigger							:	in	std_logic;
+		x_in, y_in, z_in, theta			:	in	signed ( 15 downto 0 );
+		i								:	in 	unsigned ( 3 downto 0 );
 		mu								:	in	boolean;
 		x_out, y_out, z_out				:	out	signed ( 15 downto 0 );
+		done							:	out std_logic
 	);
 end cordic_alu;
 
 
 architecture behav of cordic_alu is
+	signal 
 begin
-process is
+
+x_calc: process ( trigger ) is
 	-- not implemented yet
+end process;
+
+y_calc: process ( trigger ) is
+
+end process;
+
+z_calc: process ( trigger ) is
+
+end process;
 
 end
 
