@@ -20,23 +20,32 @@ entity CORDIC is
 end CORDIC;
 	
 architecture behaviour of CORDIC is
-	signal x_current, y_current, z_current : signed(15 downto 0)
-component cordic_alu is 
-	Port (
-		trigger							:	in	std_logic;
-		x_in, y_in, z_in, theta			:	in	signed ( 15 downto 0 );
-		i								:	in 	unsigned ( 3 downto 0 );
-		mu								:	in	boolean;
-		x_out, y_out, z_out				:	out	signed ( 15 downto 0 );
-		done							:	out std_logic
-	);
+	type x_results is array (15 downto 0) of signed(15 down to 0)
+	type y_results is array (15 downto 0) of signed(15 down to 0)
+	type z_results is array (15 downto 0) of signed(15 down to 0)
+	signal iteration          : signed( 3 downto 0)
+	signal iteration_complete : std_logic
+	
+	component cordic_alu is 
+		Port (
+			trigger							:	in	std_logic;
+			x_in, y_in, z_in, theta			:	in	signed ( 15 downto 0 );
+			i								:	in 	unsigned ( 3 downto 0 );
+			mu								:	in	boolean;
+			x_out, y_out, z_out				:	out	signed ( 15 downto 0 );
+			done							:	out std_logic
+		);
 	end component;
 	
 begin
 	
+	
+		
+	
 	cordic: process (clock, reset) is
 	begin
 		if rising_edge(reset) is
+		iteration_complete <= 0;
 		x_current <= 0;
 		y_current <= 0;
 		z_current <= 0;
@@ -44,7 +53,7 @@ begin
 		y_result <= 0;
 		z_result <= 0;
 		
-		elsif
+		elsif rising_edge(clock) and done
 
 
 end behaviour;
