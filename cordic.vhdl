@@ -7,24 +7,19 @@ use IEEE.numeric_std.ALL;
 
 entity CORDIC is
 	port (
-        clock                                 : in STD_LOGIC;
+	clock                                 : in STD_LOGIC;
 	reset                                 : in STD_LOGIC;
 		
 	x_initial, y_initial, z_initial       : in signed(15 downto 0);
-        cordic_mode                           : in STD_LOGIC;
+	cordic_mode                           : in STD_LOGIC;
 	start                                 : in STD_LOGIC;
 		
-        x_result, y_result, z_result          : out signed(15 downto 0)
+	x_result, y_result, z_result          : out signed(15 downto 0)
 
 		);
 end CORDIC;
 	
 architecture behaviour of CORDIC is
-	type x_results is array (15 downto 0) of signed(15 down to 0)
-	type y_results is array (15 downto 0) of signed(15 down to 0)
-	type z_results is array (15 downto 0) of signed(15 down to 0)
-	signal iteration          : signed( 3 downto 0)
-	signal iteration_complete : std_logic
 	
 	component cordic_alu is 
 		Port (
@@ -36,6 +31,12 @@ architecture behaviour of CORDIC is
 			done							:	out std_logic
 		);
 	end component;
+	
+	type x_results is array (15 downto 0) of signed(15 down to 0);
+	type y_results is array (15 downto 0) of signed(15 down to 0);
+	type z_results is array (15 downto 0) of signed(15 down to 0);
+	signal iteration          : signed( 3 downto 0);
+	signal iteration_complete : std_logic
 	
 begin
 	
