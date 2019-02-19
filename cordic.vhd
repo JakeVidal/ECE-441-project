@@ -8,13 +8,13 @@ use IEEE.numeric_std.ALL;
 entity CORDIC is
 	port (
         clock                                 : in STD_LOGIC;
-		reset                                 : in STD_LOGIC;
+	reset                                 : in STD_LOGIC;
 		
-		x_initial, y_initial, z_initial       : in signed(15 downto 0);
+	x_initial, y_initial, z_initial       : in signed(15 downto 0);
         cordic_mode                           : in STD_LOGIC;
-		start                                 : in STD_LOGIC;
+	start                                 : in STD_LOGIC;
 		
-        x_result, y_result, z_result          : out signed(15 downto 0);
+        x_result, y_result, z_result          : out signed(15 downto 0)
 
 		);
 end CORDIC;
