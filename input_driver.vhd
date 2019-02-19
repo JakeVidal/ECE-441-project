@@ -64,6 +64,7 @@ begin
 
         if reset then
             state := input;
+        end if;
 
         case state is
             when (input AND x_input) => state := input_x;
@@ -74,6 +75,7 @@ begin
             when (input_z AND NOT z_input) => state := input;   
             when (input AND x_input_done AND y_input_done AND z_input_done) => state := output; 
         end case;
+
     end process;
 
     decode: process (clk, state, reset) is
@@ -87,6 +89,7 @@ begin
             x_iteration <= "00";
             y_iteration <= "00";
             z_iteration <= "00";
+        end if;
 
         keypad_col <= "0111";
         if keypad_row = "0111" then
@@ -186,7 +189,7 @@ begin
 
     output: process (clk, state, reset) is
     begin
-        
+
     end process;
 
 end behavioural;
