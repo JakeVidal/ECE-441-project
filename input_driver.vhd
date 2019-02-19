@@ -1,5 +1,9 @@
+-- CORDIC input cotroller
+-- Written by Jake Vidal
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity input_driver is 
     Port (
@@ -38,6 +42,8 @@ architecture behavioural of input_driver is
     signal cordic_mode_debounced, start_cordic_debounced : STD_LOGIC;
     signal keypad_row_debounced : STD_LOGIC_VECTOR (3 downto 0);
 
+    signal decode_value : STD_LOGIC_VECTOR (3 downto 0)
+
     type   state_type is (input, input_x, input_y, input_z, output);  
     signal state : state_type := input;  
 
@@ -61,10 +67,55 @@ begin
 
     decode: process (state) is
     begin
-    end process;
+
+        keypad_col <= "0111";
+        if keypad_row = "0111" then
+            decode_value <= "0001"; --1
+        elsif keypad_row = "1011" then
+            decode_value <= "0100"; --4
+        elsif keypad_row = "1101" then
+            decode_value <= "0111"; --7
+        elsif keypad_row = "1110" then
+            decode_value <= "0000"; --0
+        end if;
+
+        keypad_col <= "1011";
+        if keypad_row = "0111" then        
+            decode_value <= "0010"; --2
+        elsif keypad_row = "1011" then
+            decode_value <= "0101"; --5
+        elsif keypad_row = "1101" then
+            decode_value <= "1000"; --8
+        elsif keypad_row = "1110" then
+            decode_value <= "1111"; --F
+        end if;
+
+        keypad_col <= "1101";
+        if keypad_row = "0111" then
+            decode_value <= "0011"; --3    
+        elsif keypad_row = "1011" then
+            decode_value <= "0110"; --6
+        elsif keypad_row = "1101" then
+            decode_value <= "1001"; --9
+        elsif keypad_row = "1110" then
+            decode_value <= "1110"; --E
+        end if;
+
+        keypad_col <= "1110";
+        if keypad_row = "0111" then
+            decode_value <= "1010"; --A
+        elsif keypad_row = "1011" then
+            decode_value <= "1011"; --B
+        elsif keypad_row = "1101" then
+            decode_value <= "1100"; --C
+        elsif keypad_row = "1110" then
+            decode_value <= "1101"; --D
+        end if;
+
+    end process decode;
 
     state_machine: process (state) is
     begin
-    end process;
+    end process state_machine;
 
 end behavioural;
