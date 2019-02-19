@@ -43,8 +43,8 @@ architecture behavioural of input_driver is
     signal keypad_row_debounced : STD_LOGIC_VECTOR (3 downto 0);
     signal x_input_done, y_input_done, z_input_done : STD_LOGIC := "0";
 
-    type   state_type is (input, input_x, input_y, input_z, output);  
-    signal state : state_type := input;  
+    type   state_type is (mode_input, mode_input_x, mode_input_y, mode_input_z, mode_output);  
+    signal state : state_type := mode_input;  
 
 begin
 
@@ -62,128 +62,129 @@ begin
     state_machine: process (clk, state, reset) is
     begin
 
-        if reset then
-            state := input;
-        end if;
+        if rising_edge(reset) then
+            state := mode_input;
 
-        case state is
-            when (input AND x_input) => state := input_x;
-            when (input AND y_input) => state := input_y; 
-            when (input AND z_input) => state := input_z;  
-            when (input_x AND NOT x_input) => state := input;
-            when (input_y AND NOT y_input) => state := input; 
-            when (input_z AND NOT z_input) => state := input;   
-            when (input AND x_input_done AND y_input_done AND z_input_done) => state := output; 
-        end case;
+        elsif rising_edge(clk) then
+            case state is
+                when (mode_input AND x_input) => state := mode_input_x;
+                when (mode_input AND y_input) => state := mode_input_y; 
+                when (mode_input AND z_input) => state := mode_input_z;  
+                when (mode_input_x AND NOT x_input) => state := mode_input;
+                when (mode_input_y AND NOT y_input) => state := mode_input; 
+                when (mode_input_z AND NOT z_input) => state := mode_input;   
+                when (mode_input AND x_input_done AND y_input_done AND z_input_done) => state := mode_output; 
+            end case;
+
+        end if;
 
     end process;
 
     decode: process (clk, state, reset) is
 
         signal decode_value : STD_LOGIC_VECTOR (3 downto 0)
-        signal x_iteration, y_iteration, z_iteration : STD_LOGIC_VECTOR (2 downto 0);
+        signal x_iteration, y_iteration, z_iteration : STD_LOGIC_VECTOR (1 downto 0);
     
     begin
 
-        if reset then
+        if rising_edge(reset) OR (state = mode_input) then
             x_iteration <= "00";
             y_iteration <= "00";
             z_iteration <= "00";
-        end if;
-
-        keypad_col <= "0111";
-        if keypad_row = "0111" then
-            decode_value <= "0001"; --1
-        elsif keypad_row = "1011" then
-            decode_value <= "0100"; --4
-        elsif keypad_row = "1101" then
-            decode_value <= "0111"; --7
-        elsif keypad_row = "1110" then
-            decode_value <= "0000"; --0
-        end if;
-
-        keypad_col <= "1011";
-        if keypad_row = "0111" then        
-            decode_value <= "0010"; --2
-        elsif keypad_row = "1011" then
-            decode_value <= "0101"; --5
-        elsif keypad_row = "1101" then
-            decode_value <= "1000"; --8
-        elsif keypad_row = "1110" then
-            decode_value <= "1111"; --F
-        end if;
-
-        keypad_col <= "1101";
-        if keypad_row = "0111" then
-            decode_value <= "0011"; --3    
-        elsif keypad_row = "1011" then
-            decode_value <= "0110"; --6
-        elsif keypad_row = "1101" then
-            decode_value <= "1001"; --9
-        elsif keypad_row = "1110" then
-            decode_value <= "1110"; --E
-        end if;
-
-        keypad_col <= "1110";
-        if keypad_row = "0111" then
-            decode_value <= "1010"; --A
-        elsif keypad_row = "1011" then
-            decode_value <= "1011"; --B
-        elsif keypad_row = "1101" then
-            decode_value <= "1100"; --C
-        elsif keypad_row = "1110" then
-            decode_value <= "1101"; --D
-        end if;
-
-        if state = input_x then
-
-            if x_iteration = "00"
-                initial_x( 15 downto 12) <= decode_value;
-                x_iteration = x_iteration + "1"
-            elif x_iteration = "01"
-                initial_x( 11 downto 8) <= decode_value;
-                x_iteration = x_iteration + "1"
-            elif x_iteration = "10"
-                initial_x( 7 downto 4) <= decode_value;
-                x_iteration = x_iteration + "1"
-            elif x_iteration = "11"
-                initial_x( 3 downto 0) <= decode_value;
-                x_iteration <= "00"
-                x_done <= "1"
+        
+        elsif rising_edge(clk) then
+            keypad_col <= "0111";
+            if keypad_row_debounced = "0111" then
+                decode_value <= "0001"; --1
+            elsif keypad_row_debounced = "1011" then
+                decode_value <= "0100"; --4
+            elsif keypad_row_debounced = "1101" then
+                decode_value <= "0111"; --7
+            elsif keypad_row_debounced = "1110" then
+                decode_value <= "0000"; --0
             end if;
 
-        elsif state = input_y then
-
-            if y_iteration = "00"
-                initial_y( 15 downto 12) <= decode_value;
-                y_iteration = y_iteration + "1"
-            elif y_iteration = "01"
-                initial_y( 11 downto 8) <= decode_value;
-                y_iteration = y_iteration + "1"
-            elif y_iteration = "10"
-                initial_y( 7 downto 4) <= decode_value;
-                y_iteration = y_iteration + "1"
-            elif y_iteration = "11"
-                initial_y( 3 downto 0) <= decode_value;
-                y_iteration <= "00"
-                y_done <= "1"
+            keypad_col <= "1011";
+            if keypad_row_debounced = "0111" then        
+                decode_value <= "0010"; --2
+            elsif keypad_row_debounced = "1011" then
+                decode_value <= "0101"; --5
+            elsif keypad_row_debounced = "1101" then
+                decode_value <= "1000"; --8
+            elsif keypad_row_debounced = "1110" then
+                decode_value <= "1111"; --F
             end if;
 
-        elsif state = input_z then
+            keypad_col <= "1101";
+            if keypad_row_debounced = "0111" then
+                decode_value <= "0011"; --3    
+            elsif keypad_row_debounced = "1011" then
+                decode_value <= "0110"; --6
+            elsif keypad_row_debounced = "1101" then
+                decode_value <= "1001"; --9
+            elsif keypad_row_debounced = "1110" then
+                decode_value <= "1110"; --E
+            end if;
 
-            if z_iteration = "00"
-                initial_z( 15 downto 12) <= decode_value;
-                z_iteration = z_iteration + "1"
-            elif z_iteration = "01"
-                initial_z( 11 downto 8) <= decode_value;
-                z_iteration = z_iteration + "1"
-            elif z_iteration = "10"
-                initial_z( 7 downto 4) <= decode_value;
-                z_iteration = z_iteration + "1"
-            elif z_iteration = "11"
-                initial_z( 3 downto 0) <= decode_value;
-                z_iteration <= "00"
-                z_done <= "1"
+            keypad_col <= "1110";
+            if keypad_row_debounced = "0111" then
+                decode_value <= "1010"; --A
+            elsif keypad_row_debounced = "1011" then
+                decode_value <= "1011"; --B
+            elsif keypad_row_debounced = "1101" then
+                decode_value <= "1100"; --C
+            elsif keypad_row_debounced = "1110" then
+                decode_value <= "1101"; --D
+            end if;
+
+            if (state = mode_input_x) then
+                if x_iteration = "00"
+                    initial_x(15 downto 12) <= decode_value;
+                    x_iteration = x_iteration + "1"
+                elif x_iteration = "01"
+                    initial_x(11 downto 8) <= decode_value;
+                    x_iteration = x_iteration + "1"
+                elif x_iteration = "10"
+                    initial_x(7 downto 4) <= decode_value;
+                    x_iteration = x_iteration + "1"
+                elif x_iteration = "11"
+                    initial_x(3 downto 0) <= decode_value;
+                    x_iteration <= "00"
+                    x_done <= "1"
+                end if;
+
+            elsif (state = mode_input_y) then
+                if y_iteration = "00"
+                    initial_y(15 downto 12) <= decode_value;
+                    y_iteration = y_iteration + "1"
+                elif y_iteration = "01"
+                    initial_y(11 downto 8) <= decode_value;
+                    y_iteration = y_iteration + "1"
+                elif y_iteration = "10"
+                    initial_y(7 downto 4) <= decode_value;
+                    y_iteration = y_iteration + "1"
+                elif y_iteration = "11"
+                    initial_y(3 downto 0) <= decode_value;
+                    y_iteration <= "00"
+                    y_done <= "1"
+                end if;
+
+            elsif (state = mode_input_z) then
+                if z_iteration = "00"
+                    initial_z(15 downto 12) <= decode_value;
+                    z_iteration = z_iteration + "1"
+                elif z_iteration = "01"
+                    initial_z(11 downto 8) <= decode_value;
+                    z_iteration = z_iteration + "1"
+                elif z_iteration = "10"
+                    initial_z(7 downto 4) <= decode_value;
+                    z_iteration = z_iteration + "1"
+                elif z_iteration = "11"
+                    initial_z(3 downto 0) <= decode_value;
+                    z_iteration <= "00"
+                    z_done <= "1"
+                end if;
+
             end if;
 
         end if;
@@ -193,6 +194,7 @@ begin
     output: process (clk, state, reset) is
     begin
         if state = output then
+            
         end if;
     end process;
 
