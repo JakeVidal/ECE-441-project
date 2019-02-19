@@ -1,4 +1,4 @@
--- CORDIC input cotroller
+-- CORDIC input controller
 -- Written by Jake Vidal
 
 library IEEE;
@@ -41,7 +41,7 @@ architecture behavioural of input_driver is
     signal x_input_debounced, y_input_debounced, z_input_debounced : STD_LOGIC;
     signal cordic_mode_debounced, start_cordic_debounced : STD_LOGIC;
     signal keypad_row_debounced : STD_LOGIC_VECTOR (3 downto 0);
-    signal x_input_done, y_input_done, z_input_done : STD_LOGIC;
+    signal x_input_done, y_input_done, z_input_done : STD_LOGIC := "0";
 
     type   state_type is (input, input_x, input_y, input_z, output);  
     signal state : state_type := input;  
@@ -149,6 +149,7 @@ begin
             elif x_iteration = "11"
                 initial_x( 3 downto 0) <= decode_value;
                 x_iteration <= "00"
+                x_done <= "1"
             end if;
 
         elsif state = input_y then
@@ -165,6 +166,7 @@ begin
             elif y_iteration = "11"
                 initial_y( 3 downto 0) <= decode_value;
                 y_iteration <= "00"
+                y_done <= "1"
             end if;
 
         elsif state = input_z then
@@ -181,6 +183,7 @@ begin
             elif z_iteration = "11"
                 initial_z( 3 downto 0) <= decode_value;
                 z_iteration <= "00"
+                z_done <= "1"
             end if;
 
         end if;
@@ -189,7 +192,8 @@ begin
 
     output: process (clk, state, reset) is
     begin
-
+        if state = output then
+        end if;
     end process;
 
 end behavioural;
