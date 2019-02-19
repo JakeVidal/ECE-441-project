@@ -74,7 +74,7 @@ begin
             when (input_z AND NOT z_input) => state := input;   
             when (input AND x_input_done AND y_input_done AND z_input_done) => state := output; 
         end case;
-    end process state_machine;
+    end process;
 
     decode: process (clk, state, reset) is
 
@@ -132,7 +132,7 @@ begin
             decode_value <= "1101"; --D
         end if;
 
-        if (x_input AND NOT y_input AND NOT z_input) then
+        if state = input_x then
 
             if x_iteration = "00"
                 initial_x( 15 downto 12) <= decode_value;
@@ -148,7 +148,7 @@ begin
                 x_iteration <= "00"
             end if;
 
-        elsif (y_input AND NOT x_input AND NOT z_input) then
+        elsif state = input_y then
 
             if y_iteration = "00"
                 initial_y( 15 downto 12) <= decode_value;
@@ -164,7 +164,7 @@ begin
                 y_iteration <= "00"
             end if;
 
-        elsif (z_input AND NOT x_input AND NOT y_input) then
+        elsif state = input_z then
 
             if z_iteration = "00"
                 initial_z( 15 downto 12) <= decode_value;
@@ -179,9 +179,14 @@ begin
                 initial_z( 3 downto 0) <= decode_value;
                 z_iteration <= "00"
             end if;
-            
+
         end if;
 
-    end process decode;
+    end process;
+
+    output: process (clk, state, reset) is
+    begin
+        
+    end process;
 
 end behavioural;
