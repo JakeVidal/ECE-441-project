@@ -14,7 +14,6 @@ entity input_driver is
             y_input                   : in STD_LOGIC;
             z_input                   : in STD_LOGIC;
             cordic_mode               : in STD_LOGIC;
-            start_cordic              : in STD_LOGIC;
 
             keypad_row                : in STD_LOGIC_VECTOR (3 downto 0);
             keypad_col                : out STD_LOGIC_VECTOR (3 downto 0);
@@ -23,7 +22,7 @@ entity input_driver is
             initial_y                 : out STD_LOGIC_VECTOR (15 downto 0);
             initial_z                 : out STD_LOGIC_VECTOR (15 downto 0);
             cordic_mode_debounced     : out STD_LOGIC;
-            start_cordic_debounced    : out STD_LOGIC
+            start_cordic              : out STD_LOGIC := "0"
     );
 end input_driver;
 
@@ -51,9 +50,7 @@ begin
     x_debouncer: debouncer port map (clk, reset, x_input, x_input_debounced);
     y_debouncer: debouncer port map (clk, reset, y_input, y_input_debounced);
     z_debouncer: debouncer port map (clk, reset, z_input, z_input_debounced);
-
     mode_debouncer: debouncer port map (clk, reset, cordic_mode, cordic_mode_debounced);
-    start_debouncer: debouncer port map (clk, reset, start_cordic, start_cordic_debounced);
 
     generate_row_debouncer: for i in 0 to 3 generate
         row_debouncer: debouncer port map (clk, reset, keypad_row(i), keypad_row_debounced(i));
@@ -64,6 +61,10 @@ begin
 
         if rising_edge(reset) then
             state := mode_input;
+            x_input_done <= "0";
+            y_input_done <= "0";
+            z_input_done <= "0";
+            start_cordic <= "0";
 
         elsif rising_edge(clk) then
             case state is
@@ -138,51 +139,54 @@ begin
             end if;
 
             if (state = mode_input_x) then
-                if x_iteration = "00"
+                if (x_iteration = "00") then
                     initial_x(15 downto 12) <= decode_value;
-                    x_iteration = x_iteration + "1"
-                elif x_iteration = "01"
+                    x_iteration <= x_iteration + "1";
+                elif (x_iteration = "01") then
                     initial_x(11 downto 8) <= decode_value;
-                    x_iteration = x_iteration + "1"
-                elif x_iteration = "10"
+                    x_iteration = x_iteration + "1";
+                elif (x_iteration = "10") then
                     initial_x(7 downto 4) <= decode_value;
-                    x_iteration = x_iteration + "1"
-                elif x_iteration = "11"
+                    x_iteration = x_iteration + "1";
+                elif (x_iteration = "11") then
                     initial_x(3 downto 0) <= decode_value;
-                    x_iteration <= "00"
-                    x_done <= "1"
+                    x_iteration <= "00";
+                    x_input_done <= "1";
+                    led(0) <= "1";
                 end if;
 
             elsif (state = mode_input_y) then
-                if y_iteration = "00"
+                if (y_iteration = "00") then
                     initial_y(15 downto 12) <= decode_value;
-                    y_iteration = y_iteration + "1"
-                elif y_iteration = "01"
+                    y_iteration = y_iteration + "1";
+                elif (y_iteration = "01") then
                     initial_y(11 downto 8) <= decode_value;
-                    y_iteration = y_iteration + "1"
-                elif y_iteration = "10"
+                    y_iteration = y_iteration + "1";
+                elif (y_iteration = "10") then
                     initial_y(7 downto 4) <= decode_value;
-                    y_iteration = y_iteration + "1"
-                elif y_iteration = "11"
+                    y_iteration = y_iteration + "1";
+                elif (y_iteration = "11") then
                     initial_y(3 downto 0) <= decode_value;
-                    y_iteration <= "00"
-                    y_done <= "1"
+                    y_iteration <= "00";
+                    y_input_done <= "1";
+                    led(1) <= "1";
                 end if;
 
             elsif (state = mode_input_z) then
-                if z_iteration = "00"
+                if (z_iteration = "00") then
                     initial_z(15 downto 12) <= decode_value;
-                    z_iteration = z_iteration + "1"
-                elif z_iteration = "01"
+                    z_iteration = z_iteration + "1";
+                elif (z_iteration = "01") then
                     initial_z(11 downto 8) <= decode_value;
-                    z_iteration = z_iteration + "1"
-                elif z_iteration = "10"
+                    z_iteration = z_iteration + "1";
+                elif (z_iteration = "10") then
                     initial_z(7 downto 4) <= decode_value;
-                    z_iteration = z_iteration + "1"
-                elif z_iteration = "11"
+                    z_iteration = z_iteration + "1";
+                elif (z_iteration = "11") then
                     initial_z(3 downto 0) <= decode_value;
-                    z_iteration <= "00"
-                    z_done <= "1"
+                    z_iteration <= "00";
+                    z_input_done <= "1";
+                    led(2) <= "1";
                 end if;
 
             end if;
@@ -194,8 +198,12 @@ begin
     output: process (clk, state, reset) is
     begin
         if state = output then
-            
+            led(0) <= "0";
+            led(1) <= "0";
+            led(2) <= "0";
+            start_cordic <= "1"
         end if;
+
     end process;
 
 end behavioural;
