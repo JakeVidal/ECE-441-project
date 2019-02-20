@@ -7,14 +7,17 @@ use IEEE.numeric_std.ALL;
 
 entity CORDIC is
 	port (
-	clock                                 : in STD_LOGIC;
-	reset                                 : in STD_LOGIC;
+	clock                                 : in std_logic;
+	reset                                 : in std_logic;
 		
 	x_initial, y_initial, z_initial       : in signed(15 downto 0);
-	cordic_mode                           : in STD_LOGIC;
-	start                                 : in STD_LOGIC;
+	cordic_mode                           : in std_logic;
+	start                                 : in std_logic;
 		
 	x_result, y_result, z_result          : out signed(15 downto 0)
+	iteration                             : out unsigned ( 3 downto 0 ) := "0000";
+	iteration_complete                    : out std_logic
+	
 
 		);
 end CORDIC;
@@ -32,20 +35,27 @@ architecture behaviour of CORDIC is
 		);
 	end component;
 	
-	type x_results is array (15 downto 0) of signed(15 down to 0);
-	type y_results is array (15 downto 0) of signed(15 down to 0);
-	type z_results is array (15 downto 0) of signed(15 down to 0);
-	signal iteration          : signed( 3 downto 0);
-	signal iteration_complete : std_logic
+	
+	signal setup_alu                                : std_logic := "0";
+	signal alu_trigger                              : std_logic := "0";
+	signal alu_x_input, alu_y_input, alu_z_input    : signed(15 downto 0);
+	signal alu_mu                                   : boolean := "0";
+	signal alu_completed                            : std_logic := "0";
 	
 begin
 	
-	
-		
+	c_alu: cordic_alu port map ( alu_trigger, 
+								 alu_x_input, alu_y_input, alu_z_input, 
+								 iteration, 
+								 alu_mu, 
+								 x_result, y_result, z_result,
+								 alu_completed
+								 );
+						
 	
 	cordic: process (clock, reset) is
 	begin
-		if rising_edge(reset) is
+		if rising_edge(reset) then
 		iteration_complete <= 0;
 		x_current <= 0;
 		y_current <= 0;
@@ -54,7 +64,24 @@ begin
 		y_result <= 0;
 		z_result <= 0;
 		
-		elsif rising_edge(clock) and done
+		elsif rising_edge(clock) then
+		
+		determine mode
+		
+			if(start and iteration = 0)
+				setup alu
+				 -> set initial values to alu inputs
+				 -> find value of mu
+				 -> get value of theta
+				 
+				 
+			
+			
+			
+
+				
+		
+		
 
 
 end behaviour;
