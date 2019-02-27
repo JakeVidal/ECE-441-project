@@ -21,8 +21,8 @@ entity output_driver is
             z_select                  : in STD_LOGIC;
             iteration_select          : in STD_LOGIC_VECTOR (3 downto 0);
 
-            anode                     : out STD_LOGIC_VECTOR ( 3 downto 0 );
-            segment                   : out STD_LOGIC_VECTOR ( 6 downto 0 )
+            anode                     : out STD_LOGIC_VECTOR (3 downto 0);
+            segment                   : out STD_LOGIC_VECTOR (6 downto 0)
     );
 end output_driver;
 
@@ -42,9 +42,9 @@ architecture behavioural of output_driver is
             clk : in STD_LOGIC;
             reset   : in STD_LOGIC;
             done    : in STD_LOGIC;
-            d_in    : in STD_LOGIC_VECTOR ( 15 downto 0 );
-            anodes  : out STD_LOGIC_VECTOR ( 3 downto 0 );
-            cathodes: out STD_LOGIC_VECTOR ( 6 downto 0 )
+            d_in    : in STD_LOGIC_VECTOR (15 downto 0);
+            anodes  : out STD_LOGIC_VECTOR (3 downto 0);
+            cathodes: out STD_LOGIC_VECTOR (6 downto 0)
         );
     end component;
 
@@ -55,6 +55,9 @@ architecture behavioural of output_driver is
 
     signal x_select_debounced, y_select_debounced, z_select_debounced : STD_LOGIC;
     signal iteration_select_debounced : STD_LOGIC_VECTOR (3 downto 0);
+
+    signal display : STD_LOGIC := "0";
+    signal selected_value : STD_LOGIC_VECTOR (15 downto 0)
 
 begin
 
@@ -67,5 +70,29 @@ begin
     end generate generate_iteration_debouncer;
 
     display_value: hex_driver port map (clk, reset, display, selected_value, anode, segment);
+
+    storage: process (clk, data_ready, reset) is
+    begin
+
+         if rising_edge(reset) then
+            x_data := (others => (others => "0"))
+            y_data := (others => (others => "0"))
+            z_data := (others => (others => "0"))
+
+        elsif rising_edge(clk) then
+            if rising_edge(data_ready) then
+                x_data(iteration) := x_result;
+                y_data(iteration) := y_result;
+                z_data(iteration) := z_result;
+
+    end process;
+
+    handle_ui: process (clk, x_select, y_select, z_select, iteration_select, reset)
+    begin
+    end process;
+
+    handle_display: process (clk, selected_value, reset)
+    begin
+    end process;
 
 end behavioural;
