@@ -39,12 +39,12 @@ architecture behavioural of output_driver is
 
     component hex_driver is
         Port (
-            clk : in STD_LOGIC;
-            reset   : in STD_LOGIC;
-            done    : in STD_LOGIC;
-            d_in    : in STD_LOGIC_VECTOR (15 downto 0);
-            anodes  : out STD_LOGIC_VECTOR (3 downto 0);
-            cathodes: out STD_LOGIC_VECTOR (6 downto 0)
+            clk           : in STD_LOGIC;
+            reset         : in STD_LOGIC;
+            done          : in STD_LOGIC;
+            d_in          : in STD_LOGIC_VECTOR (15 downto 0);
+            anodes        : out STD_LOGIC_VECTOR (3 downto 0);
+            cathodes      : out STD_LOGIC_VECTOR (6 downto 0)
         );
     end component;
 
@@ -87,8 +87,20 @@ begin
 
     end process;
 
-    handle_ui: process (clk, x_select, y_select, z_select, iteration_select, reset)
+    handle_ui: process (clk, x_select_debounced, y_select_debounced, z_select_debounced, iteration_select_debounced, reset)
     begin
+
+         if rising_edge(reset) then
+            selected_value = "0000000000000000";
+
+        elsif rising_edge(clk) then
+            if rising_edge(x_select_debounced) then
+                selected_value := x_data(iteration_select_debounced);
+            elsif rising_edge(y_select_debounced) then
+                selected_value := y_data(iteration_select_debounced);
+            elsif rising_edge(z_select_debounced) then
+                selected_value := z_data(iteration_select_debounced);
+
     end process;
 
     handle_display: process (clk, selected_value, reset)
