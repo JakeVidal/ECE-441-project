@@ -68,12 +68,12 @@ begin
 
         elsif rising_edge(clk) then
             case state is
-                when (mode_input AND x_input) => state := mode_input_x;
-                when (mode_input AND y_input) => state := mode_input_y; 
-                when (mode_input AND z_input) => state := mode_input_z;  
-                when (mode_input_x AND NOT x_input) => state := mode_input;
-                when (mode_input_y AND NOT y_input) => state := mode_input; 
-                when (mode_input_z AND NOT z_input) => state := mode_input;   
+                when (mode_input AND x_input_debounced) => state := mode_input_x;
+                when (mode_input AND y_input_debounced) => state := mode_input_y; 
+                when (mode_input AND z_input_debounced) => state := mode_input_z;  
+                when (mode_input_x AND NOT x_input_debounced) => state := mode_input;
+                when (mode_input_y AND NOT y_input_debounced) => state := mode_input; 
+                when (mode_input_z AND NOT z_input_debounced) => state := mode_input;   
                 when (mode_input AND x_input_done AND y_input_done AND z_input_done) => state := mode_output; 
             end case;
 
