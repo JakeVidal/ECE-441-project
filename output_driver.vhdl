@@ -85,6 +85,8 @@ begin
                 y_data(iteration) := y_result;
                 z_data(iteration) := z_result;
 
+            end if;
+
         end if;
 
     end process;
@@ -103,6 +105,8 @@ begin
             elsif rising_edge(z_select_debounced) then
                 selected_value := z_data(iteration_select_debounced);
 
+            end if;
+
         end if;
 
     end process;
@@ -117,6 +121,10 @@ begin
             if (data_ready = "1") then
                 if (iteration = "1111") then
                     start_display <= "1";
+
+                end if;
+
+            end if;
 
         end if;
 
