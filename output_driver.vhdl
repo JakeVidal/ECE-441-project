@@ -56,7 +56,7 @@ architecture behavioural of output_driver is
     signal x_select_debounced, y_select_debounced, z_select_debounced : STD_LOGIC;
     signal iteration_select_debounced : STD_LOGIC_VECTOR (3 downto 0);
 
-    signal display : STD_LOGIC := "0";
+    signal start_display : STD_LOGIC := "0";
     signal selected_value : STD_LOGIC_VECTOR (15 downto 0)
 
 begin
@@ -69,28 +69,30 @@ begin
         iteration_debouncer: debouncer port map (clk, reset, iteration_select(i), iteration_select_debounced(i));
     end generate generate_iteration_debouncer;
 
-    display_value: hex_driver port map (clk, reset, display, selected_value, anode, segment);
+    display_value: hex_driver port map (clk, reset, start_display, selected_value, anode, segment);
 
     storage: process (clk, data_ready, reset) is
     begin
 
-         if rising_edge(reset) then
-            x_data := (others => (others => "0"))
-            y_data := (others => (others => "0"))
-            z_data := (others => (others => "0"))
+        if rising_edge(reset) then
+            x_data := (others => (others => "0"));
+            y_data := (others => (others => "0"));
+            z_data := (others => (others => "0"));
 
         elsif rising_edge(clk) then
-            if rising_edge(data_ready) then
+            if (data_ready = "1") then
                 x_data(iteration) := x_result;
                 y_data(iteration) := y_result;
                 z_data(iteration) := z_result;
+
+        end if;
 
     end process;
 
     handle_ui: process (clk, x_select_debounced, y_select_debounced, z_select_debounced, iteration_select_debounced, reset)
     begin
 
-         if rising_edge(reset) then
+        if rising_edge(reset) then
             selected_value = "0000000000000000";
 
         elsif rising_edge(clk) then
@@ -101,10 +103,23 @@ begin
             elsif rising_edge(z_select_debounced) then
                 selected_value := z_data(iteration_select_debounced);
 
+        end if;
+
     end process;
 
-    handle_display: process (clk, selected_value, reset)
+    handle_display: process (clk, data_ready, reset)
     begin
+
+        if rising_edge(reset) then
+            start_display <= "0";
+
+        elsif rising_edge(clk) then
+            if (data_ready = "1") then
+                if (iteration = "1111") then
+                    start_display <= "1";
+
+        end if;
+
     end process;
 
 end behavioural;
