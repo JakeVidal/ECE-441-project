@@ -18,6 +18,8 @@ entity input_driver is
             keypad_row                : in STD_LOGIC_VECTOR (3 downto 0);
             keypad_col                : out STD_LOGIC_VECTOR (3 downto 0);
 
+            led                       : out STD_LOGIC_VECTOR (15 downto 0);
+            
             initial_x                 : out STD_LOGIC_VECTOR (15 downto 0);
             initial_y                 : out STD_LOGIC_VECTOR (15 downto 0);
             initial_z                 : out STD_LOGIC_VECTOR (15 downto 0);
@@ -97,111 +99,111 @@ begin
     end process;
 
     decode: process (clk, state, reset) is
-
-        signal decode_value : STD_LOGIC_VECTOR (3 downto 0);
-        signal x_iteration, y_iteration, z_iteration : STD_LOGIC_VECTOR (1 downto 0);
+    
+        variable decode_value : STD_LOGIC_VECTOR (3 downto 0);
+        variable x_iteration, y_iteration, z_iteration : STD_LOGIC_VECTOR (1 downto 0);
     
     begin
 
         if rising_edge(reset) OR (state = mode_input) then
-            x_iteration <= "00";
-            y_iteration <= "00";
-            z_iteration <= "00";
+            x_iteration := "00";
+            y_iteration := "00";
+            z_iteration := "00";
         
         elsif rising_edge(clk) then
             keypad_col <= "0111";
             if keypad_row_debounced = "0111" then
-                decode_value <= "0001"; --1
+                decode_value := "0001"; --1
             elsif keypad_row_debounced = "1011" then
-                decode_value <= "0100"; --4
+                decode_value := "0100"; --4
             elsif keypad_row_debounced = "1101" then
-                decode_value <= "0111"; --7
+                decode_value := "0111"; --7
             elsif keypad_row_debounced = "1110" then
-                decode_value <= "0000"; --0
+                decode_value := "0000"; --0
             end if;
 
             keypad_col <= "1011";
             if keypad_row_debounced = "0111" then        
-                decode_value <= "0010"; --2
+                decode_value := "0010"; --2
             elsif keypad_row_debounced = "1011" then
-                decode_value <= "0101"; --5
+                decode_value := "0101"; --5
             elsif keypad_row_debounced = "1101" then
-                decode_value <= "1000"; --8
+                decode_value := "1000"; --8
             elsif keypad_row_debounced = "1110" then
-                decode_value <= "1111"; --F
+                decode_value := "1111"; --F
             end if;
 
             keypad_col <= "1101";
             if keypad_row_debounced = "0111" then
-                decode_value <= "0011"; --3    
+                decode_value := "0011"; --3    
             elsif keypad_row_debounced = "1011" then
-                decode_value <= "0110"; --6
+                decode_value := "0110"; --6
             elsif keypad_row_debounced = "1101" then
-                decode_value <= "1001"; --9
+                decode_value := "1001"; --9
             elsif keypad_row_debounced = "1110" then
-                decode_value <= "1110"; --E
+                decode_value := "1110"; --E
             end if;
 
             keypad_col <= "1110";
             if keypad_row_debounced = "0111" then
-                decode_value <= "1010"; --A
+                decode_value := "1010"; --A
             elsif keypad_row_debounced = "1011" then
-                decode_value <= "1011"; --B
+                decode_value := "1011"; --B
             elsif keypad_row_debounced = "1101" then
-                decode_value <= "1100"; --C
+                decode_value := "1100"; --C
             elsif keypad_row_debounced = "1110" then
-                decode_value <= "1101"; --D
+                decode_value := "1101"; --D
             end if;
 
             if (state = mode_input_x) then
                 if (x_iteration = "00") then
                     initial_x(15 downto 12) <= decode_value;
-                    x_iteration <= x_iteration + "1";
+                    x_iteration := "01";
                 elsif (x_iteration = "01") then
                     initial_x(11 downto 8) <= decode_value;
-                    x_iteration = x_iteration + "1";
+                    x_iteration := "10";
                 elsif (x_iteration = "10") then
                     initial_x(7 downto 4) <= decode_value;
-                    x_iteration = x_iteration + "1";
+                    x_iteration := "11";
                 elsif (x_iteration = "11") then
                     initial_x(3 downto 0) <= decode_value;
-                    x_iteration <= "00";
-                    x_input_done <= "1";
-                    led(0) <= "1";
+                    x_iteration := "00";
+                    x_input_done <= '1';
+                    led(0) <= '1';
                 end if;
 
             elsif (state = mode_input_y) then
                 if (y_iteration = "00") then
                     initial_y(15 downto 12) <= decode_value;
-                    y_iteration = y_iteration + "1";
+                    y_iteration := "01";
                 elsif (y_iteration = "01") then
                     initial_y(11 downto 8) <= decode_value;
-                    y_iteration = y_iteration + "1";
+                    y_iteration := "10";
                 elsif (y_iteration = "10") then
                     initial_y(7 downto 4) <= decode_value;
-                    y_iteration = y_iteration + "1";
+                    y_iteration := "11";
                 elsif (y_iteration = "11") then
                     initial_y(3 downto 0) <= decode_value;
-                    y_iteration <= "00";
-                    y_input_done <= "1";
-                    led(1) <= "1";
+                    y_iteration := "00";
+                    y_input_done <= '1';
+                    led(1) <= '1';
                 end if;
 
             elsif (state = mode_input_z) then
                 if (z_iteration = "00") then
                     initial_z(15 downto 12) <= decode_value;
-                    z_iteration = z_iteration + "1";
+                    z_iteration := "01";
                 elsif (z_iteration = "01") then
                     initial_z(11 downto 8) <= decode_value;
-                    z_iteration = z_iteration + "1";
+                    z_iteration := "10";
                 elsif (z_iteration = "10") then
                     initial_z(7 downto 4) <= decode_value;
-                    z_iteration = z_iteration + "1";
+                    z_iteration := "11";
                 elsif (z_iteration = "11") then
                     initial_z(3 downto 0) <= decode_value;
-                    z_iteration <= "00";
-                    z_input_done <= "1";
-                    led(2) <= "1";
+                    z_iteration := "00";
+                    z_input_done <= '1';
+                    led(2) <= '1';
                 end if;
 
             end if;
@@ -212,14 +214,14 @@ begin
 
     output: process (clk, state, reset) is
     begin
-        if state = output then
-            led(0) <= "0";
-            led(1) <= "0";
-            led(2) <= "0";
+        if state = mode_output then
+            led(0) <= '0';
+            led(1) <= '0';
+            led(2) <= '0';
             initial_cordic_mode <= cordic_mode_debounced;
-            start_cordic <= "1";
+            start_cordic <= '1';
         else
-            start_cordic <= "0";
+            start_cordic <= '0';
         end if;
 
     end process;

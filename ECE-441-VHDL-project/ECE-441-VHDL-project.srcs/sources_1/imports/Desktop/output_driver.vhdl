@@ -49,41 +49,41 @@ architecture behavioural of output_driver is
     end component;
 
     type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
-    signal x_data : matrix := (others => (others => "0"));
-    signal y_data : matrix := (others => (others => "0"));
-    signal z_data : matrix := (others => (others => "0"));
+    signal x_data : matrix := (others => (others => '0'));
+    signal y_data : matrix := (others => (others => '0'));
+    signal z_data : matrix := (others => (others => '0'));
 
     signal x_select_debounced, y_select_debounced, z_select_debounced : STD_LOGIC;
     signal iteration_select_debounced : STD_LOGIC_VECTOR (3 downto 0);
 
-    signal start_display : STD_LOGIC := "0";
-    signal selected_value : STD_LOGIC_VECTOR (15 downto 0)
+    signal start_display : STD_LOGIC := '0';
+    signal selected_value : STD_LOGIC_VECTOR (15 downto 0);
 
 begin
 
-    x_select_debouncer: debouncer port map (clk, reset, x_input, x_input_debounced);
-    y_select_debouncer: debouncer port map (clk, reset, y_input, y_input_debounced);
-    z_select_debouncer: debouncer port map (clk, reset, z_input, z_input_debounced);
+    x_select_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => x_select, PB_out => x_select_debounced);
+    y_select_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => y_select, PB_out => y_select_debounced);
+    z_select_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => z_select, PB_out => z_select_debounced);
 
     generate_iteration_debouncer: for i in 0 to 3 generate
-        iteration_debouncer: debouncer port map (clk, reset, iteration_select(i), iteration_select_debounced(i));
+        iteration_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => iteration_select(i), PB_out => iteration_select_debounced(i));
     end generate generate_iteration_debouncer;
 
-    display_value: hex_driver port map (clk, reset, start_display, selected_value, anode, segment);
+    display_value: hex_driver port map (clk => clk, reset => reset, done => start_display, d_in => selected_value, anodes => anode, cathodes => segment);
 
     storage: process (clk, data_ready, reset) is
     begin
 
         if rising_edge(reset) then
-            x_data := (others => (others => "0"));
-            y_data := (others => (others => "0"));
-            z_data := (others => (others => "0"));
+            x_data <= (others => (others => '0'));
+            y_data <= (others => (others => '0'));
+            z_data <= (others => (others => '0'));
 
         elsif rising_edge(clk) then
-            if (data_ready = "1") then
-                x_data(iteration) := x_result;
-                y_data(iteration) := y_result;
-                z_data(iteration) := z_result;
+            if (data_ready = '1') then
+                x_data(to_integer(unsigned(iteration))) <= x_result;
+                y_data(to_integer(unsigned(iteration))) <= y_result;
+                z_data(to_integer(unsigned(iteration))) <= z_result;
 
             end if;
 
@@ -95,15 +95,15 @@ begin
     begin
 
         if rising_edge(reset) then
-            selected_value = "0000000000000000";
+            selected_value <= "0000000000000000";
 
         elsif rising_edge(clk) then
             if rising_edge(x_select_debounced) then
-                selected_value := x_data(iteration_select_debounced);
+                selected_value <= x_data(to_integer(unsigned(iteration_select_debounced)));
             elsif rising_edge(y_select_debounced) then
-                selected_value := y_data(iteration_select_debounced);
+                selected_value <= y_data(to_integer(unsigned(iteration_select_debounced)));
             elsif rising_edge(z_select_debounced) then
-                selected_value := z_data(iteration_select_debounced);
+                selected_value <= z_data(to_integer(unsigned(iteration_select_debounced)));
 
             end if;
 
@@ -115,12 +115,12 @@ begin
     begin
 
         if rising_edge(reset) then
-            start_display <= "0";
+            start_display <= '0';
 
         elsif rising_edge(clk) then
-            if (data_ready = "1") then
+            if (data_ready = '1') then
                 if (iteration = "1111") then
-                    start_display <= "1";
+                    start_display <= '1';
 
                 end if;
 

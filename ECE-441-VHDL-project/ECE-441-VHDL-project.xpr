@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="35" Path="C:/Users/jrvidal/Desktop/ECE-441-project-master/ECE-441-VHDL-project/ECE-441-VHDL-project.xpr">
+<Project Version="7" Minor="35" Path="C:/Users/jrvidal/Desktop/githubplace/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="6baac21219ff402ab24a5797986a332b"/>
@@ -33,7 +33,7 @@
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSAVendor" Val="xilinx"/>
     <Option Name="DSANumComputeUnits" Val="60"/>
-    <Option Name="WTXSimLaunchSim" Val="13"/>
+    <Option Name="WTXSimLaunchSim" Val="14"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -59,7 +59,7 @@
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sources_1/imports/Desktop/debouncer.vhdl">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../debouncer.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../debouncer.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -67,7 +67,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/Desktop/input_driver.vhdl">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../input_driver.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../input_driver.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -76,7 +76,7 @@
       <File Path="$PSRCDIR/sources_1/imports/Desktop/hex_driver.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../hex_driver.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hex_driver.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -85,7 +85,7 @@
       <File Path="$PSRCDIR/sources_1/imports/Desktop/top.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../top.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../top.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -94,7 +94,7 @@
       <File Path="$PSRCDIR/sources_1/imports/Desktop/cordic_alu.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../cordic_alu.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../cordic_alu.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -103,7 +103,7 @@
       <File Path="$PSRCDIR/sources_1/imports/Desktop/cordic.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../cordic.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../cordic.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -112,7 +112,7 @@
       <File Path="$PSRCDIR/sources_1/imports/Desktop/output_driver.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../output_driver.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../output_driver.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -142,7 +142,7 @@
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_cordic_alu.vhdl">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../testbench_cordic_alu.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_cordic_alu.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -151,7 +151,7 @@
       <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_cordic.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../testbench_cordic.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_cordic.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -160,7 +160,7 @@
       <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_input_driver.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../testbench_input_driver.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_input_driver.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -169,7 +169,7 @@
       <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_top.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../testbench_top.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_top.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -178,7 +178,7 @@
       <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_output_driver.vhdl">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../testbench_output_driver.vhdl"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_output_driver.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
