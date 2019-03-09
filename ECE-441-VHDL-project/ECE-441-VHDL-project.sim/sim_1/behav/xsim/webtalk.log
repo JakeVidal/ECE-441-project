@@ -2,13 +2,12 @@
 # Webtalk v2017.4 (64-bit)
 # SW Build 2086221 on Fri Dec 15 20:55:39 MST 2017
 # IP Build 2085800 on Fri Dec 15 22:25:07 MST 2017
-# Start of session at: Wed Feb  6 14:59:43 2019
-# Process ID: 3796
-# Current directory: C:/Users/jrvidal/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim
-# Command line: wbtcv.exe -mode batch -source C:/Users/jrvidal/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim/xsim.dir/myNANDgate_behav/webtalk/xsim_webtalk.tcl -notrace
-# Log file: C:/Users/jrvidal/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim/webtalk.log
-# Journal file: C:/Users/jrvidal/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim\webtalk.jou
+# Start of session at: Fri Mar  8 14:59:21 2019
+# Process ID: 6900
+# Current directory: C:/Users/jrvidal/Desktop/ECE-441-project-master/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim
+# Command line: wbtcv.exe -mode batch -source C:/Users/jrvidal/Desktop/ECE-441-project-master/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim/xsim.dir/cordic_alu_tb_behav/webtalk/xsim_webtalk.tcl -notrace
+# Log file: C:/Users/jrvidal/Desktop/ECE-441-project-master/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim/webtalk.log
+# Journal file: C:/Users/jrvidal/Desktop/ECE-441-project-master/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim\webtalk.jou
 #-----------------------------------------------------------
-source C:/Users/jrvidal/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim/xsim.dir/myNANDgate_behav/webtalk/xsim_webtalk.tcl -notrace
-INFO: [Common 17-186] 'C:/Users/jrvidal/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim/xsim.dir/myNANDgate_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Wed Feb  6 14:59:46 2019. For additional details about this file, please refer to the WebTalk help file at C:/Xilinx/Vivado/2017.4/doc/webtalk_introduction.html.
-INFO: [Common 17-206] Exiting Webtalk at Wed Feb  6 14:59:46 2019...
+source C:/Users/jrvidal/Desktop/ECE-441-project-master/ECE-441-VHDL-project/ECE-441-VHDL-project.sim/sim_1/behav/xsim/xsim.dir/cordic_alu_tb_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Mar  8 14:59:23 2019...
