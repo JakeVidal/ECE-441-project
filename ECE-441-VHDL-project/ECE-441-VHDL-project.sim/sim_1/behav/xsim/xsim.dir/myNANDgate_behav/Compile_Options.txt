@@ -1,1 +1,0 @@
--wto "6baac21219ff402ab24a5797986a332b" --incr --debug "typical" --relax --mt "2" -L "xil_defaultlib" -L "secureip" --snapshot "myNANDgate_behav" "xil_defaultlib.myNANDgate" -log "elaborate.log" 
