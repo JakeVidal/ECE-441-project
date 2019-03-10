@@ -26,7 +26,7 @@ end CORDIC;
 architecture behaviour of CORDIC is
 	
 	component cordic_alu is 
-		Port (
+		port (
             trigger				: in STD_LOGIC;
             x_in	  	        : in STD_LOGIC_VECTOR ( 15 downto 0 );
             y_in			    : in STD_LOGIC_VECTOR ( 15 downto 0 );
@@ -41,6 +41,13 @@ architecture behaviour of CORDIC is
 		);
 	end component;
 	
+	component Theta_LUT_dist_mem_gen is
+      port (
+          a   : in STD_LOGIC_VECTOR (  3 downto 0 );
+          spo : out STD_LOGIC_VECTOR( 15 downtoNTO 0 )
+      );
+    end component;
+	
 	-- iteration and current values
 	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 );
     signal x_current       : STD_LOGIC_VECTOR ( 15 downto 0 );
@@ -51,10 +58,10 @@ architecture behaviour of CORDIC is
     type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
     -- signal theta_LUT : matrix := (others => (others => '0'));
     -- https://www.ics.uci.edu/~jmoorkan/vhdlref/arrays.html
-    signal theta_LUT : matrix := ( x"3244", x"1dac", x"faf" , x"7f7" , 
-                                   x"3ff" , x"200" , x"100" , x"80"  ,
-                                   x"40"  , x"21"  , x"11"  , x"9"   ,
-                                   x"4"   , x"2"   , x"1"   , x"1"   );
+    --signal theta_LUT : matrix := ( x"3244", x"1dac", x"faf" , x"7f7" , 
+    --                               x"3ff" , x"200" , x"100" , x"80"  ,
+    --                               x"40"  , x"21"  , x"11"  , x"9"   ,
+    --                               x"4"   , x"2"   , x"1"   , x"1"   );
 
 	-- ALU interface
 	signal setup_alu       : STD_LOGIC;
@@ -82,7 +89,11 @@ begin
 	    z_out	    => out_z_result,
 	    done	    => alu_completed
 		);
-						
+	
+	theta_LUT: Theta_LUT_dist_mem_gen port map (
+	    a     =>   iteration,
+        spo   =>   theta
+	); 					
 	
 	cordic: process (in_clock, in_reset) is
 	begin
