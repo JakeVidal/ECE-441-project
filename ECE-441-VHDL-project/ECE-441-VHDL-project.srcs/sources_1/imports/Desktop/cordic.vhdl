@@ -41,12 +41,22 @@ architecture behaviour of CORDIC is
 		);
 	end component;
 	
-	
+	-- iteration and current values
 	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 );
     signal x_current       : STD_LOGIC_VECTOR ( 15 downto 0 );
     signal y_current       : STD_LOGIC_VECTOR ( 15 downto 0 );
     signal z_current       : STD_LOGIC_VECTOR ( 15 downto 0 );
-	
+    
+    -- data storage (LUTS)
+    type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
+    -- signal theta_LUT : matrix := (others => (others => '0'));
+    -- https://www.ics.uci.edu/~jmoorkan/vhdlref/arrays.html
+    signal theta_LUT : matrix := ( x"3244", x"1dac", x"faf" , x"7f7" , 
+                                   x"3ff" , x"200" , x"100" , x"80"  ,
+                                   x"40"  , x"21"  , x"11"  , x"9"   ,
+                                   x"4"   , x"2"   , x"1"   , x"1"   );
+
+	-- ALU interface
 	signal setup_alu       : STD_LOGIC;
 	signal alu_trigger     : STD_LOGIC;
 	signal alu_x_input     : STD_LOGIC_VECTOR ( 15 downto 0 );
@@ -88,16 +98,21 @@ begin
 		elsif rising_edge(in_clock) then
 		
 		--determine mode
+		    if(in_cordic_mode = '0') -- CORDIC mode is 0 - vectoring
 		
-			if(in_start = '1' and iteration = "0000") then
-			    out_iteration_complete <= '0';
-				--setup alu
-				--> set initial values to alu inputs
-				--> find value of mu
-				--> get value of theta
-				
-			end if; -- end (start and iteration = 0)
-				 
+                if(in_start = '1' and iteration = "0000") then
+                    out_iteration_complete <= '0';
+                    --setup alu
+                    --> set initial values to alu inputs
+                    --> find value of mu
+                    --> get value of theta
+                    
+                end if; -- end (start and iteration = 0)
+			
+			else --CORDIC mode is 1 - rotation
+			
+			
+			end if; -- end cordic mode selection
 			
 		end if; -- end rising edge of clock or reset
 			
