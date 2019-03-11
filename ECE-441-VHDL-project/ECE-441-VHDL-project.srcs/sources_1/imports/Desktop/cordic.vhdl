@@ -9,15 +9,17 @@ entity CORDIC is
 	port (
 	        in_clock                : in STD_LOGIC;
 	        in_reset                : in STD_LOGIC;
-	        in_x_initial            : in STD_LOGIC_VECTOR ( 15 downto 0 );
-	        in_y_initial            : in STD_LOGIC_VECTOR ( 15 downto 0 );
-	        in_z_initial            : in STD_LOGIC_VECTOR ( 15 downto 0 );
+	        in_x_initial            : in signed ( 15 downto 0 );
+	        in_y_initial            : in signed ( 15 downto 0 );
+	        in_z_initial            : in signed ( 15 downto 0 );
+	        in_test_iteration       : in STD_LOGIC_VECTOR (  3 downto 0 );
 	        in_cordic_mode          : in STD_LOGIC;
 	        in_start                : in STD_LOGIC;
 	        
-	        out_x_result             : out STD_LOGIC_VECTOR ( 15 downto 0 );
-	        out_y_result             : out STD_LOGIC_VECTOR ( 15 downto 0 );
-	        out_z_result             : out STD_LOGIC_VECTOR ( 15 downto 0 );
+	        out_x_result             : out signed ( 15 downto 0 );
+	        out_y_result             : out signed ( 15 downto 0 );
+	        out_z_result             : out signed ( 15 downto 0 );
+	        out_test_theta           : out STD_LOGIC_VECTOR ( 15 downto 0 );
 	        out_iteration            : out STD_LOGIC_VECTOR (  3 downto 0 );
 	        out_iteration_complete   : out STD_LOGIC
 		);
@@ -28,15 +30,15 @@ architecture behaviour of CORDIC is
 	component cordic_alu is 
 		port (
             trigger				: in STD_LOGIC;
-            x_in	  	        : in STD_LOGIC_VECTOR ( 15 downto 0 );
-            y_in			    : in STD_LOGIC_VECTOR ( 15 downto 0 );
-            z_in		        : in STD_LOGIC_VECTOR ( 15 downto 0 );
-            theta		     	: in STD_LOGIC_VECTOR ( 15 downto 0 );			
+            x_in	  	        : in signed ( 15 downto 0 );
+            y_in			    : in signed ( 15 downto 0 );
+            z_in		        : in signed ( 15 downto 0 );
+            theta		     	: in signed ( 15 downto 0 );			
             i					: in STD_LOGIC_VECTOR (  3 downto 0 );
             mu					: in STD_LOGIC;
-            x_out				: out STD_LOGIC_VECTOR ( 15 downto 0 );
-            y_out				: out STD_LOGIC_VECTOR ( 15 downto 0 );
-            z_out				: out STD_LOGIC_VECTOR ( 15 downto 0 );
+            x_out				: out signed ( 15 downto 0 );
+            y_out				: out signed ( 15 downto 0 );
+            z_out				: out signed ( 15 downto 0 );
             done				: out STD_LOGIC
 		);
 	end component;
@@ -44,21 +46,21 @@ architecture behaviour of CORDIC is
 	component Theta_LUT_dist_mem_gen is
       port (
           a   : in STD_LOGIC_VECTOR (  3 downto 0 );
-          spo : out STD_LOGIC_VECTOR( 15 downtoNTO 0 )
+          spo : out STD_LOGIC_VECTOR( 15 downto 0 )
       );
     end component;
 	
 	-- iteration and current values
 	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 );
-    signal x_current       : STD_LOGIC_VECTOR ( 15 downto 0 );
-    signal y_current       : STD_LOGIC_VECTOR ( 15 downto 0 );
-    signal z_current       : STD_LOGIC_VECTOR ( 15 downto 0 );
+    signal x_current       : signed ( 15 downto 0 );
+    signal y_current       : signed ( 15 downto 0 );
+    signal z_current       : signed ( 15 downto 0 );
     
     -- data storage (LUTS)
     type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
     -- signal theta_LUT : matrix := (others => (others => '0'));
     -- https://www.ics.uci.edu/~jmoorkan/vhdlref/arrays.html
-    --signal theta_LUT : matrix := ( x"3244", x"1dac", x"faf" , x"7f7" , 
+    -- signal theta_LUT : matrix := ( x"3244", x"1dac", x"faf" , x"7f7" , 
     --                               x"3ff" , x"200" , x"100" , x"80"  ,
     --                               x"40"  , x"21"  , x"11"  , x"9"   ,
     --                               x"4"   , x"2"   , x"1"   , x"1"   );
@@ -66,10 +68,10 @@ architecture behaviour of CORDIC is
 	-- ALU interface
 	signal setup_alu       : STD_LOGIC;
 	signal alu_trigger     : STD_LOGIC;
-	signal alu_x_input     : STD_LOGIC_VECTOR ( 15 downto 0 );
-	signal alu_y_input     : STD_LOGIC_VECTOR ( 15 downto 0 );
-	signal alu_z_input     : STD_LOGIC_VECTOR ( 15 downto 0 );
-	signal theta           : STD_LOGIC_VECTOR ( 15 downto 0 );
+	signal alu_x_input     : signed ( 15 downto 0 );
+	signal alu_y_input     : signed ( 15 downto 0 );
+	signal alu_z_input     : signed ( 15 downto 0 );
+	signal theta           : signed ( 15 downto 0 );
 	signal alu_mu          : STD_LOGIC;
 	signal alu_completed   : STD_LOGIC;
 	
@@ -91,9 +93,9 @@ begin
 		);
 	
 	theta_LUT: Theta_LUT_dist_mem_gen port map (
-	    a     =>   iteration,
-        spo   =>   theta
-	); 					
+	    a     =>   in_test_iteration,
+        spo   =>   out_test_theta
+	    ); 					
 	
 	cordic: process (in_clock, in_reset) is
 	begin
@@ -108,8 +110,10 @@ begin
 		
 		elsif rising_edge(in_clock) then
 		
+		
+		
 		--determine mode
-		    if(in_cordic_mode = '0') -- CORDIC mode is 0 - vectoring
+		    if(in_cordic_mode = '0') then -- CORDIC mode is 0 - vectoring
 		
                 if(in_start = '1' and iteration = "0000") then
                     out_iteration_complete <= '0';
@@ -130,7 +134,7 @@ begin
 
 				
 		
-		
+    end process;		
 
 
 end behaviour;
