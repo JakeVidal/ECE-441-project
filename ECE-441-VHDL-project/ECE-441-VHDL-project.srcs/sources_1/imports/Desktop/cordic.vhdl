@@ -97,7 +97,7 @@ begin
 		);
 	
 	theta_LUT: Theta_LUT_dist_mem_gen port map (
-	    a     =>   iteration,
+	    a               =>   iteration,
         unsigned(spo)   =>   theta
 	    ); 					
 	
@@ -170,9 +170,10 @@ begin
 		            
 		        -- scales final value
 		        when mode_scale =>
+		          --out_x_result <= 0.607252935103 * x_current;
+		          --out_y_result <= 0.607252935103 * y_current;
 		          out_iteration_complete <= '1'; -- allows output driver to capture values
-		           0.607252935103
-		          state <= mode_idle
+		          state <= mode_idle;
 		    end case;	            	
 		end if;
     end process;		
