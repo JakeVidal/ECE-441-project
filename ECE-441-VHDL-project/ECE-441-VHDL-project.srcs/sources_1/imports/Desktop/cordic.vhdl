@@ -9,17 +9,17 @@ entity CORDIC is
 	port (
 	        in_clock                : in STD_LOGIC;
 	        in_reset                : in STD_LOGIC;
-	        in_x_initial            : in signed ( 15 downto 0 );
-	        in_y_initial            : in signed ( 15 downto 0 );
-	        in_z_initial            : in signed ( 15 downto 0 );
-	        in_test_iteration       : in STD_LOGIC_VECTOR (  3 downto 0 );
+	        in_x_initial            : in SIGNED ( 15 downto 0 );
+	        in_y_initial            : in SIGNED ( 15 downto 0 );
+	        in_z_initial            : in SIGNED ( 15 downto 0 );
+	        --in_test_iteration       : in STD_LOGIC_VECTOR (  3 downto 0 );
 	        in_cordic_mode          : in STD_LOGIC;
 	        in_start                : in STD_LOGIC;
 	        
-	        out_x_result             : out signed ( 15 downto 0 );
-	        out_y_result             : out signed ( 15 downto 0 );
-	        out_z_result             : out signed ( 15 downto 0 );
-	        out_test_theta           : out STD_LOGIC_VECTOR ( 15 downto 0 );
+	        out_x_result             : out SIGNED ( 15 downto 0 );
+	        out_y_result             : out SIGNED ( 15 downto 0 );
+	        out_z_result             : out SIGNED ( 15 downto 0 );
+	        --out_test_theta           : out STD_LOGIC_VECTOR ( 15 downto 0 );
 	        out_iteration            : out STD_LOGIC_VECTOR (  3 downto 0 );
 	        out_iteration_complete   : out STD_LOGIC
 		);
@@ -30,15 +30,15 @@ architecture behaviour of CORDIC is
 	component cordic_alu is 
 		port (
             trigger				: in STD_LOGIC;
-            x_in	  	        : in signed ( 15 downto 0 );
-            y_in			    : in signed ( 15 downto 0 );
-            z_in		        : in signed ( 15 downto 0 );
-            theta		     	: in signed ( 15 downto 0 );			
+            x_in	  	        : in SIGNED ( 15 downto 0 );
+            y_in			    : in SIGNED ( 15 downto 0 );
+            z_in		        : in SIGNED ( 15 downto 0 );
+            theta		     	: in SIGNED ( 15 downto 0 );			
             i					: in STD_LOGIC_VECTOR (  3 downto 0 );
             mu					: in STD_LOGIC;
-            x_out				: out signed ( 15 downto 0 );
-            y_out				: out signed ( 15 downto 0 );
-            z_out				: out signed ( 15 downto 0 );
+            x_out				: out SIGNED ( 15 downto 0 );
+            y_out				: out SIGNED ( 15 downto 0 );
+            z_out				: out SIGNED ( 15 downto 0 );
             done				: out STD_LOGIC
 		);
 	end component;
@@ -52,9 +52,9 @@ architecture behaviour of CORDIC is
 	
 	-- iteration and current values
 	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 );
-    signal x_current       : signed ( 15 downto 0 );
-    signal y_current       : signed ( 15 downto 0 );
-    signal z_current       : signed ( 15 downto 0 );
+    --signal x_current       : SIGNED ( 15 downto 0 );
+    --signal y_current       : SIGNED ( 15 downto 0 );
+    --signal z_current       : SIGNED ( 15 downto 0 );
     
     -- data storage (LUTS)
     type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
@@ -68,12 +68,16 @@ architecture behaviour of CORDIC is
 	-- ALU interface
 	signal setup_alu       : STD_LOGIC;
 	signal alu_trigger     : STD_LOGIC;
-	signal alu_x_input     : signed ( 15 downto 0 );
-	signal alu_y_input     : signed ( 15 downto 0 );
-	signal alu_z_input     : signed ( 15 downto 0 );
-	signal theta           : signed ( 15 downto 0 );
+	signal alu_x_input     : SIGNED ( 15 downto 0 );
+	signal alu_y_input     : SIGNED ( 15 downto 0 );
+	signal alu_z_input     : SIGNED ( 15 downto 0 );
+	signal theta           : STD_LOGIC_VECTOR ( 15 downto 0 );
 	signal alu_mu          : STD_LOGIC;
 	signal alu_completed   : STD_LOGIC;
+	
+	-- State machine
+	type state_type is (mode_zero, mode_calculate, mode_launchALU, mode_waitALU, mode_idle);
+	signal state : state_type := mode_idle;
 	
 begin
 	
@@ -93,47 +97,72 @@ begin
 		);
 	
 	theta_LUT: Theta_LUT_dist_mem_gen port map (
-	    a     =>   in_test_iteration,
-        spo   =>   out_test_theta
+	    a     =>   iteration,
+        spo   =>   theta
 	    ); 					
 	
-	cordic: process (in_clock, in_reset) is
+
+	
+	cordic_control: process (in_clock, in_reset, state) is
 	begin
 		if rising_edge(in_reset) then
+		    state <= mode_idle;
+		    
             out_iteration_complete <= '0';
-            x_current          <= (others => '0');
-            y_current          <= (others => '0');
-            z_current          <= (others => '0');
+            --x_current          <= (others => '0');
+            --y_current          <= (others => '0');
+            --z_current          <= (others => '0');
             out_x_result       <= (others => '0');
             out_y_result       <= (others => '0');
             out_z_result       <= (others => '0');
 		
 		elsif rising_edge(in_clock) then
-		
-		
-		
-		--determine mode
-		    if(in_cordic_mode = '0') then -- CORDIC mode is 0 - vectoring
-		
-                if(in_start = '1' and iteration = "0000") then
-                    out_iteration_complete <= '0';
-                    --setup alu
-                    --> set initial values to alu inputs
-                    --> find value of mu
-                    --> get value of theta
+		  	case state is
+		  	    -- mode_idle: nothing happening, waiting for start signal
+                when mode_idle =>
+                    if rising_edge(in_start) then
+                        state <= mode_zero;
+                    end if;
                     
-                end if; -- end (start and iteration = 0)
-			
-			else --CORDIC mode is 1 - rotation
-			
-			
-			end if; -- end cordic mode selection
-			
-		end if; -- end rising edge of clock or reset
-			
-
-				
-		
+                -- mode_zero: start state, initializes variables
+                when mode_zero =>
+                    out_iteration_complete <= '0';
+                    iteration   <= "0000";  
+                    alu_x_input <= in_x_initial; 
+                    alu_y_input <= in_y_initial; 
+                    alu_z_input <= in_z_initial;   
+                    state <= mode_calculate;
+                    
+                -- mode_calculate: calculates the mu value    
+                when mode_calculate =>
+                    out_iteration_complete <= '0';
+                    if(in_cordic_mode = '0') then -- CORDIC mode is 0 - vectoring
+                        
+                    else 
+                        
+                    end if;
+                    state <= mode_launchALU;
+                    
+                -- mode_launchALU: triggers the ALU    
+                when mode_launchALU =>
+                    alu_trigger <= '1';
+                    state <= mode_waitALU;
+                    
+                -- mode_waitALU: waits for the ALU to finish, then starts next iteration
+                when mode_waitALU =>
+		            alu_trigger <= '0';
+		            if( rising_edge(alu_completed)) then
+		                out_iteration <= iteration;    -- updates the output iteration value
+		                out_iteration_complete <= '1'; -- allows output driver to capture values
+		                if(iteration = "1111") then    -- work here is done, returns to idle
+		                    state <= mode_idle;
+		                else                           -- still got work to do, increment iteration and keep on going
+		                    iteration <= std_logic_vector( unsigned(iteration) + 1 );
+		                    state <= mode_calculate;
+		                end if;
+		            end if;	
+		    end case;	            	
+		end if;
     end process;		
 
 
