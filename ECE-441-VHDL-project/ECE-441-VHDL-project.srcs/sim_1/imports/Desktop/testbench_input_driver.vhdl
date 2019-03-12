@@ -7,7 +7,7 @@ entity input_driver_tb is
 end input_driver_tb;
 
 architecture tb of input_driver_tb is
-    signal clk                       : STD_LOGIC := 0;
+    signal clk                       : STD_LOGIC := '0';
     signal reset                     : STD_LOGIC;
 
     signal x_input                   : STD_LOGIC;
@@ -19,12 +19,14 @@ architecture tb of input_driver_tb is
     signal keypad_col                : STD_LOGIC_VECTOR (3 downto 0);
 
     signal led                       : STD_LOGIC_VECTOR (15 downto 0);
-    signal 
     signal initial_x                 : STD_LOGIC_VECTOR (15 downto 0);
     signal initial_y                 : STD_LOGIC_VECTOR (15 downto 0);
     signal initial_z                 : STD_LOGIC_VECTOR (15 downto 0);
     signal initial_cordic_mode       : STD_LOGIC;
-    signal start_cordic              : STD_LOGIC
+    signal start_cordic              : STD_LOGIC;
+    
+    constant clk_period      : time := 4ns; --100MHz clock
+    constant clk_half_period : time := clk_period / 2;
 
 begin
 
@@ -45,10 +47,17 @@ begin
         start_cordic         => start_cordic        
     );
 
+    clk_process :process
+    begin
+         clk <= '0';
+         wait for clk_half_period;  --for half of clock period clk stays at '0'.
+         clk <= '1';
+         wait for clk_half_period;  --for next half of clock period clk stays at '1'.
+    end process;
+    --in_clock <= not in_clock after clk_half_period; -- tick the clock every 10ns (High for 5ns, Low for 5ns)
+
     testbench: process
     begin
-
-        clk <= not clk after 2ns;
 
         x_input <= '0', '1' after 1ns, '0' after 2ns, '1' after 3ns, '0' after 4ns, '1' after 5ns, '0' after 6ns;
 

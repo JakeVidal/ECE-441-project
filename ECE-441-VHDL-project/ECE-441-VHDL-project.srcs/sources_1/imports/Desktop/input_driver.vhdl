@@ -92,6 +92,10 @@ begin
                             if (z_input_debounced = '0') then
                                 state <= mode_input;
                             end if;
+                when mode_output =>
+                            if (reset = '1') then
+                                state <= mode_input;
+                            end if;
             end case;
 
         end if;
