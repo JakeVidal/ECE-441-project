@@ -12,14 +12,12 @@ entity CORDIC is
 	        in_x_initial            : in SIGNED ( 15 downto 0 );
 	        in_y_initial            : in SIGNED ( 15 downto 0 );
 	        in_z_initial            : in SIGNED ( 15 downto 0 );
-	        --in_test_iteration       : in STD_LOGIC_VECTOR (  3 downto 0 );
 	        in_cordic_mode          : in STD_LOGIC;
 	        in_start                : in STD_LOGIC;
 	        
 	        out_x_result             : out SIGNED ( 15 downto 0 );
 	        out_y_result             : out SIGNED ( 15 downto 0 );
 	        out_z_result             : out SIGNED ( 15 downto 0 );
-	        --out_test_theta           : out STD_LOGIC_VECTOR ( 15 downto 0 );
 	        out_iteration            : out STD_LOGIC_VECTOR (  3 downto 0 );
 	        out_iteration_complete   : out STD_LOGIC
 		);
@@ -51,10 +49,10 @@ architecture behaviour of CORDIC is
     end component;
 	
 	-- iteration and current values
-	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 );
-    signal x_current       : SIGNED ( 15 downto 0 );
-    signal y_current       : SIGNED ( 15 downto 0 );
-    signal z_current       : SIGNED ( 15 downto 0 );
+	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 ) := (others => '0');
+    signal x_current       : SIGNED ( 15 downto 0 )           := (others => '0');
+    signal y_current       : SIGNED ( 15 downto 0 )           := (others => '0');
+    signal z_current       : SIGNED ( 15 downto 0 )           := (others => '0');
     
     -- data storage (LUTS)
     type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
@@ -66,20 +64,24 @@ architecture behaviour of CORDIC is
     --                               x"4"   , x"2"   , x"1"   , x"1"   );
 
 	-- ALU interface
-	signal setup_alu       : STD_LOGIC;
-	signal alu_trigger     : STD_LOGIC;
-	signal alu_x_input     : SIGNED ( 15 downto 0 );
-	signal alu_y_input     : SIGNED ( 15 downto 0 );
-	signal alu_z_input     : SIGNED ( 15 downto 0 );
-	signal theta           : UNSIGNED ( 15 downto 0 );
-	signal alu_mu          : STD_LOGIC;
-	signal alu_completed   : STD_LOGIC;
+	signal alu_trigger     : STD_LOGIC              := '0';
+	signal alu_x_input     : SIGNED ( 15 downto 0 ) := (others => '0');
+	signal alu_y_input     : SIGNED ( 15 downto 0 ) := (others => '0');
+	signal alu_z_input     : SIGNED ( 15 downto 0 ) := (others => '0');
+	signal theta           : SIGNED ( 15 downto 0 ) := (others => '0');
+	signal alu_mu          : STD_LOGIC              := '0';
+	signal alu_completed   : STD_LOGIC              := '0';
 	
 	-- State machine
 	type state_type is (mode_idle, mode_zero, mode_calculate, mode_launchALU, mode_waitALU, mode_scale);
 	signal state : state_type := mode_idle;
 	
 begin
+	
+	theta_LUT: Theta_LUT_dist_mem_gen port map (
+        a               =>   iteration,
+        signed(spo)     =>   theta
+        );         
 	
 	c_alu: cordic_alu port map ( 
 	    trigger     => alu_trigger ,
@@ -96,16 +98,10 @@ begin
 	    done	    => alu_completed
 		);
 	
-	theta_LUT: Theta_LUT_dist_mem_gen port map (
-	    a               =>   iteration,
-        unsigned(spo)   =>   theta
-	    ); 					
-	
 
-	
 	cordic_control: process (in_clock, in_reset, state) is
 	begin
-		if rising_edge(in_reset) then
+		if (in_reset = '1') then
 		    state <= mode_idle;
 		    
             out_iteration_complete <= '0';
@@ -120,7 +116,7 @@ begin
 		  	case state is
 		  	    -- mode_idle: nothing happening, waiting for start signal
                 when mode_idle =>
-                    if rising_edge(in_start) then
+                    if (in_start = '1') then
                         state <= mode_zero;
                     end if;
                     
@@ -154,7 +150,7 @@ begin
                 -- mode_waitALU: waits for the ALU to finish, then starts next iteration
                 when mode_waitALU =>
 		            alu_trigger <= '0';
-		            if( rising_edge(alu_completed)) then
+		            if( alu_completed = '1') then
 		                out_iteration <= iteration;    -- updates the output iteration value
 		                out_x_result  <= x_current;
                         out_y_result  <= y_current;

@@ -10,8 +10,9 @@ entity cordic_alu is
 
     Port (
         trigger							:	in	std_logic;
-        x_in, y_in, z_in, theta			:	in	signed ( 15 downto 0 );
-        i								:	in 	std_logic_vector(3 downto 0);
+        x_in, y_in, z_in          		:	in	signed ( 15 downto 0 );
+        theta                           :   in  signed ( 15 downto 0 );
+        i								:	in 	std_logic_vector (  3 downto 0 );
         mu								:	in	std_logic;
         x_out, y_out, z_out				:	out	signed ( 15 downto 0 );
         done							:	out std_logic
@@ -80,7 +81,7 @@ begin
             z_done <= '0';
         
         if (mu = '1') then
-            z_out <= z_in - theta;
+            z_out <= z_in - theta; --theta never greater than 14 bits -> signed/unsigned doesn't matter
         else
             z_out <= z_in + theta;
         end if;
