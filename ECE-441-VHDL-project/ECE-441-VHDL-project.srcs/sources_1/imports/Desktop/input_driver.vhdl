@@ -96,6 +96,7 @@ begin
                             if (reset = '1') then
                                 state <= mode_input;
                             end if;
+                            -- after a few ns, mode must go back to input
             end case;
 
         end if;
