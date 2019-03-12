@@ -7,7 +7,7 @@ entity input_driver_tb is
 end input_driver_tb;
 
 architecture tb of input_driver_tb is
-    signal clk                       : STD_LOGIC;
+    signal clk                       : STD_LOGIC := 0;
     signal reset                     : STD_LOGIC;
 
     signal x_input                   : STD_LOGIC;
@@ -47,6 +47,12 @@ begin
 
     testbench: process
     begin
+
+        clk <= not clk after 2ns;
+
+        x_input <= '0', '1' after 1ns, '0' after 2ns, '1' after 3ns, '0' after 4ns, '1' after 5ns, '0' after 6ns;
+
+        keypad_row <= "1111", "1110" after 10ns, "1111" after 11ns, "1110" after 12ns, "1111" after 13ns, "1110" after 14ns;
 
         wait;
     end process;
