@@ -36,8 +36,7 @@ architecture behaviour of CORDIC is
             mu					: in STD_LOGIC;
             x_out				: out SIGNED ( 15 downto 0 );
             y_out				: out SIGNED ( 15 downto 0 );
-            z_out				: out SIGNED ( 15 downto 0 );
-            done				: out STD_LOGIC
+            z_out				: out SIGNED ( 15 downto 0 )
 		);
 	end component;
 	
@@ -50,9 +49,9 @@ architecture behaviour of CORDIC is
 	
 	-- iteration and current values
 	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 ) := (others => '0');
-    signal x_current       : SIGNED ( 15 downto 0 )           := (others => '0');
-    signal y_current       : SIGNED ( 15 downto 0 )           := (others => '0');
-    signal z_current       : SIGNED ( 15 downto 0 )           := (others => '0');
+    signal x_current       : SIGNED ( 15 downto 0 )          ;
+    signal y_current       : SIGNED ( 15 downto 0 )          ;
+    signal z_current       : SIGNED ( 15 downto 0 )          ;
     
     -- data storage (LUTS)
     type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
@@ -65,15 +64,14 @@ architecture behaviour of CORDIC is
 
 	-- ALU interface
 	signal alu_trigger     : STD_LOGIC              := '0';
-	signal alu_x_input     : SIGNED ( 15 downto 0 ) := (others => '0');
-	signal alu_y_input     : SIGNED ( 15 downto 0 ) := (others => '0');
-	signal alu_z_input     : SIGNED ( 15 downto 0 ) := (others => '0');
+	signal alu_x_input     : SIGNED ( 15 downto 0 ) ;
+	signal alu_y_input     : SIGNED ( 15 downto 0 ) ;
+	signal alu_z_input     : SIGNED ( 15 downto 0 ) ;
 	signal theta           : SIGNED ( 15 downto 0 ) := (others => '0');
 	signal alu_mu          : STD_LOGIC              := '0';
-	signal alu_completed   : STD_LOGIC              := '0';
 	
 	-- State machine
-	type state_type is (mode_idle, mode_zero, mode_calculate, mode_waitALU);
+	type state_type is (mode_idle, mode_zero, mode_calculate, mode_trigger, mode_waitALU, mode_readALU, mode_release);
 	signal state : state_type := mode_idle;
 	
 begin
@@ -94,23 +92,14 @@ begin
 	    -- reset       => in_reset    ,
 	    x_out	    => x_current,
 	    y_out	    => y_current,
-	    z_out	    => z_current,
-	    done	    => alu_completed
+	    z_out	    => z_current
 		);
 	
 
 	cordic_control: process (in_clock, in_reset, state) is
 	begin
 		if (in_reset = '1') then
-		    state <= mode_idle;
-		    
-            out_iteration_complete <= '0';
-            x_current          <= (others => '0');
-            y_current          <= (others => '0');
-            z_current          <= (others => '0');
-            out_x_result       <= (others => '0');
-            out_y_result       <= (others => '0');
-            out_z_result       <= (others => '0');
+		    state <= mode_idle;   
 		
 		elsif rising_edge(in_clock) then
 		  	case state is
@@ -149,25 +138,36 @@ begin
                     else 
                         alu_mu <= z_current(15);
                     end if;
+                    state <= mode_trigger;
+                 
+                 -- start the ALU
+                 when mode_trigger =>
                     alu_trigger <= '1';
                     state <= mode_waitALU;
                             
                 -- mode_waitALU: waits for the ALU to finish, then starts next iteration
                 when mode_waitALU =>
-		            if( alu_completed = '0') then
-		                out_iteration <= iteration;    -- updates the output iteration value
-		                out_x_result  <= x_current;
-                        out_y_result  <= y_current;
-                        out_z_result  <= z_current;
-                        out_iteration_complete <= '1'; -- allows output driver to capture values
-                        alu_trigger <= '0';
-		                if(iteration = "1111") then    -- work here is done, scale final values
-		                    state <= mode_idle;
-		                else                           -- still got work to do, increment iteration and keep on going
-		                    iteration <= std_logic_vector( unsigned(iteration) + 1 );
-		                    state <= mode_calculate;
-		                end if;
-		            end if;	
+                    alu_trigger <= '0';
+                    state <= mode_readALU;
+		        
+		        when mode_readALU =>
+		           out_iteration <= iteration;    -- updates the output iteration value         
+                   out_x_result  <= x_current;                                                  
+                   out_y_result  <= y_current;                                            
+                   out_z_result  <= z_current;   
+                   state <= mode_release;
+                
+                when mode_release =>
+                    out_iteration_complete <= '1'; -- allows output driver to capture values       
+                    if(iteration = "1111") then    -- work here is done, scale final values
+                        state <= mode_idle;
+                    else                           -- still got work to do, increment iteration and keep on going
+                        iteration <= std_logic_vector( unsigned(iteration) + 1 );
+                        alu_x_input <= x_current;      
+                        alu_y_input <= y_current;
+                        alu_z_input <= z_current;
+                        state <= mode_calculate;
+                    end if;                                  
 		            
 		            
 		    end case;	            	
