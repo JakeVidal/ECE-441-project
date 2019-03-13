@@ -32,11 +32,7 @@ begin
     begin	
         if rising_edge(trigger) then
             
-            if (y_in >= 0) then
-                tempx := signed( shift_right(unsigned(abs(y_in)),to_integer(unsigned(i))));
-            else
-                tempx := -signed( shift_right(unsigned(abs(y_in)),to_integer(unsigned(i))));
-            end if;
+            tempx := shift_right(y_in, to_integer(unsigned(i)));
             
             if (mu = '1') then
                 x_out <= x_in - tempx;
@@ -52,12 +48,8 @@ begin
     begin
         
         if rising_edge(trigger) then
-            
-            if (x_in >= 0) then
-                tempy :=  signed( shift_right(unsigned(abs(x_in)), to_integer(unsigned(i)) ) );
-            else
-                tempy := -signed( shift_right(unsigned(abs(x_in)), to_integer(unsigned(i)) ) );
-            end if;
+        
+            tempy :=  shift_right(x_in, to_integer(unsigned(i)));
             
             if (mu = '1') then
                 y_out <= y_in + tempy;
