@@ -12,7 +12,6 @@ architecture tb of cordic_alu_tb is
     signal i : std_logic_vector (3 downto 0);
     signal mu : std_logic;
     signal x_out, y_out, z_out : signed ( 15 downto 0 );
-    signal done : std_logic;
 begin
     -- connecting testbench signals with half_adder.vhd
     UUT : entity work.cordic_alu port map (
@@ -25,8 +24,7 @@ begin
      mu => mu,
      x_out => x_out,
      y_out => y_out,
-     z_out => z_out,
-     done => done
+     z_out => z_out
     );
 
     testbench: process
