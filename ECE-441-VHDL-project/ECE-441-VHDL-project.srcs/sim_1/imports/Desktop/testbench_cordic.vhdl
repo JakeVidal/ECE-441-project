@@ -54,7 +54,8 @@ begin
         in_x_initial <= x"4000";
         in_y_initial <= x"0000";
         in_z_initial <= x"2183";
-        in_start <= '1', '0' after 10ns;
+        in_start <= '0', '1' after 50ns, '0' after 60ns;
+        in_reset <= '0', '1' after 10ns, '0' after 20ns;
         
         
 

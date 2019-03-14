@@ -15,11 +15,11 @@ entity CORDIC is
 	        in_cordic_mode          : in STD_LOGIC;
 	        in_start                : in STD_LOGIC;
 	        
-	        out_x_result             : out SIGNED ( 15 downto 0 );
-	        out_y_result             : out SIGNED ( 15 downto 0 );
-	        out_z_result             : out SIGNED ( 15 downto 0 );
-	        out_iteration            : out STD_LOGIC_VECTOR (  3 downto 0 );
-	        out_iteration_complete   : out STD_LOGIC
+	        out_x_result             : out SIGNED ( 15 downto 0 )             := (others => '0');
+	        out_y_result             : out SIGNED ( 15 downto 0 )             := (others => '0');
+	        out_z_result             : out SIGNED ( 15 downto 0 )             := (others => '0');
+	        out_iteration            : out STD_LOGIC_VECTOR (  3 downto 0 )   := (others => '0');
+	        out_iteration_complete   : out STD_LOGIC                          := '0'
 		);
 end CORDIC;
 	
@@ -49,9 +49,9 @@ architecture behaviour of CORDIC is
 	
 	-- iteration and current values
 	signal iteration       : STD_LOGIC_VECTOR (  3 downto 0 ) := (others => '0');
-    signal x_current       : SIGNED ( 15 downto 0 )          ;
-    signal y_current       : SIGNED ( 15 downto 0 )          ;
-    signal z_current       : SIGNED ( 15 downto 0 )          ;
+    signal x_current       : SIGNED ( 15 downto 0 )           := (others => '0');
+    signal y_current       : SIGNED ( 15 downto 0 )           := (others => '0');
+    signal z_current       : SIGNED ( 15 downto 0 )           := (others => '0');
     
     -- data storage (LUTS)
     type matrix is array (15 downto 0) of STD_LOGIC_VECTOR (15 downto 0);
@@ -64,11 +64,13 @@ architecture behaviour of CORDIC is
 
 	-- ALU interface
 	signal alu_trigger     : STD_LOGIC              := '0';
-	signal alu_x_input     : SIGNED ( 15 downto 0 ) ;
-	signal alu_y_input     : SIGNED ( 15 downto 0 ) ;
-	signal alu_z_input     : SIGNED ( 15 downto 0 ) ;
+	signal alu_x_input     : SIGNED ( 15 downto 0 ) := (others => '0');
+	signal alu_y_input     : SIGNED ( 15 downto 0 ) := (others => '0');
+	signal alu_z_input     : SIGNED ( 15 downto 0 ) := (others => '0');
 	signal theta           : SIGNED ( 15 downto 0 ) := (others => '0');
 	signal alu_mu          : STD_LOGIC              := '0';
+	
+	signal counter         : UNSIGNED (15 downto 0) ;
 	
 	-- State machine
 	type state_type is (mode_idle, mode_zero, mode_calculate, mode_trigger, mode_waitALU, mode_readALU, mode_release);
@@ -96,7 +98,7 @@ begin
 		);
 	
 
-	cordic_control: process (in_clock, in_reset, state) is
+	cordic_control: process (in_clock, in_reset) is
 	begin
 		if (in_reset = '1') then
 		    state <= mode_idle;   
@@ -121,13 +123,15 @@ begin
                     
                 -- mode_zero: start state, initializes variables
                 when mode_zero =>
-                    iteration     <= "0000";    
+                    out_iteration_complete <= '0'; 
+                    out_iteration <= "0000"; 
+                    iteration     <= "0000";  
+                    out_x_result  <= (others => '0'); 
+                    out_y_result  <= (others => '0'); 
+                    out_z_result  <= (others => '0');   
                     alu_x_input <= in_x_initial; 
                     alu_y_input <= in_y_initial; 
                     alu_z_input <= in_z_initial; 
-                    x_current <= in_x_initial;
-                    y_current <= in_y_initial;
-                    z_current <= in_z_initial;
                     state <= mode_calculate;
                     
                 -- mode_calculate: calculates the mu value, and trigger 
@@ -143,12 +147,17 @@ begin
                  -- start the ALU
                  when mode_trigger =>
                     alu_trigger <= '1';
+                    counter <= (others => '0');
                     state <= mode_waitALU;
                             
                 -- mode_waitALU: waits for the ALU to finish, then starts next iteration
                 when mode_waitALU =>
                     alu_trigger <= '0';
-                    state <= mode_readALU;
+                    if( counter = "1111" ) then
+                        state <= mode_readALU;
+                    else
+                        counter <= counter + 1;
+                    end if;
 		        
 		        when mode_readALU =>
 		           out_iteration <= iteration;    -- updates the output iteration value         
