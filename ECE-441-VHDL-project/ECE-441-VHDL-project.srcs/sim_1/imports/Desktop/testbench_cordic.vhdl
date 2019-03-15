@@ -18,6 +18,7 @@ architecture testbench of cordic_tb is
       signal out_y_result             : SIGNED ( 15 downto 0 )           := (others => '0');
       signal out_z_result             : SIGNED ( 15 downto 0 )           := (others => '0');
       signal out_iteration            : UNSIGNED (  3 downto 0 )         := (others => '0');
+      signal out_mu                   : STD_LOGIC                        := '0';
       signal out_iteration_complete   : STD_LOGIC                        := '0';
       
       constant clk_period      : time := 10ns; --100MHz clock
@@ -37,6 +38,7 @@ begin
        out_y_result              =>    out_y_result          ,
        out_z_result              =>    out_z_result          ,
        out_iteration             =>    out_iteration         ,
+       out_mu                    =>    out_mu                ,
        out_iteration_complete    =>    out_iteration_complete 
     );
     
