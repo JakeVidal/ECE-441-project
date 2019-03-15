@@ -47,7 +47,7 @@ architecture behaviour of CORDIC is
 	signal alu_mu          : STD_LOGIC              := '0';
 	
 	-- State machine
-	type state_type is (mode_idle, mode_zero, mode_calculate, mode_output, mode_setup);
+	type state_type is (mode_idle, mode_zero, mode_calculate, mode_output);
 	signal state : state_type := mode_idle;
 	
 	
@@ -117,14 +117,12 @@ begin
                     state <= mode_output;
                 
                 when mode_output =>
-                    out_iteration <= iteration;    -- updates the output iteration value
+                    out_iteration <= iteration + 1;    -- updates the output iteration value
                     out_iteration_complete <= '1'; -- allows output driver to capture values            
                     out_x_result  <= x_current;                                                  
                     out_y_result  <= y_current;                                            
                     out_z_result  <= z_current;
-                    state <= mode_setup;
                     
-                when mode_setup =>
                     if(in_cordic_mode = '0') then -- CORDIC mode is 0 - vectoring
                         alu_mu <= z_current(15);
                         out_mu <= z_current(15);
