@@ -95,7 +95,7 @@ begin
     begin
 
         if rising_edge(reset) then
-            selected_value <= "0000000000000000";
+            selected_value <= x"0000";
 
         elsif rising_edge(clk) then
             if rising_edge(x_select_debounced) then

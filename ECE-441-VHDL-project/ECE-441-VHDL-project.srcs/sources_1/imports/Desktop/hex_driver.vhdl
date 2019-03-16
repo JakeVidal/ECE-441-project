@@ -90,6 +90,7 @@ begin
 		when "1101" => cathodes <= "0100001"; -- "d"
 		when "1110" => cathodes <= "0000110"; -- "E"
 		when "1111" => cathodes <= "0001110"; -- "F"
+		when others =>
 	   end case;
 	
 	else
@@ -124,7 +125,8 @@ begin
 				when "11" =>
                     anodes <= b"1110"; -- enable AN0 (the right-most 7-seg display)
                     hex_digit_to_display <= d_in(3 downto 0);
-
+                    
+                when others =>
 		end case;
 	end if;
 end process;
