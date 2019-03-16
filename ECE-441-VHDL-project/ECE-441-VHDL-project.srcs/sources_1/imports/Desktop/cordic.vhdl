@@ -34,7 +34,7 @@ architecture behaviour of CORDIC is
     end component;
 	
 	-- iteration and current values
-	signal iteration       : UNSIGNED (  3 downto 0 ) := (others => '0');
+	signal iteration       : UNSIGNED (  3 downto 0 )         := (others => '0');
     signal x_current       : SIGNED ( 15 downto 0 )           := (others => '0');
     signal y_current       : SIGNED ( 15 downto 0 )           := (others => '0');
     signal z_current       : SIGNED ( 15 downto 0 )           := (others => '0');
@@ -105,7 +105,7 @@ begin
                     
                 -- mode_calculate: gets the new alu values
                 when mode_calculate =>
-                    out_iteration_complete <= '0';                   
+                    out_iteration_complete <= '0';                                                                               
                     
                     if(alu_mu = '0') then
                         x_current <= alu_x_input - shift_right(alu_y_input, to_integer(iteration));

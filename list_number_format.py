@@ -2,15 +2,15 @@
 import math
 
 
-#thetas = []
-#print("Thetas:")
-#for i in range(0, 16):
-#	theta = math.atan( math.pow(2, -i) )
-#	theta = round(theta, 5)
-#	thetas.append(theta)
-#	print(theta)
+thetas = []
+print("Thetas:")
+for i in range(0, 16):
+	theta = math.atan( math.pow(2, -i) )
+	theta = round(theta, 5)
+	thetas.append(theta)
+	print(theta)
 	
-thetas = [0.7854, 0.4636, 0.245, 0.1244, 0.0624, 0.0312, 0.0156, 0.0078, 0.0039, 0.002, 0.00098, 0.00049, 0.00024, 0.00012, 0.000061, 0.000031]
+#thetas = [0.7854, 0.4636, 0.245, 0.1244, 0.0624, 0.0312, 0.0156, 0.0078, 0.0039, 0.002, 0.00098, 0.00049, 0.00024, 0.00012, 0.000061, 0.000031]
 
 hex_thetas = []
 print("Hex value bit shifted thetas")
