@@ -1,10 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-// Date        : Sun Mar 10 16:01:36 2019
+// Date        : Fri Mar 15 17:17:06 2019
 // Host        : DESKTOP-I2HU3TI running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
-//               e:/VLSI_Projects/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Theta_LUT_dist_mem_gen/Theta_LUT_dist_mem_gen_sim_netlist.v
+//               E:/VLSI_Projects/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Theta_LUT_dist_mem_gen/Theta_LUT_dist_mem_gen_sim_netlist.v
 // Design      : Theta_LUT_dist_mem_gen
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -184,7 +184,7 @@ module Theta_LUT_dist_mem_gen_dist_mem_gen_v8_0_12
        (.G(\<const0> ));
   (* SOFT_HLUTNM = "soft_lutpair0" *) 
   LUT4 #(
-    .INIT(16'hCE1C)) 
+    .INIT(16'hCD12)) 
     g0_b0
        (.I0(a[0]),
         .I1(a[1]),
