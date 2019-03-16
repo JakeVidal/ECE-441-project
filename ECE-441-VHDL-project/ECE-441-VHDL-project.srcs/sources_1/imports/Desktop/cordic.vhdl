@@ -85,8 +85,8 @@ begin
                             alu_mu <= in_z_initial(15);
                             out_mu <= in_z_initial(15);
                         else
-                            alu_mu <= in_y_initial(15);
-                            out_mu <= in_y_initial(15);
+                            alu_mu <= not(in_y_initial(15));
+                            out_mu <= not(in_y_initial(15));
                         end if;
                         
                         state <= mode_calculate;
@@ -120,22 +120,26 @@ begin
                 
                 when mode_output =>
                     out_iteration <= iteration + 1;    -- updates the output iteration value        
-                    out_x_result  <= x_current;                                                  
-                    out_y_result  <= y_current;                                            
-                    out_z_result  <= z_current;
                     
                     if(in_cordic_mode = '0') then -- CORDIC mode is 0 - vectoring
                         alu_mu <= z_current(15);
                         out_mu <= z_current(15);
                     else
-                        alu_mu <= y_current(15);
-                        out_mu <= y_current(15);
+                        alu_mu <= not(y_current(15));
+                        out_mu <= not(y_current(15));
                     end if;
                           
                     if(iteration = "1111") then    -- work here is done, scale final values
                         state <= mode_idle;
+                        out_x_result  <= (others => '0');                                                  
+                        out_y_result  <= (others => '0');                                            
+                        out_z_result  <= (others => '0');
+                        out_mu        <= '0';
                     else                           -- still got work to do, increment iteration and keep on going
                         iteration <= iteration + 1 ;
+                        out_x_result  <= x_current;                                                  
+                        out_y_result  <= y_current;                                            
+                        out_z_result  <= z_current;
                         out_iteration_complete <= '1'; -- allows output driver to capture values 
                         alu_x_input <= x_current;      
                         alu_y_input <= y_current;
