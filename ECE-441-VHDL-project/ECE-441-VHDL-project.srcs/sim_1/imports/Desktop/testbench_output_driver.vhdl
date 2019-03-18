@@ -57,7 +57,7 @@ begin
     testbench: process
     begin
         
-        reset <= '1', '0' after 5ns;
+        reset <= '0';
         
         x_result <= x"DEAD";
         y_result <= x"BEEF";

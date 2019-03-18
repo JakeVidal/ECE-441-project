@@ -26,7 +26,7 @@ architecture testbench of top_tb is
       constant clk_period      : time := 10ns; --100MHz clock
       constant clk_half_period : time := clk_period / 2;
       constant cordic_time     : time := 350ns; -- ammount of time cordic takes to execute.
-      constant display_time    : time := 600ns;
+      constant display_time    : time := 1500ns;
 
 begin
     UUT : entity work.top port map (
@@ -57,7 +57,8 @@ begin
     testbench: process
     begin
         -- Rotation
-    
+        in_reset <= '1', '0' after 5ns;
+        
         in_cordic_mode <= '0';
         in_x_initial <= x"4000" after (0 * cordic_time);
         in_y_initial <= x"0000" after (0 * cordic_time);                 
