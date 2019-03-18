@@ -113,8 +113,9 @@ begin
 
         if rising_edge(reset) then
             selected_value <= x"0000";
-
-        elsif (state = mode_read) then
+        end if;
+        
+        if (state = mode_read) then
             if (x_select_debounced = '1') then
                 selected_value <= x_stored_value;
             elsif (y_select_debounced = '1') then
@@ -134,8 +135,9 @@ begin
         if rising_edge(reset) then
             state <= mode_write;
             -- clear ram
-
-        elsif rising_edge(clk) then
+        end if;
+        
+        if rising_edge(clk) then
             case state is
                 when mode_write => 
                     write_enable <= data_ready;
