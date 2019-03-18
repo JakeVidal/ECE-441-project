@@ -10,10 +10,10 @@ architecture tb of output_driver_tb is
     signal clk                       : STD_LOGIC;
     signal reset                     : STD_LOGIC;
 
-    signal x_result                  : STD_LOGIC_VECTOR (15 downto 0);
-    signal y_result                  : STD_LOGIC_VECTOR (15 downto 0);
-    signal z_result                  : STD_LOGIC_VECTOR (15 downto 0);
-    signal iteration                 : STD_LOGIC_VECTOR (3 downto 0);
+    signal x_result                  : SIGNED (15 downto 0);
+    signal y_result                  : SIGNED (15 downto 0);
+    signal z_result                  : SIGNED (15 downto 0);
+    signal iteration                 : UNSIGNED (3 downto 0);
     signal data_ready                : STD_LOGIC;
 
     signal x_select                  : STD_LOGIC;

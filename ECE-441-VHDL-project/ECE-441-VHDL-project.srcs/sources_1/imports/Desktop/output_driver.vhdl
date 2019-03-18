@@ -10,10 +10,10 @@ entity output_driver is
             clk                       : in STD_LOGIC;
             reset                     : in STD_LOGIC;
 
-            x_result                  : in STD_LOGIC_VECTOR (15 downto 0);
-            y_result                  : in STD_LOGIC_VECTOR (15 downto 0);
-            z_result                  : in STD_LOGIC_VECTOR (15 downto 0);
-            iteration                 : in STD_LOGIC_VECTOR (3 downto 0);
+            x_result                  : in SIGNED (15 downto 0);
+            y_result                  : in SIGNED (15 downto 0);
+            z_result                  : in SIGNED (15 downto 0);
+            iteration                 : in UNSIGNED (3 downto 0);
             data_ready                : in STD_LOGIC;
 
             x_select                  : in STD_LOGIC;
@@ -76,7 +76,7 @@ begin
 
 	x_result_storage: Result_dist_mem_gen port map (
     a               =>   ram_address,
-    d               =>   x_result,
+    d               =>   STD_LOGIC_VECTOR(x_result),
     clk             =>   clk,
     we              =>   write_enable,
     spo             =>   x_stored_value
@@ -84,7 +84,7 @@ begin
     
     y_result_storage: Result_dist_mem_gen port map (
     a               =>   ram_address,
-    d               =>   y_result,
+    d               =>   STD_LOGIC_VECTOR(y_result),
     clk             =>   clk,
     we              =>   write_enable,
     spo             =>   y_stored_value
@@ -92,7 +92,7 @@ begin
     
     z_result_storage: Result_dist_mem_gen port map (
     a               =>   ram_address,
-    d               =>   z_result,
+    d               =>   STD_LOGIC_VECTOR(z_result),
     clk             =>   clk,
     we              =>   write_enable,
     spo             =>   z_stored_value
@@ -139,7 +139,7 @@ begin
             case state is
                 when mode_write => 
                     write_enable <= data_ready;
-                    ram_address <= iteration;
+                    ram_address <= STD_LOGIC_VECTOR(iteration);
                     start_display <= '0';
                     
                     if (iteration = "1111") then
