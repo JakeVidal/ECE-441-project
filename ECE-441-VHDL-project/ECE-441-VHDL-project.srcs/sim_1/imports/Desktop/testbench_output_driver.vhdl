@@ -26,7 +26,7 @@ architecture tb of output_driver_tb is
     
     constant clk_period      : time := 4ns; --100MHz clock
     constant clk_half_period : time := clk_period / 2;
-
+    
 begin
 
     UUT : entity work.output_driver port map (
@@ -44,7 +44,7 @@ begin
         anode             => anode,
         segment           => segment         
     );
-
+    
     clk_process :process
     begin
          clk <= '0';
@@ -59,16 +59,16 @@ begin
         
         reset <= '1', '0' after 5ns;
         
-        x_result <= x"AAAA";
-        y_result <= x"BBBB";
-        z_result <= x"CCCC";
-        iteration <= "1111";
+        x_result <= x"DEAD";
+        y_result <= x"BEEF";
+        z_result <= x"FACE";
+        iteration <= "1110", "1111" after 20ns;
         
         data_ready <= '0', '1' after 10ns, '0' after 20ns;
-        iteration_select <= "1111";
-        x_select <= '0', '1' after 50ns, '0' after 60ns;
-        y_select <= '0', '1' after 70ns, '0' after 80ns;
-        z_select <= '0', '1' after 90ns, '0' after 100ns;
+        iteration_select <= "1110";
+        x_select <= '0', '1' after 30ns;
+        y_select <= '0';
+        z_select <= '0';
 
         wait;
     end process;

@@ -12,11 +12,11 @@ use IEEE.std_logic_unsigned.all;
 entity hex_driver is
 
     Port (
-	clk	: in STD_LOGIC;
-        reset	: in STD_LOGIC;
-        done	: in STD_LOGIC;
+	clk	    : in STD_LOGIC;
+    reset	: in STD_LOGIC;
+    done	: in STD_LOGIC;
 	d_in	: in STD_LOGIC_VECTOR ( 15 downto 0 );
-	anodes 	: out STD_LOGIC_VECTOR ( 3 downto 0 );
+	anodes 	: out STD_LOGIC_VECTOR ( 3 downto 0 ) := b"1111";
 	cathodes: out STD_LOGIC_VECTOR ( 6 downto 0 )
 	);
   
@@ -32,7 +32,7 @@ architecture behavioural of hex_driver is
 
 signal digit_enable_counter: STD_LOGIC_VECTOR (1 downto 0); -- a 2-bit counter for rotating the anode enable among the 4 7-seg digits
 
-signal hex_digit_to_display: STD_LOGIC_VECTOR (3 downto 0); -- hold the current value to be written to the 7-seg digit
+signal hex_digit_to_display: STD_LOGIC_VECTOR (3 downto 0) := "0000"; -- hold the current value to be written to the 7-seg digit
 
 
 begin
@@ -43,7 +43,7 @@ begin
 		refresh_display_counter <= x"0000000";
 
 	elsif ( rising_edge( clk )) then
-		if(refresh_display_counter >= x"000BC1F") then 
+		if(refresh_display_counter >= x"000001F") then -- correct counter value is x"000BC1F"
 			refresh_display_counter <= x"0000000";
 
 		 else
@@ -52,7 +52,7 @@ begin
 	end if;
 end process;
 
-refresh_period_reached <= '1' when refresh_display_counter = x"000BC1F" else '0';
+refresh_period_reached <= '1' when refresh_display_counter = x"000001F" else '0'; -- correct counter value is x"000BC1F"
 
 
 process(clk, reset )  -- 2-bit counter to enable 1 of 4 7-seg digits

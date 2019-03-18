@@ -1,32 +1,32 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-// Date        : Fri Mar 15 17:56:45 2019
-// Host        : DESKTOP-I2HU3TI running 64-bit major release  (build 9200)
+// Date        : Sun Mar 17 16:56:42 2019
+// Host        : Jake-PC running 64-bit Service Pack 1  (build 7601)
 // Command     : write_verilog -force -mode funcsim
-//               e:/VLSI_Projects/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/ResultStorage_dist_mem_gen_0/ResultStorage_dist_mem_gen_0_sim_netlist.v
-// Design      : ResultStorage_dist_mem_gen_0
+//               c:/Users/Jake/Desktop/Coding/Projects/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Result_dist_mem_gen/Result_dist_mem_gen_sim_netlist.v
+// Design      : Result_dist_mem_gen
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
 // Device      : xc7a35tcpg236-1
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "ResultStorage_dist_mem_gen_0,dist_mem_gen_v8_0_12,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "dist_mem_gen_v8_0_12,Vivado 2017.4" *) 
+(* CHECK_LICENSE_TYPE = "Result_dist_mem_gen,dist_mem_gen_v8_0_12,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "dist_mem_gen_v8_0_12,Vivado 2017.4" *) 
 (* NotValidForBitStream *)
-module ResultStorage_dist_mem_gen_0
+module Result_dist_mem_gen
    (a,
     d,
     clk,
     we,
     spo);
-  input [5:0]a;
+  input [3:0]a;
   input [15:0]d;
   input clk;
   input we;
   output [15:0]spo;
 
-  wire [5:0]a;
+  wire [3:0]a;
   wire clk;
   wire [15:0]d;
   wire [15:0]spo;
@@ -49,9 +49,9 @@ module ResultStorage_dist_mem_gen_0
   (* C_MEM_TYPE = "1" *) 
   (* C_QCE_JOINED = "0" *) 
   (* C_REG_DPRA_INPUT = "0" *) 
-  (* c_addr_width = "6" *) 
+  (* c_addr_width = "4" *) 
   (* c_default_data = "0" *) 
-  (* c_depth = "48" *) 
+  (* c_depth = "16" *) 
   (* c_elaboration_dir = "./" *) 
   (* c_has_i_ce = "0" *) 
   (* c_has_qspo = "0" *) 
@@ -67,12 +67,12 @@ module ResultStorage_dist_mem_gen_0
   (* c_reg_a_d_inputs = "0" *) 
   (* c_sync_enable = "1" *) 
   (* c_width = "16" *) 
-  ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12 U0
+  Result_dist_mem_gen_dist_mem_gen_v8_0_12 U0
        (.a(a),
         .clk(clk),
         .d(d),
         .dpo(NLW_U0_dpo_UNCONNECTED[15:0]),
-        .dpra({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
+        .dpra({1'b0,1'b0,1'b0,1'b0}),
         .i_ce(1'b1),
         .qdpo(NLW_U0_qdpo_UNCONNECTED[15:0]),
         .qdpo_ce(1'b1),
@@ -87,7 +87,7 @@ module ResultStorage_dist_mem_gen_0
         .we(we));
 endmodule
 
-(* C_ADDR_WIDTH = "6" *) (* C_DEFAULT_DATA = "0" *) (* C_DEPTH = "48" *) 
+(* C_ADDR_WIDTH = "4" *) (* C_DEFAULT_DATA = "0" *) (* C_DEPTH = "16" *) 
 (* C_ELABORATION_DIR = "./" *) (* C_FAMILY = "artix7" *) (* C_HAS_CLK = "1" *) 
 (* C_HAS_D = "1" *) (* C_HAS_DPO = "0" *) (* C_HAS_DPRA = "0" *) 
 (* C_HAS_I_CE = "0" *) (* C_HAS_QDPO = "0" *) (* C_HAS_QDPO_CE = "0" *) 
@@ -98,7 +98,7 @@ endmodule
 (* C_PIPELINE_STAGES = "0" *) (* C_QCE_JOINED = "0" *) (* C_QUALIFY_WE = "0" *) 
 (* C_READ_MIF = "0" *) (* C_REG_A_D_INPUTS = "0" *) (* C_REG_DPRA_INPUT = "0" *) 
 (* C_SYNC_ENABLE = "1" *) (* C_WIDTH = "16" *) (* ORIG_REF_NAME = "dist_mem_gen_v8_0_12" *) 
-module ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12
+module Result_dist_mem_gen_dist_mem_gen_v8_0_12
    (a,
     d,
     dpra,
@@ -116,9 +116,9 @@ module ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12
     dpo,
     qspo,
     qdpo);
-  input [5:0]a;
+  input [3:0]a;
   input [15:0]d;
-  input [5:0]dpra;
+  input [3:0]dpra;
   input clk;
   input we;
   input i_ce;
@@ -135,7 +135,7 @@ module ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12
   output [15:0]qdpo;
 
   wire \<const0> ;
-  wire [5:0]a;
+  wire [3:0]a;
   wire clk;
   wire [15:0]d;
   wire [15:0]spo;
@@ -191,7 +191,7 @@ module ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12
   assign qspo[0] = \<const0> ;
   GND GND
        (.G(\<const0> ));
-  ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12_synth \synth_options.dist_mem_inst 
+  Result_dist_mem_gen_dist_mem_gen_v8_0_12_synth \synth_options.dist_mem_inst 
        (.a(a),
         .clk(clk),
         .d(d),
@@ -200,25 +200,25 @@ module ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12
 endmodule
 
 (* ORIG_REF_NAME = "dist_mem_gen_v8_0_12_synth" *) 
-module ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12_synth
+module Result_dist_mem_gen_dist_mem_gen_v8_0_12_synth
    (spo,
-    we,
-    a,
     clk,
-    d);
+    d,
+    we,
+    a);
   output [15:0]spo;
-  input we;
-  input [5:0]a;
   input clk;
   input [15:0]d;
+  input we;
+  input [3:0]a;
 
-  wire [5:0]a;
+  wire [3:0]a;
   wire clk;
   wire [15:0]d;
   wire [15:0]spo;
   wire we;
 
-  ResultStorage_dist_mem_gen_0_spram \gen_sp_ram.spram_inst 
+  Result_dist_mem_gen_spram \gen_sp_ram.spram_inst 
        (.a(a),
         .clk(clk),
         .d(d),
@@ -227,56 +227,22 @@ module ResultStorage_dist_mem_gen_0_dist_mem_gen_v8_0_12_synth
 endmodule
 
 (* ORIG_REF_NAME = "spram" *) 
-module ResultStorage_dist_mem_gen_0_spram
+module Result_dist_mem_gen_spram
    (spo,
-    we,
-    a,
     clk,
-    d);
+    d,
+    we,
+    a);
   output [15:0]spo;
-  input we;
-  input [5:0]a;
   input clk;
   input [15:0]d;
+  input we;
+  input [3:0]a;
 
-  wire [5:0]a;
+  wire [3:0]a;
   wire clk;
   wire [15:0]d;
   (* RTL_KEEP = "true" *) wire [15:0]qspo_int;
-  wire ram_reg_0_15_0_0__0_n_0;
-  wire ram_reg_0_15_0_0__10_n_0;
-  wire ram_reg_0_15_0_0__11_n_0;
-  wire ram_reg_0_15_0_0__12_n_0;
-  wire ram_reg_0_15_0_0__13_n_0;
-  wire ram_reg_0_15_0_0__14_n_0;
-  wire ram_reg_0_15_0_0__1_n_0;
-  wire ram_reg_0_15_0_0__2_n_0;
-  wire ram_reg_0_15_0_0__3_n_0;
-  wire ram_reg_0_15_0_0__4_n_0;
-  wire ram_reg_0_15_0_0__5_n_0;
-  wire ram_reg_0_15_0_0__6_n_0;
-  wire ram_reg_0_15_0_0__7_n_0;
-  wire ram_reg_0_15_0_0__8_n_0;
-  wire ram_reg_0_15_0_0__9_n_0;
-  wire ram_reg_0_15_0_0_i_1_n_0;
-  wire ram_reg_0_15_0_0_n_0;
-  wire ram_reg_0_31_0_0__0_n_0;
-  wire ram_reg_0_31_0_0__10_n_0;
-  wire ram_reg_0_31_0_0__11_n_0;
-  wire ram_reg_0_31_0_0__12_n_0;
-  wire ram_reg_0_31_0_0__13_n_0;
-  wire ram_reg_0_31_0_0__14_n_0;
-  wire ram_reg_0_31_0_0__1_n_0;
-  wire ram_reg_0_31_0_0__2_n_0;
-  wire ram_reg_0_31_0_0__3_n_0;
-  wire ram_reg_0_31_0_0__4_n_0;
-  wire ram_reg_0_31_0_0__5_n_0;
-  wire ram_reg_0_31_0_0__6_n_0;
-  wire ram_reg_0_31_0_0__7_n_0;
-  wire ram_reg_0_31_0_0__8_n_0;
-  wire ram_reg_0_31_0_0__9_n_0;
-  wire ram_reg_0_31_0_0_i_1_n_0;
-  wire ram_reg_0_31_0_0_n_0;
   wire [15:0]spo;
   wire we;
 
@@ -450,537 +416,204 @@ module ResultStorage_dist_mem_gen_0_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[0]),
-        .O(ram_reg_0_15_0_0_n_0),
+        .O(spo[0]),
         .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
+        .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__0
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[1]),
-        .O(ram_reg_0_15_0_0__0_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__1
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[2]),
-        .O(ram_reg_0_15_0_0__1_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__10
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[11]),
-        .O(ram_reg_0_15_0_0__10_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__11
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[12]),
-        .O(ram_reg_0_15_0_0__11_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__12
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[13]),
-        .O(ram_reg_0_15_0_0__12_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__13
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[14]),
-        .O(ram_reg_0_15_0_0__13_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__14
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[15]),
-        .O(ram_reg_0_15_0_0__14_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__2
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[3]),
-        .O(ram_reg_0_15_0_0__2_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__3
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[4]),
-        .O(ram_reg_0_15_0_0__3_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__4
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[5]),
-        .O(ram_reg_0_15_0_0__4_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__5
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[6]),
-        .O(ram_reg_0_15_0_0__5_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__6
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[7]),
-        .O(ram_reg_0_15_0_0__6_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__7
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[8]),
-        .O(ram_reg_0_15_0_0__7_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__8
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(1'b0),
-        .D(d[9]),
-        .O(ram_reg_0_15_0_0__8_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_15_0_0__9
+    ram_reg_0_15_10_10
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
         .A4(1'b0),
         .D(d[10]),
-        .O(ram_reg_0_15_0_0__9_n_0),
+        .O(spo[10]),
         .WCLK(clk),
-        .WE(ram_reg_0_15_0_0_i_1_n_0));
-  LUT3 #(
-    .INIT(8'h40)) 
-    ram_reg_0_15_0_0_i_1
-       (.I0(a[4]),
-        .I1(a[5]),
-        .I2(we),
-        .O(ram_reg_0_15_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0
+    ram_reg_0_15_11_11
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
-        .D(d[0]),
-        .O(ram_reg_0_31_0_0_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__0
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(a[4]),
-        .D(d[1]),
-        .O(ram_reg_0_31_0_0__0_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__1
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(a[4]),
-        .D(d[2]),
-        .O(ram_reg_0_31_0_0__1_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__10
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[11]),
-        .O(ram_reg_0_31_0_0__10_n_0),
+        .O(spo[11]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__11
+    ram_reg_0_15_12_12
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[12]),
-        .O(ram_reg_0_31_0_0__11_n_0),
+        .O(spo[12]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__12
+    ram_reg_0_15_13_13
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[13]),
-        .O(ram_reg_0_31_0_0__12_n_0),
+        .O(spo[13]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__13
+    ram_reg_0_15_14_14
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[14]),
-        .O(ram_reg_0_31_0_0__13_n_0),
+        .O(spo[14]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__14
+    ram_reg_0_15_15_15
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[15]),
-        .O(ram_reg_0_31_0_0__14_n_0),
+        .O(spo[15]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__2
+    ram_reg_0_15_1_1
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
+        .D(d[1]),
+        .O(spo[1]),
+        .WCLK(clk),
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
+  RAM32X1S #(
+    .INIT(32'h00000000)) 
+    ram_reg_0_15_2_2
+       (.A0(a[0]),
+        .A1(a[1]),
+        .A2(a[2]),
+        .A3(a[3]),
+        .A4(1'b0),
+        .D(d[2]),
+        .O(spo[2]),
+        .WCLK(clk),
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
+  RAM32X1S #(
+    .INIT(32'h00000000)) 
+    ram_reg_0_15_3_3
+       (.A0(a[0]),
+        .A1(a[1]),
+        .A2(a[2]),
+        .A3(a[3]),
+        .A4(1'b0),
         .D(d[3]),
-        .O(ram_reg_0_31_0_0__2_n_0),
+        .O(spo[3]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__3
+    ram_reg_0_15_4_4
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[4]),
-        .O(ram_reg_0_31_0_0__3_n_0),
+        .O(spo[4]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__4
+    ram_reg_0_15_5_5
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[5]),
-        .O(ram_reg_0_31_0_0__4_n_0),
+        .O(spo[5]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__5
+    ram_reg_0_15_6_6
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[6]),
-        .O(ram_reg_0_31_0_0__5_n_0),
+        .O(spo[6]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__6
+    ram_reg_0_15_7_7
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[7]),
-        .O(ram_reg_0_31_0_0__6_n_0),
+        .O(spo[7]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__7
+    ram_reg_0_15_8_8
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[8]),
-        .O(ram_reg_0_31_0_0__7_n_0),
+        .O(spo[8]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
+        .WE(we));
+  (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__8
+    ram_reg_0_15_9_9
        (.A0(a[0]),
         .A1(a[1]),
         .A2(a[2]),
         .A3(a[3]),
-        .A4(a[4]),
+        .A4(1'b0),
         .D(d[9]),
-        .O(ram_reg_0_31_0_0__8_n_0),
+        .O(spo[9]),
         .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
-  RAM32X1S #(
-    .INIT(32'h00000000)) 
-    ram_reg_0_31_0_0__9
-       (.A0(a[0]),
-        .A1(a[1]),
-        .A2(a[2]),
-        .A3(a[3]),
-        .A4(a[4]),
-        .D(d[10]),
-        .O(ram_reg_0_31_0_0__9_n_0),
-        .WCLK(clk),
-        .WE(ram_reg_0_31_0_0_i_1_n_0));
-  LUT2 #(
-    .INIT(4'h2)) 
-    ram_reg_0_31_0_0_i_1
-       (.I0(we),
-        .I1(a[5]),
-        .O(ram_reg_0_31_0_0_i_1_n_0));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[0]_INST_0 
-       (.I0(ram_reg_0_15_0_0_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0_n_0),
-        .O(spo[0]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[10]_INST_0 
-       (.I0(ram_reg_0_15_0_0__9_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__9_n_0),
-        .O(spo[10]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[11]_INST_0 
-       (.I0(ram_reg_0_15_0_0__10_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__10_n_0),
-        .O(spo[11]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[12]_INST_0 
-       (.I0(ram_reg_0_15_0_0__11_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__11_n_0),
-        .O(spo[12]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[13]_INST_0 
-       (.I0(ram_reg_0_15_0_0__12_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__12_n_0),
-        .O(spo[13]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[14]_INST_0 
-       (.I0(ram_reg_0_15_0_0__13_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__13_n_0),
-        .O(spo[14]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[15]_INST_0 
-       (.I0(ram_reg_0_15_0_0__14_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__14_n_0),
-        .O(spo[15]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[1]_INST_0 
-       (.I0(ram_reg_0_15_0_0__0_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__0_n_0),
-        .O(spo[1]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[2]_INST_0 
-       (.I0(ram_reg_0_15_0_0__1_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__1_n_0),
-        .O(spo[2]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[3]_INST_0 
-       (.I0(ram_reg_0_15_0_0__2_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__2_n_0),
-        .O(spo[3]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[4]_INST_0 
-       (.I0(ram_reg_0_15_0_0__3_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__3_n_0),
-        .O(spo[4]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[5]_INST_0 
-       (.I0(ram_reg_0_15_0_0__4_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__4_n_0),
-        .O(spo[5]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[6]_INST_0 
-       (.I0(ram_reg_0_15_0_0__5_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__5_n_0),
-        .O(spo[6]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[7]_INST_0 
-       (.I0(ram_reg_0_15_0_0__6_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__6_n_0),
-        .O(spo[7]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[8]_INST_0 
-       (.I0(ram_reg_0_15_0_0__7_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__7_n_0),
-        .O(spo[8]));
-  LUT4 #(
-    .INIT(16'h2F20)) 
-    \spo[9]_INST_0 
-       (.I0(ram_reg_0_15_0_0__8_n_0),
-        .I1(a[4]),
-        .I2(a[5]),
-        .I3(ram_reg_0_31_0_0__8_n_0),
-        .O(spo[9]));
+        .WE(we));
 endmodule
 `ifndef GLBL
 `define GLBL

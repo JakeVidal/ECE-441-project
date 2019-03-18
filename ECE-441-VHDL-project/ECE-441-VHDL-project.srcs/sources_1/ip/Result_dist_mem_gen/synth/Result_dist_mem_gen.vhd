@@ -56,19 +56,19 @@ USE ieee.numeric_std.ALL;
 LIBRARY dist_mem_gen_v8_0_12;
 USE dist_mem_gen_v8_0_12.dist_mem_gen_v8_0_12;
 
-ENTITY ResultStorage_dist_mem_gen_0 IS
+ENTITY Result_dist_mem_gen IS
   PORT (
-    a : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+    a : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     d : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     clk : IN STD_LOGIC;
     we : IN STD_LOGIC;
     spo : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
   );
-END ResultStorage_dist_mem_gen_0;
+END Result_dist_mem_gen;
 
-ARCHITECTURE ResultStorage_dist_mem_gen_0_arch OF ResultStorage_dist_mem_gen_0 IS
+ARCHITECTURE Result_dist_mem_gen_arch OF Result_dist_mem_gen IS
   ATTRIBUTE DowngradeIPIdentifiedWarnings : STRING;
-  ATTRIBUTE DowngradeIPIdentifiedWarnings OF ResultStorage_dist_mem_gen_0_arch: ARCHITECTURE IS "yes";
+  ATTRIBUTE DowngradeIPIdentifiedWarnings OF Result_dist_mem_gen_arch: ARCHITECTURE IS "yes";
   COMPONENT dist_mem_gen_v8_0_12 IS
     GENERIC (
       C_FAMILY : STRING;
@@ -105,9 +105,9 @@ ARCHITECTURE ResultStorage_dist_mem_gen_0_arch OF ResultStorage_dist_mem_gen_0 I
       C_PARSER_TYPE : INTEGER
     );
     PORT (
-      a : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+      a : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       d : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-      dpra : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+      dpra : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       clk : IN STD_LOGIC;
       we : IN STD_LOGIC;
       i_ce : IN STD_LOGIC;
@@ -125,19 +125,19 @@ ARCHITECTURE ResultStorage_dist_mem_gen_0_arch OF ResultStorage_dist_mem_gen_0 I
     );
   END COMPONENT dist_mem_gen_v8_0_12;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF ResultStorage_dist_mem_gen_0_arch: ARCHITECTURE IS "dist_mem_gen_v8_0_12,Vivado 2017.4";
+  ATTRIBUTE X_CORE_INFO OF Result_dist_mem_gen_arch: ARCHITECTURE IS "dist_mem_gen_v8_0_12,Vivado 2017.4";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
-  ATTRIBUTE CHECK_LICENSE_TYPE OF ResultStorage_dist_mem_gen_0_arch : ARCHITECTURE IS "ResultStorage_dist_mem_gen_0,dist_mem_gen_v8_0_12,{}";
+  ATTRIBUTE CHECK_LICENSE_TYPE OF Result_dist_mem_gen_arch : ARCHITECTURE IS "Result_dist_mem_gen,dist_mem_gen_v8_0_12,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF ResultStorage_dist_mem_gen_0_arch: ARCHITECTURE IS "ResultStorage_dist_mem_gen_0,dist_mem_gen_v8_0_12,{x_ipProduct=Vivado 2017.4,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=dist_mem_gen,x_ipVersion=8.0,x_ipCoreRevision=12,x_ipLanguage=VHDL,x_ipSimLanguage=VHDL,C_FAMILY=artix7,C_ADDR_WIDTH=6,C_DEFAULT_DATA=0,C_DEPTH=48,C_HAS_CLK=1,C_HAS_D=1,C_HAS_DPO=0,C_HAS_DPRA=0,C_HAS_I_CE=0,C_HAS_QDPO=0,C_HAS_QDPO_CE=0,C_HAS_QDPO_CLK=0,C_HAS_QDPO_RST=0,C_HAS_QDPO_SRST=0,C_HAS_QSPO=0,C_HAS_QSPO_CE=0,C_HAS_QSPO_RST=0,C_HAS_QSPO_SRST=0,C_HAS_SPO=1,C_HAS_WE=1,C_" & 
-"MEM_INIT_FILE=no_coe_file_loaded,C_ELABORATION_DIR=./,C_MEM_TYPE=1,C_PIPELINE_STAGES=0,C_QCE_JOINED=0,C_QUALIFY_WE=0,C_READ_MIF=0,C_REG_A_D_INPUTS=0,C_REG_DPRA_INPUT=0,C_SYNC_ENABLE=1,C_WIDTH=16,C_PARSER_TYPE=1}";
+  ATTRIBUTE CORE_GENERATION_INFO OF Result_dist_mem_gen_arch: ARCHITECTURE IS "Result_dist_mem_gen,dist_mem_gen_v8_0_12,{x_ipProduct=Vivado 2017.4,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=dist_mem_gen,x_ipVersion=8.0,x_ipCoreRevision=12,x_ipLanguage=VHDL,x_ipSimLanguage=VHDL,C_FAMILY=artix7,C_ADDR_WIDTH=4,C_DEFAULT_DATA=0,C_DEPTH=16,C_HAS_CLK=1,C_HAS_D=1,C_HAS_DPO=0,C_HAS_DPRA=0,C_HAS_I_CE=0,C_HAS_QDPO=0,C_HAS_QDPO_CE=0,C_HAS_QDPO_CLK=0,C_HAS_QDPO_RST=0,C_HAS_QDPO_SRST=0,C_HAS_QSPO=0,C_HAS_QSPO_CE=0,C_HAS_QSPO_RST=0,C_HAS_QSPO_SRST=0,C_HAS_SPO=1,C_HAS_WE=1,C_MEM_INIT_" & 
+"FILE=no_coe_file_loaded,C_ELABORATION_DIR=./,C_MEM_TYPE=1,C_PIPELINE_STAGES=0,C_QCE_JOINED=0,C_QUALIFY_WE=0,C_READ_MIF=0,C_REG_A_D_INPUTS=0,C_REG_DPRA_INPUT=0,C_SYNC_ENABLE=1,C_WIDTH=16,C_PARSER_TYPE=1}";
 BEGIN
   U0 : dist_mem_gen_v8_0_12
     GENERIC MAP (
       C_FAMILY => "artix7",
-      C_ADDR_WIDTH => 6,
+      C_ADDR_WIDTH => 4,
       C_DEFAULT_DATA => "0",
-      C_DEPTH => 48,
+      C_DEPTH => 16,
       C_HAS_CLK => 1,
       C_HAS_D => 1,
       C_HAS_DPO => 0,
@@ -170,7 +170,7 @@ BEGIN
     PORT MAP (
       a => a,
       d => d,
-      dpra => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 6)),
+      dpra => STD_LOGIC_VECTOR(TO_UNSIGNED(0, 4)),
       clk => clk,
       we => we,
       i_ce => '1',
@@ -183,4 +183,4 @@ BEGIN
       qdpo_srst => '0',
       spo => spo
     );
-END ResultStorage_dist_mem_gen_0_arch;
+END Result_dist_mem_gen_arch;

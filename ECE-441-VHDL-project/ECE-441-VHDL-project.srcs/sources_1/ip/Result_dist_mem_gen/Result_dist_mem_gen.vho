@@ -52,9 +52,9 @@
 -- The following code must appear in the VHDL architecture header.
 
 ------------- Begin Cut here for COMPONENT Declaration ------ COMP_TAG
-COMPONENT ResultStorage_dist_mem_gen_0
+COMPONENT Result_dist_mem_gen
   PORT (
-    a : IN STD_LOGIC_VECTOR(5 DOWNTO 0);
+    a : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
     d : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
     clk : IN STD_LOGIC;
     we : IN STD_LOGIC;
@@ -67,7 +67,7 @@ END COMPONENT;
 -- body. Substitute your own instance name and net names.
 
 ------------- Begin Cut here for INSTANTIATION Template ----- INST_TAG
-your_instance_name : ResultStorage_dist_mem_gen_0
+your_instance_name : Result_dist_mem_gen
   PORT MAP (
     a => a,
     d => d,
@@ -77,7 +77,7 @@ your_instance_name : ResultStorage_dist_mem_gen_0
   );
 -- INST_TAG_END ------ End INSTANTIATION Template ---------
 
--- You must compile the wrapper file ResultStorage_dist_mem_gen_0.vhd when simulating
--- the core, ResultStorage_dist_mem_gen_0. When compiling the wrapper file, be sure to
+-- You must compile the wrapper file Result_dist_mem_gen.vhd when simulating
+-- the core, Result_dist_mem_gen. When compiling the wrapper file, be sure to
 -- reference the VHDL simulation library.
 
