@@ -17,7 +17,7 @@ entity hex_driver is
     done	: in STD_LOGIC;
 	d_in	: in STD_LOGIC_VECTOR ( 15 downto 0 );
 	anodes 	: out STD_LOGIC_VECTOR ( 3 downto 0 ) := b"1111";
-	cathodes: out STD_LOGIC_VECTOR ( 6 downto 0 )
+	cathodes: out STD_LOGIC_VECTOR ( 6 downto 0 ) := "0111111"
 	);
   
 end hex_driver;
@@ -25,14 +25,16 @@ end hex_driver;
 architecture behavioural of hex_driver is
 
 -- Counting number of clock ticks (28 bits required for 100,000,000 ticks !
-  signal refresh_display_counter: STD_LOGIC_VECTOR (27 downto 0);    
+signal refresh_display_counter: STD_LOGIC_VECTOR (27 downto 0) := x"0000000";    
 
 -- a signal to indicate when we reach the maximum number of clock ticks required for the time period  
-  signal refresh_period_reached: STD_LOGIC;  
+signal refresh_period_reached: STD_LOGIC;  
 
-signal digit_enable_counter: STD_LOGIC_VECTOR (1 downto 0); -- a 2-bit counter for rotating the anode enable among the 4 7-seg digits
+-- a 2-bit counter for rotating the anode enable among the 4 7-seg digits
+signal digit_enable_counter: STD_LOGIC_VECTOR (1 downto 0)     := b"00"; 
 
-signal hex_digit_to_display: STD_LOGIC_VECTOR (3 downto 0) := "0000"; -- hold the current value to be written to the 7-seg digit
+-- hold the current value to be written to the 7-seg digit
+signal hex_digit_to_display: STD_LOGIC_VECTOR (3 downto 0)     := "0000"; 
 
 
 begin
