@@ -25,7 +25,7 @@ architecture tb of input_driver_tb is
     signal initial_cordic_mode       : STD_LOGIC;
     signal start_cordic              : STD_LOGIC;
     
-    constant clk_period      : time := 4ns; --100MHz clock
+    constant clk_period      : time := 10ns; --100MHz clock
     constant clk_half_period : time := clk_period / 2;
 
 begin
@@ -47,7 +47,7 @@ begin
         start_cordic         => start_cordic        
     );
 
-    clk_process :process
+    clk_process: process
     begin
          clk <= '0';
          wait for clk_half_period;  --for half of clock period clk stays at '0'.
@@ -58,10 +58,14 @@ begin
 
     testbench: process
     begin
-
-        x_input <= '0', '1' after 1ns, '0' after 2ns, '1' after 3ns, '0' after 4ns, '1' after 5ns, '0' after 6ns;
-
-        keypad_row <= "1111", "1110" after 10ns, "1111" after 11ns, "1110" after 12ns, "1111" after 13ns, "1110" after 14ns;
+        
+        reset <= '0';
+        cordic_mode <= '0';
+        x_input <= '0', '1' after 5ns;
+        y_input <= '0';
+        z_input <= '0';
+        
+        keypad_row <= "1111";
 
         wait;
     end process;
