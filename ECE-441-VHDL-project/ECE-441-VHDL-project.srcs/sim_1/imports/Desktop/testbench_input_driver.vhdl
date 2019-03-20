@@ -61,12 +61,12 @@ begin
         
         reset <= '0';
         cordic_mode <= '0';
-        x_input <= '0', '1' after 5ns;
-        y_input <= '0';
+        x_input <= '0', '1' after 5ns, '0' after 450ns;
+        y_input <= '0', '1' after 500ns;
         z_input <= '0';
         
-        keypad_row <=   "1111", "0111" after 40ns, "1111" after 110ns, "1101" after 150ns, "1111" after 200ns, "1011" after 220ns, "1111" after 240ns,
-                        "1110" after 270ns, "1111" after 300ns;
+        keypad_row <=   "0000", "1111" after 2ns, "0111" after 40ns, "1111" after 110ns, "1101" after 150ns, "1111" after 200ns, "1011" after 220ns, "1111" after 240ns,
+                        "1110" after 270ns, "1111" after 300ns, "1101" after 580ns, "1111" after 700ns, "1110" after 740ns, "1111" after 780ns;
 
         wait;
     end process;

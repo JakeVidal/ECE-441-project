@@ -15,7 +15,7 @@ entity input_driver is
             cordic_mode               : in STD_LOGIC;
             keypad_row                : in STD_LOGIC_VECTOR (3 downto 0);
             
-            keypad_col                : out STD_LOGIC_VECTOR (3 downto 0)   := "0000";
+            keypad_col                : out STD_LOGIC_VECTOR (3 downto 0)   := "1111";
             led                       : out STD_LOGIC_VECTOR (15 downto 0)  := x"0000";
             initial_x                 : out STD_LOGIC_VECTOR (15 downto 0)  := x"0000";
             initial_y                 : out STD_LOGIC_VECTOR (15 downto 0)  := x"0000";
@@ -110,40 +110,39 @@ begin
     end process;
 
     -- process to continuously poll set low the columns of the hex pad
-    column_select: process (clk, state, reset) is
+    column_select: process (clk, reset, state) is
         variable counter        :   unsigned (1 downto 0)           := "00";
     begin
 
-        if rising_edge(reset) OR (state = mode_input) then
+        if rising_edge(reset) or (state = mode_input) or (state = mode_output) then
             counter     := "00";
-        else
-            if rising_edge(clk) then
-            
-                case counter is
-                    when "00" =>
-                        keypad_col <= "0111";
-                        keypad_col_internal <= "0111";
-                        counter := "01";
-                        
-                    when "01" =>
-                        keypad_col <= "1011";
-                        keypad_col_internal <= "1011";
-                        counter := "10";
+            keypad_col <= "1111";
+            keypad_col_internal <= "1111";
+        elsif rising_edge(clk) then
+        
+            case counter is
+                when "00" =>
+                    keypad_col <= "0111";
+                    keypad_col_internal <= "0111";
+                    counter := "01";
                     
-                    when "10" =>
-                        keypad_col <= "1101";
-                        keypad_col_internal <= "1101";
-                        counter := "11";
-                        
-                    when "11" =>
-                        keypad_col <= "1110";
-                        keypad_col_internal <= "1110";
-                        counter := "00";
-                    when others => counter := "00"; -- will never get here
+                when "01" =>
+                    keypad_col <= "1011";
+                    keypad_col_internal <= "1011";
+                    counter := "10";
+                
+                when "10" =>
+                    keypad_col <= "1101";
+                    keypad_col_internal <= "1101";
+                    counter := "11";
                     
-                end case; 
-            end if; -- if rising_edge(clk)
-        end if; -- if rising_edge(reset) OR state = mode_input, else...
+                when "11" =>
+                    keypad_col <= "1110";
+                    keypad_col_internal <= "1110";
+                    counter := "00";
+                when others => counter := "00"; -- will never get here
+            end case; 
+        end if; -- if rising_edge(clk)
 
     end process; --column_select
     
@@ -154,12 +153,11 @@ begin
         variable decode_value   :   STD_LOGIC_VECTOR (3 downto 0)   := "0000";
     begin
     
-        if rising_edge(reset) or (state = mode_input) then
+        if rising_edge(reset) or (state = mode_input) or (state = mode_output) then
             x_iteration := "00";
             y_iteration := "00";
             z_iteration := "00";
-            decode_value := "0000";
-        elsif ( keypad_row_debounced'event and keypad_row_debounced /= "1111") then -- something was actually pressed
+        elsif ( (keypad_row_debounced'event) and (keypad_row_debounced /= "1111") and (keypad_col_internal /= "1111") ) then -- something was actually pressed
             -- depending on mode, store the result in the correct output
                 
             -- decode the row and column combo
