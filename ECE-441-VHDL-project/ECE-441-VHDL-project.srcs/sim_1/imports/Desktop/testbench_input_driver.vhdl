@@ -65,7 +65,8 @@ begin
         y_input <= '0';
         z_input <= '0';
         
-        keypad_row <= "1111";
+        keypad_row <=   "1111", "0111" after 40ns, "1111" after 110ns, "1101" after 150ns, "1111" after 200ns, "1011" after 220ns, "1111" after 240ns,
+                        "1110" after 270ns, "1111" after 300ns;
 
         wait;
     end process;
