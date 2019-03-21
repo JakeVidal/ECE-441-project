@@ -323,7 +323,7 @@ entity input_driver is
         out_led         :       out     std_logic_vector (15 downto 0)  := x"0001";
         out_cordic_mode :       out     std_logic                       := '0';
         out_reset       :       out     std_logic                       := '0';
-        out_start_cordic:       out     std_logic                       := '0' 
+        out_start_cordic:       out     std_logic                       := '0'
     );  
 end input_driver;
 
@@ -349,7 +349,8 @@ architecture behavioural of input_driver is
                             state_start_cordic, state_end  );  
     signal state : state_type := state_begin;
     
-    --signal start_cordic_timer_signal : std_logic := '0';
+    signal start_cordic_timer_signal_send : std_logic := '0';
+    signal start_cordic_timer_signal_recv : std_logic := '0';
 
 begin
 
@@ -366,7 +367,7 @@ out_reset <= in_reset_button;
 
 -- STATE_MACHINE process --------------------------------
  
-state_machine: process(in_reset_button, input_button_db) is
+state_machine: process(in_reset_button, input_button_db, start_cordic_timer_signal_recv) is
 begin
     -- If the reset button is pressed, at ANY time, reset the mode to mode_begin, which is our starting mode
     if rising_edge(in_reset_button) then
@@ -387,7 +388,7 @@ begin
     -- (e.g. lighting the LEDs)
     -- NOTE on LEDs:    They never turn off until we reach the end state.
     --                  In this sense they indicate progress thru state machine
-    elsif rising_edge(input_button_db) then
+    elsif rising_edge(input_button_db) OR rising_edge(start_cordic_timer_signal_recv) then
         
         case state is
             
@@ -431,9 +432,13 @@ begin
                 
             when state_start_cordic =>
                 -- received signal to start cordic
-                out_start_cordic <= '1';  
-                --start_cordic_timer_signal <= '1';              
-                state <= state_end;
+                if start_cordic_timer_signal_recv = '0' then
+                    out_start_cordic <= '1';  
+                    start_cordic_timer_signal_send <= '1';
+                else -- there was a rising edge on the timer_signal_recv signal
+                    out_start_cordic <= '0';
+                    state <= state_end;
+                end if;           
                 
             when state_end =>
                 -- Do nothing. No way to get out except reset
@@ -444,18 +449,21 @@ begin
     
 end process state_machine;
 
---start_cordic_timer: process(clk) is
---    variable counter : unsigned (3 downto 0) := "0000";
---begin
---    if rising_edge(clk) and (start_cordic_timer_signal = '1') then
---        if counter = "1111" then
---            start_cordic_timer_signal <= '0';
---            out_start_cordic <= '0';
---            counter := "0000";
---        else
---            counter := counter + 1;
---        end if; -- counter = "1111"
---    end if; --rising_edge(clk)
---end process start_cordic_timer;
+start_cordic_timer: process(clk, in_reset_button) is
+    variable counter : unsigned (7 downto 0) := x"00";
+begin
+    if rising_edge(clk) then
+    
+        if (start_cordic_timer_signal_send = '1') then
+            -- count 16 clock cycles then send signal to turn off the start cordic
+            if counter = x"0f" then --after 16 clk go down
+                start_cordic_timer_signal_recv <= '1';
+            else
+                counter := counter + "1"; -- note double quotes here are necessary, it will still run without but won't work
+            end if;               
+            
+        end if;
+    end if; --rising_edge(clk)
+end process start_cordic_timer;
 
 end behavioural;

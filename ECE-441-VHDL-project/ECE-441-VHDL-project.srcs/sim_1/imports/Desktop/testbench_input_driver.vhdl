@@ -199,10 +199,10 @@ begin
         
         -- WAIT THEN RESET
         -- EXPECT ALL SIGNALS TO REVERT TO DEFAULT
-        wait for 100ns;
-        in_reset <= '1';
-        wait for 100ns;
-        in_reset <= '0';
+--        wait for 100ns;
+--        in_reset <= '1';
+--        wait for 100ns;
+--        in_reset <= '0';
         
         wait;
     end process;
