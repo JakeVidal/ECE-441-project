@@ -130,6 +130,8 @@ begin
     begin
        
        in_reset <= '0';
+       input_vector <= x"0000";
+       input_button <= '0';
         
         -- TRANSITION FROM BEGIN TO INPUT_X
         -- at 50ns move to state state_input_x
@@ -168,6 +170,9 @@ begin
         wait for 50ns;
         input_button <= '0';
         
+        -- test reset here to see how, with the reset held, further signals don't affect the state
+        --in_reset <= '1';
+        
         -- TRANSITION FROM INPUT_CORDIC_MODE to START_CORDIC and save CORDIC_MODE
         wait for 25ns;
         -- at 125ns, place a value on input vector
@@ -186,7 +191,7 @@ begin
         wait for 50ns;
         input_button <= '0';
         
-        --wait for 100ns;
+        
         
         -- IN STATE_END
         -- CHANGE THE INPUT BUTTON A FEW TIMES TO MAKE SURE NOTHING HAPPENS

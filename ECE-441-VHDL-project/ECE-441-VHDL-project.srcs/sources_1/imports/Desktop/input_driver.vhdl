@@ -378,6 +378,12 @@ begin
         out_cordic_mode <= '0';
         out_start_cordic <= '0';
         
+        -- shut off internal message signals
+        start_cordic_timer_signal_send <= '0';
+        start_cordic_timer_signal_recv <= '0';
+        
+    elsif falling_edge(in_reset_button) then
+        -- once we are done holding down the reset button
         -- turn on the "state_begin" LED; indicates we are ready to start
         -- turn off all the others
         out_led <= x"0001";
@@ -461,8 +467,10 @@ start_cordic_timer: process(clk, in_reset_button) is
     variable counter : unsigned (7 downto 0) := x"00";
 begin
     if rising_edge(clk) then
-    
-        if (start_cordic_timer_signal_send = '1') then
+        
+        if rising_edge(in_reset_button) then
+            counter := x"00";
+        elsif (start_cordic_timer_signal_send = '1') then
             -- count 16 clock cycles then send signal to turn off the start cordic
             if counter = x"0f" then --after 16 clk go down
                 start_cordic_timer_signal_recv <= '1';
