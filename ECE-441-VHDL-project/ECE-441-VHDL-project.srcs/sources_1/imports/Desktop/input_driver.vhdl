@@ -432,6 +432,14 @@ begin
                 
             when state_start_cordic =>
                 -- received signal to start cordic
+                -- set the start_cordic output high, and send a signal to start counting
+                -- when the returned signal (start_cordic_timer_signal_recv, goes high
+                -- since it is in the sensitivity list, this block runs again, but the "else"
+                -- runs, and so out_start_cordic is set low, and then we enter the "end" state.
+                -- NOTE that the way this is written, if the input_button goes high a second time while we
+                --      are in here, nothing will actually happen, since we only do things if the recv signal is low for the first run
+                --      that is triggered by the input_button, then if it is high, which it will be if there is a rising edge. It won't be high
+                --      if a second signal on the input_button occurs, so nothing happens. After, we will have already reached the end state. 
                 if start_cordic_timer_signal_recv = '0' then
                     out_start_cordic <= '1';  
                     start_cordic_timer_signal_send <= '1';

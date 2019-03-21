@@ -186,23 +186,25 @@ begin
         wait for 50ns;
         input_button <= '0';
         
+        --wait for 100ns;
+        
         -- IN STATE_END
         -- CHANGE THE INPUT BUTTON A FEW TIMES TO MAKE SURE NOTHING HAPPENS
---        wait for 50ns;
---        input_button <= '1';
---        wait for 25ns;
---        input_button <= '0';
---        wait for 50ns;
---        input_button <= '1';
---        wait for 25ns;
---        input_button <= '0';
+        wait for 50ns;
+        input_button <= '1';
+        wait for 25ns;
+        input_button <= '0';
+        wait for 50ns;
+        input_button <= '1';
+        wait for 25ns;
+        input_button <= '0';
         
         -- WAIT THEN RESET
         -- EXPECT ALL SIGNALS TO REVERT TO DEFAULT
---        wait for 100ns;
---        in_reset <= '1';
---        wait for 100ns;
---        in_reset <= '0';
+        wait for 100ns;
+        in_reset <= '1';
+        wait for 100ns;
+        in_reset <= '0';
         
         wait;
     end process;
