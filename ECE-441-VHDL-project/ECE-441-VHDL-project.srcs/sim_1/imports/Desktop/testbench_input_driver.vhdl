@@ -91,9 +91,9 @@ architecture tb of input_driver_tb is
     signal cordic_mode               : STD_LOGIC;
 
     signal led                       : STD_LOGIC_VECTOR (15 downto 0);
-    signal initial_x                 : STD_LOGIC_VECTOR (15 downto 0);
-    signal initial_y                 : STD_LOGIC_VECTOR (15 downto 0);
-    signal initial_z                 : STD_LOGIC_VECTOR (15 downto 0);
+    signal initial_x                 : SIGNED (15 downto 0);
+    signal initial_y                 : SIGNED (15 downto 0);
+    signal initial_z                 : SIGNED (15 downto 0);
     signal start_cordic              : STD_LOGIC;
     signal out_reset                 : STD_LOGIC;
     

@@ -317,9 +317,9 @@ entity input_driver is
         in_input_button :       in      STD_LOGIC;
         in_reset_button :       in      STD_LOGIC;
         ----------------------OUTPUTS----------------------------------------------
-        out_x_value     :       out     SIGNED (15 downto 0)  := x"0000";
-        out_y_value     :       out     SIGNED (15 downto 0)  := x"0000";
-        out_z_value     :       out     SIGNED (15 downto 0)  := x"0000";
+        out_x_value     :       out     SIGNED (15 downto 0)            := x"0000";
+        out_y_value     :       out     SIGNED (15 downto 0)            := x"0000";
+        out_z_value     :       out     SIGNED (15 downto 0)            := x"0000";
         out_led         :       out     STD_LOGIC_VECTOR (15 downto 0)  := x"0001";
         out_cordic_mode :       out     STD_LOGIC                       := '0';
         out_reset       :       out     STD_LOGIC                       := '0';
@@ -342,6 +342,8 @@ architecture behavioural of input_driver is
     -- DEBOUNCED input signals
     signal input_value_db  : STD_LOGIC_VECTOR (15 downto 0);
     signal input_button_db : STD_LOGIC;
+    signal reset_button_db : STD_LOGIC;
+    signal zero : STD_LOGIC := '0';
     
     -- INTERNAL SIGNALS
     
@@ -355,22 +357,23 @@ architecture behavioural of input_driver is
 begin
 
 -- GENERATE debouncers for all inputs --------------------------------------------------------------------------------------------------------
-input_button_debouncer: debouncer port map (clk_100MHz => clk, reset => in_reset_button, PB_in => in_input_button, PB_out => input_button_db);
+input_button_debouncer: debouncer port map (clk_100MHz => clk, reset => reset_button_db, PB_in => in_input_button, PB_out => input_button_db);
+reset_button_debouncer: debouncer port map (clk_100MHz => clk, reset => zero, PB_in => in_reset_button, PB_out => reset_button_db);
 generate_input_value_debouncer: for i in 0 to 15 generate
-    row_debouncer: debouncer port map (clk_100MHz => clk, reset => in_reset_button, PB_in => in_input_value(i), PB_out => input_value_db(i));
+    row_debouncer: debouncer port map (clk_100MHz => clk, reset => reset_button_db, PB_in => in_input_value(i), PB_out => input_value_db(i));
 end generate generate_input_value_debouncer;
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- SIGNAL Pass thru to the CORDIC controller
 --      cordic must be aware of the reset at the same time
-out_reset <= in_reset_button;
+out_reset <= reset_button_db;
 
 -- STATE_MACHINE process --------------------------------
  
-state_machine: process(in_reset_button, input_button_db, start_cordic_timer_signal_recv) is
+state_machine: process(reset_button_db, input_button_db, start_cordic_timer_signal_recv) is
 begin
     -- If the reset button is pressed, at ANY time, reset the mode to mode_begin, which is our starting mode
-    if rising_edge(in_reset_button) then
+    if rising_edge(reset_button_db) then
         state <= state_begin; -- reset the mode
         out_x_value <= x"0000";
         out_y_value <= x"0000";
@@ -383,7 +386,7 @@ begin
         start_cordic_timer_signal_recv <= '0';   
     end if; 
     
-    if falling_edge(in_reset_button) then
+    if falling_edge(reset_button_db) then
         -- once we are done holding down the reset button
         -- turn on the "state_begin" LED; indicates we are ready to start
         -- turn off all the others
@@ -465,11 +468,11 @@ begin
     
 end process state_machine;
 
-start_cordic_timer: process(clk, in_reset_button) is
+start_cordic_timer: process(clk, reset_button_db) is
     variable counter : unsigned (7 downto 0) := x"00";
 begin
 
-    if rising_edge(in_reset_button) then
+    if rising_edge(reset_button_db) then
         counter := x"00";
     end if;
 
