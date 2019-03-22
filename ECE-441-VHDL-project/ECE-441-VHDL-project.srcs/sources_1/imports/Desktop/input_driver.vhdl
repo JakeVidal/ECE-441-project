@@ -367,13 +367,14 @@ end generate generate_input_value_debouncer;
 -- SIGNAL Pass thru to the CORDIC controller
 --      cordic must be aware of the reset at the same time
 out_reset <= reset_button_db;
+--out_led(15) <= reset_button_db;
 
 -- STATE_MACHINE process --------------------------------
  
 state_machine: process(reset_button_db, input_button_db, start_cordic_timer_signal_recv) is
 begin
     -- If the reset button is pressed, at ANY time, reset the mode to mode_begin, which is our starting mode
-    if rising_edge(reset_button_db) then
+    if (reset_button_db = '1') then
         state <= state_begin; -- reset the mode
         out_x_value <= x"0000";
         out_y_value <= x"0000";
@@ -383,23 +384,17 @@ begin
         
         -- shut off internal message signals
         start_cordic_timer_signal_send <= '0';
-        start_cordic_timer_signal_recv <= '0';   
+        
+        out_led <= x"0001"; 
     end if; 
-    
-    if falling_edge(reset_button_db) then
-        -- once we are done holding down the reset button
-        -- turn on the "state_begin" LED; indicates we are ready to start
-        -- turn off all the others
-        out_led <= x"0001";       
-    end if; 
-    
+     
     -- State machine transitions occur on the rising edge of the input button
     -- all actions taken during the state are gated by the edge
     -- all actions taken to prepare a state have to happen the state before
     -- (e.g. lighting the LEDs)
     -- NOTE on LEDs:    They never turn off until we reach the end state.
     --                  In this sense they indicate progress thru state machine
-    if rising_edge(input_button_db) OR rising_edge(start_cordic_timer_signal_recv) then
+    if rising_edge(input_button_db) then --OR rising_edge(start_cordic_timer_signal_recv) then
         
         case state is
             
@@ -407,7 +402,7 @@ begin
                 -- received signal to move to state_input_x
                 -- prepare that state:
                 -- turn on indicator LED
-                out_led(1) <= '1';
+                out_led <= x"0002";
                 state <= state_input_x;
                 
             when state_input_x =>
@@ -415,14 +410,14 @@ begin
                 -- save debounced input vector into x output
                 out_x_value <= SIGNED(input_value_db);
                 -- prepare the next state by turning on LED 2
-                out_led(2) <= '1';
+                out_led <= x"0004";
                 state <= state_input_y;
             when state_input_y =>
                 -- received signal to move to state_input_z
                 -- save debounced input vector into y output
                 out_y_value <= SIGNED(input_value_db);
                 -- prepare the next state by turning on LED 3
-                out_led(3) <= '1';
+                out_led <= x"0008";
                 state <= state_input_z;
                 
             when state_input_z =>
@@ -430,7 +425,7 @@ begin
                 -- save debounced input vector into z output
                 out_z_value <= SIGNED(input_value_db);
                 -- prepare the next state by turning on LED 4
-                out_led(4) <= '1';
+                out_led <= x"0010";
                 state <= state_input_cordic_mode;
                 
             when state_input_cordic_mode =>
@@ -438,7 +433,7 @@ begin
                 -- save LSB of input vector into out_cordic_mode
                 out_cordic_mode <= input_value_db(0);
                 -- prepare the next state by turning on LED 5
-                out_led(5) <= '1';
+                out_led <= x"0020";
                 state <= state_start_cordic;
                 
             when state_start_cordic =>
@@ -456,6 +451,7 @@ begin
                     start_cordic_timer_signal_send <= '1';
                 else -- there was a rising edge on the timer_signal_recv signal
                     out_start_cordic <= '0';
+                    out_led <= x"0040";
                     state <= state_end;
                 end if;           
                 
@@ -472,7 +468,9 @@ start_cordic_timer: process(clk, reset_button_db) is
     variable counter : unsigned (7 downto 0) := x"00";
 begin
 
-    if rising_edge(reset_button_db) then
+    if (reset_button_db = '1') then
+        -- shut off internal message signals
+        start_cordic_timer_signal_recv <= '0';   
         counter := x"00";
     end if;
 

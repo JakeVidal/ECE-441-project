@@ -61,13 +61,21 @@ begin
 	cordic_control: process (in_clock, in_reset) is
 	begin
 		if (in_reset = '1') then
-		    state <= mode_idle;   
+		    state <= mode_idle; 
+            y_current     <= (others => '0'); 
+            z_current     <= (others => '0'); 
+            out_x_result  <= (others => '0'); 
+            out_y_result  <= (others => '0'); 
+            out_z_result  <= (others => '0'); 
+            out_iteration_complete <= '0';    
+            iteration     <= "0000";          
+            out_iteration <= "0000";   
 		
 		elsif rising_edge(in_clock) then
 		  	case state is
 		  	    -- mode_idle: nothing happening, waiting for start signal
                 when mode_idle =>
-                    if (in_start = '1') then
+                    if rising_edge(in_start) then
                         iteration     <= "0000"; 
                         out_iteration <= "0000"; 
                         

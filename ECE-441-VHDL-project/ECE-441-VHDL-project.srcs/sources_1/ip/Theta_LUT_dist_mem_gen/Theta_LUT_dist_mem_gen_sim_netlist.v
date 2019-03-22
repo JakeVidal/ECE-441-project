@@ -1,8 +1,8 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-// Date        : Fri Mar 22 14:03:05 2019
-// Host        : ELW-B326-07 running 64-bit major release  (build 9200)
+// Date        : Fri Mar 22 14:44:03 2019
+// Host        : ws14-18 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
 //               C:/Users/amcote/Desktop/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Theta_LUT_dist_mem_gen/Theta_LUT_dist_mem_gen_sim_netlist.v
 // Design      : Theta_LUT_dist_mem_gen

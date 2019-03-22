@@ -45,7 +45,7 @@ begin
 		refresh_display_counter <= x"0000000";
 
 	elsif ( rising_edge( clk )) then
-		if(refresh_display_counter >= x"000001F") then -- correct counter value is x"000BC1F"
+		if(refresh_display_counter >= x"000BC1F") then -- correct counter value is x"000BC1F, x"000001F" for simulations."
 			refresh_display_counter <= x"0000000";
 
 		 else
@@ -54,7 +54,7 @@ begin
 	end if;
 end process;
 
-refresh_period_reached <= '1' when refresh_display_counter = x"000001F" else '0'; -- correct counter value is x"000BC1F"
+refresh_period_reached <= '1' when refresh_display_counter = x"000BC1F" else '0'; -- correct counter value is x"000BC1F, x"000001F" for simulations."
 
 
 process(clk, reset )  -- 2-bit counter to enable 1 of 4 7-seg digits

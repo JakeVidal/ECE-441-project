@@ -111,7 +111,7 @@ begin
     handle_ui: process (clk, x_select_debounced, y_select_debounced, z_select_debounced, iteration_select_debounced, reset)
     begin
 
-        if rising_edge(reset) then
+        if (reset = '1') then
             selected_value <= x"0000";
         end if;
         
@@ -132,7 +132,7 @@ begin
     state_machine: process (clk, state, reset) is
     begin
 
-        if rising_edge(reset) then
+        if (reset = '1') then
             state <= mode_write;
             -- clear ram
         end if;
