@@ -1,10 +1,10 @@
 -- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
--- Date        : Sun Mar 17 16:56:42 2019
--- Host        : Jake-PC running 64-bit Service Pack 1  (build 7601)
+-- Date        : Fri Mar 22 14:03:05 2019
+-- Host        : ELW-B326-07 running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub
---               c:/Users/Jake/Desktop/Coding/Projects/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Result_dist_mem_gen/Result_dist_mem_gen_stub.vhdl
+--               C:/Users/amcote/Desktop/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Result_dist_mem_gen/Result_dist_mem_gen_stub.vhdl
 -- Design      : Result_dist_mem_gen
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a35tcpg236-1

@@ -312,18 +312,18 @@ use IEEE.NUMERIC_STD.ALL;
 entity input_driver is
     Port (
         ----------------------INPUTS-----------------------------------------------
-        clk             :       in      std_logic;
-        in_input_value  :       in      std_logic_vector (15 downto 0);
-        in_input_button :       in      std_logic;
-        in_reset_button :       in      std_logic;
+        clk             :       in      STD_LOGIC;
+        in_input_value  :       in      STD_LOGIC_VECTOR (15 downto 0);
+        in_input_button :       in      STD_LOGIC;
+        in_reset_button :       in      STD_LOGIC;
         ----------------------OUTPUTS----------------------------------------------
-        out_x_value     :       out     std_logic_vector (15 downto 0)  := x"0000";
-        out_y_value     :       out     std_logic_vector (15 downto 0)  := x"0000";
-        out_z_value     :       out     std_logic_vector (15 downto 0)  := x"0000";
-        out_led         :       out     std_logic_vector (15 downto 0)  := x"0001";
-        out_cordic_mode :       out     std_logic                       := '0';
-        out_reset       :       out     std_logic                       := '0';
-        out_start_cordic:       out     std_logic                       := '0'
+        out_x_value     :       out     SIGNED (15 downto 0)  := x"0000";
+        out_y_value     :       out     SIGNED (15 downto 0)  := x"0000";
+        out_z_value     :       out     SIGNED (15 downto 0)  := x"0000";
+        out_led         :       out     STD_LOGIC_VECTOR (15 downto 0)  := x"0001";
+        out_cordic_mode :       out     STD_LOGIC                       := '0';
+        out_reset       :       out     STD_LOGIC                       := '0';
+        out_start_cordic:       out     STD_LOGIC                       := '0'
     );  
 end input_driver;
 
@@ -332,16 +332,16 @@ architecture behavioural of input_driver is
 
     component debouncer is 
         Port ( 
-            clk_100MHz    : in  std_logic;
-            reset         : in  std_logic;
-            PB_in         : in  std_logic;
-            PB_out        : out std_logic    
+            clk_100MHz    : in  STD_LOGIC;
+            reset         : in  STD_LOGIC;
+            PB_in         : in  STD_LOGIC;
+            PB_out        : out STD_LOGIC    
         );
     end component;
     
     -- DEBOUNCED input signals
-    signal input_value_db : std_logic_vector (15 downto 0);
-    signal input_button_db : std_logic;
+    signal input_value_db  : STD_LOGIC_VECTOR (15 downto 0);
+    signal input_button_db : STD_LOGIC;
     
     -- INTERNAL SIGNALS
     
@@ -349,8 +349,8 @@ architecture behavioural of input_driver is
                             state_start_cordic, state_end  );  
     signal state : state_type := state_begin;
     
-    signal start_cordic_timer_signal_send : std_logic := '0';
-    signal start_cordic_timer_signal_recv : std_logic := '0';
+    signal start_cordic_timer_signal_send : STD_LOGIC := '0';
+    signal start_cordic_timer_signal_recv : STD_LOGIC := '0';
 
 begin
 
@@ -380,21 +380,23 @@ begin
         
         -- shut off internal message signals
         start_cordic_timer_signal_send <= '0';
-        start_cordic_timer_signal_recv <= '0';
-        
-    elsif falling_edge(in_reset_button) then
+        start_cordic_timer_signal_recv <= '0';   
+    end if; 
+    
+    if falling_edge(in_reset_button) then
         -- once we are done holding down the reset button
         -- turn on the "state_begin" LED; indicates we are ready to start
         -- turn off all the others
-        out_led <= x"0001";
-        
+        out_led <= x"0001";       
+    end if; 
+    
     -- State machine transitions occur on the rising edge of the input button
     -- all actions taken during the state are gated by the edge
     -- all actions taken to prepare a state have to happen the state before
     -- (e.g. lighting the LEDs)
     -- NOTE on LEDs:    They never turn off until we reach the end state.
     --                  In this sense they indicate progress thru state machine
-    elsif rising_edge(input_button_db) OR rising_edge(start_cordic_timer_signal_recv) then
+    if rising_edge(input_button_db) OR rising_edge(start_cordic_timer_signal_recv) then
         
         case state is
             
@@ -408,14 +410,14 @@ begin
             when state_input_x =>
                 -- received signal to move to state_input_y
                 -- save debounced input vector into x output
-                out_x_value <= input_value_db;
+                out_x_value <= SIGNED(input_value_db);
                 -- prepare the next state by turning on LED 2
                 out_led(2) <= '1';
                 state <= state_input_y;
             when state_input_y =>
                 -- received signal to move to state_input_z
                 -- save debounced input vector into y output
-                out_y_value <= input_value_db;
+                out_y_value <= SIGNED(input_value_db);
                 -- prepare the next state by turning on LED 3
                 out_led(3) <= '1';
                 state <= state_input_z;
@@ -423,7 +425,7 @@ begin
             when state_input_z =>
                 -- received signal to move to state_input_cordic_mode
                 -- save debounced input vector into z output
-                out_z_value <= input_value_db;
+                out_z_value <= SIGNED(input_value_db);
                 -- prepare the next state by turning on LED 4
                 out_led(4) <= '1';
                 state <= state_input_cordic_mode;
@@ -466,18 +468,19 @@ end process state_machine;
 start_cordic_timer: process(clk, in_reset_button) is
     variable counter : unsigned (7 downto 0) := x"00";
 begin
+
+    if rising_edge(in_reset_button) then
+        counter := x"00";
+    end if;
+
     if rising_edge(clk) then
-        
-        if rising_edge(in_reset_button) then
-            counter := x"00";
-        elsif (start_cordic_timer_signal_send = '1') then
+        if (start_cordic_timer_signal_send = '1') then
             -- count 16 clock cycles then send signal to turn off the start cordic
             if counter = x"0f" then --after 16 clk go down
                 start_cordic_timer_signal_recv <= '1';
             else
                 counter := counter + "1"; -- note double quotes here are necessary, it will still run without but won't work
-            end if;               
-            
+            end if;                         
         end if;
     end if; --rising_edge(clk)
 end process start_cordic_timer;
