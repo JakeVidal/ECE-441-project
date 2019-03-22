@@ -47,7 +47,7 @@ architecture behaviour of CORDIC is
 	signal alu_mu          : STD_LOGIC              := '0';
 	
 	-- State machine
-	type state_type is (mode_idle, mode_calculate, mode_output);
+	type state_type is (mode_idle, mode_calculate, mode_output, mode_completed);
 	signal state : state_type := mode_idle;
 	
 	
@@ -70,12 +70,14 @@ begin
             out_iteration_complete <= '0';    
             iteration     <= "0000";          
             out_iteration <= "0000";   
-		
-		elsif rising_edge(in_clock) then
+        end if;
+        
+	
+		if rising_edge(in_clock) then
 		  	case state is
 		  	    -- mode_idle: nothing happening, waiting for start signal
                 when mode_idle =>
-                    if rising_edge(in_start) then
+                    if (in_start ='1') then
                         iteration     <= "0000"; 
                         out_iteration <= "0000"; 
                         
@@ -138,7 +140,7 @@ begin
                     end if;
                           
                     if(iteration = "1111") then    -- work here is done, scale final values
-                        state <= mode_idle;
+                        state <= mode_completed;
                         out_x_result  <= (others => '0');                                                  
                         out_y_result  <= (others => '0');                                            
                         out_z_result  <= (others => '0');
@@ -153,8 +155,16 @@ begin
                         alu_y_input <= y_current;
                         alu_z_input <= z_current;
                         state <= mode_calculate;
-                    end if;                                  
-		            
+                    end if;   
+                when mode_completed =>
+                    y_current     <= (others => '0'); 
+                    z_current     <= (others => '0'); 
+                    out_x_result  <= (others => '0'); 
+                    out_y_result  <= (others => '0'); 
+                    out_z_result  <= (others => '0'); 
+                    out_iteration_complete <= '0';    
+                    iteration     <= "0000";          
+                    out_iteration <= "0000";   
 		            
 		    end case;	            	
 		end if;

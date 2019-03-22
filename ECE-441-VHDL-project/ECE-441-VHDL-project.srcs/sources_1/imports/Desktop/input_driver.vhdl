@@ -351,8 +351,8 @@ architecture behavioural of input_driver is
                             state_start_cordic, state_end  );  
     signal state : state_type := state_begin;
     
-    signal start_cordic_timer_signal_send : STD_LOGIC := '0';
-    signal start_cordic_timer_signal_recv : STD_LOGIC := '0';
+    --signal start_cordic_timer_signal_send : STD_LOGIC := '0';
+    --signal start_cordic_timer_signal_recv : STD_LOGIC := '0';
 
 begin
 
@@ -371,7 +371,7 @@ out_reset <= reset_button_db;
 
 -- STATE_MACHINE process --------------------------------
  
-state_machine: process(reset_button_db, input_button_db, start_cordic_timer_signal_recv) is
+state_machine: process(reset_button_db, input_button_db) is
 begin
     -- If the reset button is pressed, at ANY time, reset the mode to mode_begin, which is our starting mode
     if (reset_button_db = '1') then
@@ -383,7 +383,7 @@ begin
         out_start_cordic <= '0';
         
         -- shut off internal message signals
-        start_cordic_timer_signal_send <= '0';
+        --start_cordic_timer_signal_send <= '0';
         
         out_led <= x"0001"; 
     end if; 
@@ -446,14 +446,18 @@ begin
                 --      are in here, nothing will actually happen, since we only do things if the recv signal is low for the first run
                 --      that is triggered by the input_button, then if it is high, which it will be if there is a rising edge. It won't be high
                 --      if a second signal on the input_button occurs, so nothing happens. After, we will have already reached the end state. 
-                if start_cordic_timer_signal_recv = '0' then
-                    out_start_cordic <= '1';  
-                    start_cordic_timer_signal_send <= '1';
-                else -- there was a rising edge on the timer_signal_recv signal
-                    out_start_cordic <= '0';
+
+                    out_start_cordic <= '1';
                     out_led <= x"0040";
                     state <= state_end;
-                end if;           
+--                if start_cordic_timer_signal_recv = '0' then
+--                    out_start_cordic <= '1';  
+--                    start_cordic_timer_signal_send <= '1';
+--                else -- there was a rising edge on the timer_signal_recv signal
+--                    out_start_cordic <= '0';
+--                    out_led <= x"0040";
+--                    state <= state_end;
+--                end if;           
                 
             when state_end =>
                 -- Do nothing. No way to get out except reset
@@ -464,26 +468,26 @@ begin
     
 end process state_machine;
 
-start_cordic_timer: process(clk, reset_button_db) is
-    variable counter : unsigned (7 downto 0) := x"00";
-begin
+--start_cordic_timer: process(clk, reset_button_db) is
+--    variable counter : unsigned (7 downto 0) := x"00";
+--begin
 
-    if (reset_button_db = '1') then
-        -- shut off internal message signals
-        start_cordic_timer_signal_recv <= '0';   
-        counter := x"00";
-    end if;
+--    if (reset_button_db = '1') then
+--        -- shut off internal message signals
+--        start_cordic_timer_signal_recv <= '0';   
+--        counter := x"00";
+--    end if;
 
-    if rising_edge(clk) then
-        if (start_cordic_timer_signal_send = '1') then
-            -- count 16 clock cycles then send signal to turn off the start cordic
-            if counter = x"0f" then --after 16 clk go down
-                start_cordic_timer_signal_recv <= '1';
-            else
-                counter := counter + "1"; -- note double quotes here are necessary, it will still run without but won't work
-            end if;                         
-        end if;
-    end if; --rising_edge(clk)
-end process start_cordic_timer;
+--    if rising_edge(clk) then
+--        if (start_cordic_timer_signal_send = '1') then
+--            -- count 16 clock cycles then send signal to turn off the start cordic
+--            if counter = x"0f" then --after 16 clk go down
+--                start_cordic_timer_signal_recv <= '1';
+--            else
+--                counter := counter + "1"; -- note double quotes here are necessary, it will still run without but won't work
+--            end if;                         
+--        end if;
+--    end if; --rising_edge(clk)
+--end process start_cordic_timer;
 
 end behavioural;
