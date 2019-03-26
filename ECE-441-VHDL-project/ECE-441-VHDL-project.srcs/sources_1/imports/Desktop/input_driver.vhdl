@@ -310,43 +310,42 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity input_driver is
-    Port (
+    port (
         ----------------------INPUTS-----------------------------------------------
-        clk             :       in      STD_LOGIC;
-        in_input_value  :       in      STD_LOGIC_VECTOR (15 downto 0);
-        in_input_button :       in      STD_LOGIC;
-        in_reset_button :       in      STD_LOGIC;
+        clk                     : in STD_LOGIC;
+        in_input_value          : in STD_LOGIC_VECTOR (15 downto 0);
+        in_input_button         : in STD_LOGIC;
+        in_reset_button         : in STD_LOGIC;
+        
         ----------------------OUTPUTS----------------------------------------------
-        out_x_value     :       out     SIGNED (15 downto 0)            := x"0000";
-        out_y_value     :       out     SIGNED (15 downto 0)            := x"0000";
-        out_z_value     :       out     SIGNED (15 downto 0)            := x"0000";
-        out_led         :       out     STD_LOGIC_VECTOR (15 downto 0)  := x"0001";
-        out_cordic_mode :       out     STD_LOGIC                       := '0';
-        out_reset       :       out     STD_LOGIC                       := '0';
-        out_start_cordic:       out     STD_LOGIC                       := '0'
+        out_x_value             : out SIGNED (15 downto 0)            := x"0000";
+        out_y_value             : out SIGNED (15 downto 0)            := x"0000";
+        out_z_value             : out SIGNED (15 downto 0)            := x"0000";
+        out_led                 : out STD_LOGIC_VECTOR (15 downto 0)  := x"0001";
+        out_cordic_mode         : out STD_LOGIC                       := '0';
+        out_reset               : out STD_LOGIC                       := '0';
+        out_start_cordic        : out STD_LOGIC                       := '0'
     );  
 end input_driver;
 
-
-architecture behavioural of input_driver is
+architecture behaviour of input_driver is
 
     component debouncer is 
-        Port ( 
-            clk_100MHz    : in  STD_LOGIC;
-            reset         : in  STD_LOGIC;
-            PB_in         : in  STD_LOGIC;
-            PB_out        : out STD_LOGIC    
+        port ( 
+            clk_100MHz          : in  STD_LOGIC;
+            reset               : in  STD_LOGIC;
+            PB_in               : in  STD_LOGIC;
+            PB_out              : out STD_LOGIC    
         );
     end component;
     
-    -- DEBOUNCED input signals
-    signal input_value_db  : STD_LOGIC_VECTOR (15 downto 0);
-    signal input_button_db : STD_LOGIC;
-    signal reset_button_db : STD_LOGIC;
-    signal zero : STD_LOGIC := '0';
+    -------------------DEBOUNCED INPUT SIGNALS-------------------------------------
+    signal input_value_db       : STD_LOGIC_VECTOR (15 downto 0);
+    signal input_button_db      : STD_LOGIC;
+    signal reset_button_db      : STD_LOGIC;
+    signal zero                 : STD_LOGIC := '0';
     
-    -- INTERNAL SIGNALS
-    
+    ---------------------------INTERNAL SIGNALS------------------------------------
     type   state_type is (  state_begin, state_input_x, state_input_y, state_input_z, state_input_cordic_mode,
                             state_start_cordic, state_end  );  
     signal state : state_type := state_begin;
@@ -356,21 +355,16 @@ architecture behavioural of input_driver is
 
 begin
 
--- GENERATE debouncers for all inputs --------------------------------------------------------------------------------------------------------
+-------------------------------DEBOUNCER PORT MAPS---------------------------------
 input_button_debouncer: debouncer port map (clk_100MHz => clk, reset => reset_button_db, PB_in => in_input_button, PB_out => input_button_db);
 reset_button_debouncer: debouncer port map (clk_100MHz => clk, reset => zero, PB_in => in_reset_button, PB_out => reset_button_db);
 generate_input_value_debouncer: for i in 0 to 15 generate
     row_debouncer: debouncer port map (clk_100MHz => clk, reset => reset_button_db, PB_in => in_input_value(i), PB_out => input_value_db(i));
 end generate generate_input_value_debouncer;
-----------------------------------------------------------------------------------------------------------------------------------------------
 
--- SIGNAL Pass thru to the CORDIC controller
---      cordic must be aware of the reset at the same time
+------------------GLOBAL RESET SIGNAL DEBOUNCER------------------------------------
 out_reset <= reset_button_db;
---out_led(15) <= reset_button_db;
 
--- STATE_MACHINE process --------------------------------
- 
 state_machine: process(reset_button_db, input_button_db) is
 begin
     -- If the reset button is pressed, at ANY time, reset the mode to mode_begin, which is our starting mode
@@ -490,4 +484,4 @@ end process state_machine;
 --    end if; --rising_edge(clk)
 --end process start_cordic_timer;
 
-end behavioural;
+end behaviour;
