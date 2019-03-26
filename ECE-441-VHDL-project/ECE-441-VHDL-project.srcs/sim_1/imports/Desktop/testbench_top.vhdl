@@ -59,7 +59,7 @@ begin
         -- TRANSITION FROM INPUT_X to INPUT_Y and save X
         wait for 25ns;
         -- at 125ns, place a value on input vector
-        sw <= x"ABCD";
+        sw <= x"4000";
         wait for 25ns;
         -- at 150ns, move save value and move to state_input_y
         input_button <= '1';
@@ -69,7 +69,7 @@ begin
         -- TRANSITION FROM INPUT_Y to INPUT_Z and save Y
         wait for 25ns;
         -- at 125ns, place a value on input vector
-        sw <= x"1234";
+        sw <= x"0000";
         wait for 25ns;
         -- at 150ns, move save value and move to state_input_y
         input_button <= '1';
@@ -79,7 +79,7 @@ begin
         -- TRANSITION FROM INPUT_Z to INPUT_CORDIC_MODE and save Z
         wait for 25ns;
         -- at 125ns, place a value on input vector
-        sw <= x"5678";
+        sw <= x"2183";
         wait for 25ns;
         -- at 150ns, move save value and move to state_input_y
         input_button <= '1';
@@ -118,10 +118,10 @@ begin
         wait for 25ns;
         input_button <= '0';
         
-        sw(15 downto 12) <= "0000" after (start_time + cordic_time), "0010" after (start_time + cordic_time + 3*display_time), "0100" after (start_time + cordic_time + 6*display_time); -- iteration select
-        sw(9)  <= '1' after (start_time + cordic_time), '0' after (start_time + cordic_time + display_time); -- X, Y, Z select
-        sw(10) <= '0' after (start_time + cordic_time), '1' after (start_time + cordic_time + display_time), '0' after (start_time + cordic_time + 2*display_time);
-        sw(11) <= '0' after (start_time + cordic_time), '1' after (start_time + cordic_time + 2*display_time), '0' after (start_time + cordic_time + 3*display_time);
+        sw(15 downto 12) <= "0000" after (display_time), "0010" after (4*display_time), "0100" after (7*display_time); -- iteration select
+        sw(9)  <= '1' after (display_time), '0' after (2*display_time), '1' after (4*display_time), '0' after (5*display_time), '1' after (7*display_time), '0' after (8*display_time); -- X, Y, Z select
+        sw(10) <= '0' after (display_time), '1' after (2*display_time), '0' after (3*display_time), '1' after (5*display_time), '0' after (6*display_time), '1' after (8*display_time), '0' after (9*display_time);
+        sw(11) <= '0' after (display_time), '1' after (3*display_time), '0' after (4*display_time), '1' after (6*display_time), '0' after (7*display_time), '1' after (9*display_time), '0' after (10*display_time);
 
         wait;  -- indefinitely suspend process
     end process;
