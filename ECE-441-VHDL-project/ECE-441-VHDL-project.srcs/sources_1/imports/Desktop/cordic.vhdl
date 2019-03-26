@@ -7,56 +7,55 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity CORDIC is
 	port (
-	        in_clock                : in STD_LOGIC;
-	        in_reset                : in STD_LOGIC;
-	        in_x_initial            : in SIGNED ( 15 downto 0 );
-	        in_y_initial            : in SIGNED ( 15 downto 0 );
-	        in_z_initial            : in SIGNED ( 15 downto 0 );
-	        in_cordic_mode          : in STD_LOGIC;
-	        in_start                : in STD_LOGIC;
-	        
-	        out_x_result             : out SIGNED ( 15 downto 0 )             := (others => '0');
-	        out_y_result             : out SIGNED ( 15 downto 0 )             := (others => '0');
-	        out_z_result             : out SIGNED ( 15 downto 0 )             := (others => '0');
-	        out_iteration            : out UNSIGNED (  3 downto 0 )           := (others => '0');
-	        out_mu                   : out STD_LOGIC                          := '0';
-	        out_iteration_complete   : out STD_LOGIC                          := '0'
+	       ----------------------INPUTS-----------------------------------------------
+	       in_clock                        : in STD_LOGIC;
+	       in_reset                        : in STD_LOGIC;
+	       in_x_initial                    : in SIGNED ( 15 downto 0 );
+	       in_y_initial                    : in SIGNED ( 15 downto 0 );
+	       in_z_initial                    : in SIGNED ( 15 downto 0 );
+	       in_cordic_mode                  : in STD_LOGIC;
+	       in_start                        : in STD_LOGIC;
+	       
+	       ----------------------OUTPUTS----------------------------------------------                                
+	       out_x_result                    : out SIGNED ( 15 downto 0 )    := (others => '0');
+	       out_y_result                    : out SIGNED ( 15 downto 0 )    := (others => '0');
+	       out_z_result                    : out SIGNED ( 15 downto 0 )    := (others => '0');
+	       out_iteration                   : out UNSIGNED (  3 downto 0 )  := (others => '0');
+	       out_mu                          : out STD_LOGIC                 := '0';
+	       out_iteration_complete          : out STD_LOGIC                 := '0'
 		);
 end CORDIC;
 	
 architecture behaviour of CORDIC is
 	
 	component Theta_LUT_dist_mem_gen is
-      port (
-          a   : in STD_LOGIC_VECTOR  (  3 downto 0 );
-          spo : out STD_LOGIC_VECTOR ( 15 downto 0 )
-      );
+        port (
+            a                              : in  STD_LOGIC_VECTOR  (  3 downto 0 );
+            spo                            : out STD_LOGIC_VECTOR ( 15 downto 0 )
+        );
     end component;
 	
-	-- iteration and current values
-	signal iteration       : UNSIGNED (  3 downto 0 )         := (others => '0');
-    signal x_current       : SIGNED ( 15 downto 0 )           := (others => '0');
-    signal y_current       : SIGNED ( 15 downto 0 )           := (others => '0');
-    signal z_current       : SIGNED ( 15 downto 0 )           := (others => '0');
+	----------------------CURRENT ITERATION SIGNALS-----------------------------------
+	signal iteration                       : UNSIGNED (  3 downto 0 )      := (others => '0');
+    signal x_current                       : SIGNED ( 15 downto 0 )        := (others => '0');
+    signal y_current                       : SIGNED ( 15 downto 0 )        := (others => '0');
+    signal z_current                       : SIGNED ( 15 downto 0 )        := (others => '0');
     
-	-- ALU interface
-	signal alu_x_input     : SIGNED ( 15 downto 0 ) := (others => '0');
-	signal alu_y_input     : SIGNED ( 15 downto 0 ) := (others => '0');
-	signal alu_z_input     : SIGNED ( 15 downto 0 ) := (others => '0');
-	signal theta           : SIGNED ( 15 downto 0 ) := (others => '0');
-	signal alu_mu          : STD_LOGIC              := '0';
+	-------------------------ALU INTERFACE SIGNALS------------------------------------
+	signal alu_x_input                     : SIGNED ( 15 downto 0 )        := (others => '0');
+	signal alu_y_input                     : SIGNED ( 15 downto 0 )        := (others => '0');
+	signal alu_z_input                     : SIGNED ( 15 downto 0 )        := (others => '0');
+	signal theta                           : SIGNED ( 15 downto 0 )        := (others => '0');
+	signal alu_mu                          : STD_LOGIC                     := '0';
 	
-	-- State machine
+	----------------------------INTERNAL SIGNALS--------------------------------------
 	type state_type is (mode_idle, mode_calculate, mode_output, mode_completed);
 	signal state : state_type := mode_idle;
 	
-	
 begin
 	
-	theta_LUT: Theta_LUT_dist_mem_gen port map (
-        a               =>   STD_LOGIC_VECTOR(iteration),
-        signed(spo)     =>   theta
-        );         
+	--------------------------------MEMORY PORT MAPS----------------------------------
+	theta_LUT: Theta_LUT_dist_mem_gen port map (a => STD_LOGIC_VECTOR(iteration), signed(spo) => theta);         
 	
 	cordic_control: process (in_clock, in_reset) is
 	begin
@@ -169,7 +168,6 @@ begin
 		    end case;	            	
 		end if;
     end process;		
-
 
 end behaviour;
 
