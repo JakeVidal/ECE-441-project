@@ -57,6 +57,7 @@ begin
     testbench: process
     begin
         
+        -- note that this timing relies on a hex driver altered to have a much faster refresh rate
         reset <= '0';
         
         x_result <= x"DEAD";

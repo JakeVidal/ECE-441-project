@@ -191,8 +191,6 @@ begin
         wait for 50ns;
         input_button <= '0';
         
-        
-        
         -- IN STATE_END
         -- CHANGE THE INPUT BUTTON A FEW TIMES TO MAKE SURE NOTHING HAPPENS
         wait for 50ns;
