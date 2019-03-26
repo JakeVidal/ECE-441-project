@@ -17,8 +17,9 @@ architecture testbench of top_tb is
 
       constant clk_period      : time := 10ns; --100MHz clock
       constant clk_half_period : time := clk_period / 2;
+      constant start_time      : time := 600ns;
       constant cordic_time     : time := 350ns; -- ammount of time cordic takes to execute.
-      constant display_time    : time := 1500ns;
+      constant display_time    : time := 1000ns;
 
 begin
     UUT : entity work.top port map (
@@ -43,20 +44,85 @@ begin
     
     testbench: process
     begin
-        -- Rotation
---        in_reset <= '1', '0' after 5ns;
+    
+        undebounced_reset <= '0';
+        sw <= x"0000";
+        input_button <= '0';
         
---        in_cordic_mode <= '0';
---        in_x_initial <= x"4000" after (0 * cordic_time);
---        in_y_initial <= x"0000" after (0 * cordic_time);                 
---        in_z_initial <= x"2183" after (0 * cordic_time);
---        in_start <= '0', '1' after (0 * cordic_time + 10ns), '0' after (0 * cordic_time + 20ns);
-         
---        iteration_select <= "0000";
---        x_select <= '0', '1' after (cordic_time + 10ns), '0' after (cordic_time + display_time + 10ns);
---        y_select <= '0', '1' after (cordic_time + display_time + 10ns), '0' after (cordic_time + 2*display_time + 10ns);
---        z_select <= '0', '1' after (cordic_time + 2*display_time + 10ns), '0' after (cordic_time + 3*display_time + 10ns);
-                         
+        -- TRANSITION FROM BEGIN TO INPUT_X
+        -- at 50ns move to state state_input_x
+        wait for 50ns;
+        input_button <= '1';
+        wait for 50ns;
+        input_button <= '0';
+        
+        -- TRANSITION FROM INPUT_X to INPUT_Y and save X
+        wait for 25ns;
+        -- at 125ns, place a value on input vector
+        sw <= x"ABCD";
+        wait for 25ns;
+        -- at 150ns, move save value and move to state_input_y
+        input_button <= '1';
+        wait for 50ns;
+        input_button <= '0';
+        
+        -- TRANSITION FROM INPUT_Y to INPUT_Z and save Y
+        wait for 25ns;
+        -- at 125ns, place a value on input vector
+        sw <= x"1234";
+        wait for 25ns;
+        -- at 150ns, move save value and move to state_input_y
+        input_button <= '1';
+        wait for 50ns;
+        input_button <= '0';
+        
+        -- TRANSITION FROM INPUT_Z to INPUT_CORDIC_MODE and save Z
+        wait for 25ns;
+        -- at 125ns, place a value on input vector
+        sw <= x"5678";
+        wait for 25ns;
+        -- at 150ns, move save value and move to state_input_y
+        input_button <= '1';
+        wait for 50ns;
+        input_button <= '0';
+        
+        -- test reset here to see how, with the reset held, further signals don't affect the state
+        --in_reset <= '1';
+        
+        -- TRANSITION FROM INPUT_CORDIC_MODE to START_CORDIC and save CORDIC_MODE
+        wait for 25ns;
+        -- at 125ns, place a value on input vector
+        sw <= x"0011"; -- check that we get the LSB and not the whole thing
+        wait for 25ns;
+        -- at 150ns, move save value and move to state_input_y
+        input_button <= '1';
+        wait for 50ns;
+        input_button <= '0';
+        
+        -- START CORDIC and MOVE TO STATE_END
+        -- EXPECT 5 clock cycles of out_start_cordic at '1' then '0' again
+        wait for 50ns;
+        -- at 150ns, move save value and move to state_input_y
+        input_button <= '1';
+        wait for 50ns;
+        input_button <= '0';
+        
+        -- IN STATE_END
+        -- CHANGE THE INPUT BUTTON A FEW TIMES TO MAKE SURE NOTHING HAPPENS
+        wait for 50ns;
+        input_button <= '1';
+        wait for 25ns;
+        input_button <= '0';
+        wait for 50ns;
+        input_button <= '1';
+        wait for 25ns;
+        input_button <= '0';
+        
+        sw(15 downto 12) <= "0000" after (start_time + cordic_time), "0010" after (start_time + cordic_time + 3*display_time), "0100" after (start_time + cordic_time + 6*display_time); -- iteration select
+        sw(9)  <= '1' after (start_time + cordic_time), '0' after (start_time + cordic_time + display_time); -- X, Y, Z select
+        sw(10) <= '0' after (start_time + cordic_time), '1' after (start_time + cordic_time + display_time), '0' after (start_time + cordic_time + 2*display_time);
+        sw(11) <= '0' after (start_time + cordic_time), '1' after (start_time + cordic_time + 2*display_time), '0' after (start_time + cordic_time + 3*display_time);
+
         wait;  -- indefinitely suspend process
     end process;
 end testbench;
