@@ -37,15 +37,6 @@ architecture behavioural of output_driver is
             spo                       : out STD_LOGIC_VECTOR(15 DOWNTO 0)
         );
     end component;
-    
-    component debouncer is 
-        port ( 
-            clk_100MHz                : in  STD_LOGIC;
-            reset                     : in  STD_LOGIC;
-            PB_in                     : in STD_LOGIC;
-            PB_out                    : out STD_LOGIC    
-        );
-    end component;
 
     component hex_driver is
         port (
@@ -63,10 +54,6 @@ architecture behavioural of output_driver is
     signal store_value: STD_LOGIC_VECTOR (15 downto 0);
     signal ram_address: STD_LOGIC_VECTOR (3 downto 0);
     signal x_stored_value, y_stored_value, z_stored_value: STD_LOGIC_VECTOR (15 downto 0);
-    
-    -------------------DEBOUNCED INPUT SIGNALS-------------------------------------
-    signal x_select_debounced, y_select_debounced, z_select_debounced : STD_LOGIC;
-    signal iteration_select_debounced : STD_LOGIC_VECTOR (3 downto 0);
     
     ---------------------------INTERNAL SIGNALS------------------------------------
     signal start_display : STD_LOGIC := '0';
@@ -100,35 +87,27 @@ begin
     we              =>   write_enable,
     spo             =>   z_stored_value
     ); 
-    
-    -------------------------------DEBOUNCER MAPS----------------------------------
-    x_select_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => x_select, PB_out => x_select_debounced);
-    y_select_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => y_select, PB_out => y_select_debounced);
-    z_select_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => z_select, PB_out => z_select_debounced);
-    generate_iteration_debouncer: for i in 0 to 3 generate
-        iteration_debouncer: debouncer port map (clk_100MHz => clk, reset => reset, PB_in => iteration_select(i), PB_out => iteration_select_debounced(i));
-    end generate generate_iteration_debouncer;
 
     ------------------------------HEX DRIVER PORT MAP------------------------------
     display_value: hex_driver port map (clk => clk, reset => reset, done => start_display, d_in => selected_value, anodes => anode, cathodes => segment);
 
-    handle_ui: process (clk, x_select_debounced, y_select_debounced, z_select_debounced, iteration_select_debounced, reset)
+    handle_ui: process (clk, x_select, y_select, z_select, reset)
     begin
 
         if (reset = '1') then
             selected_value <= x"0000";
         end if;
         
-        if (state = mode_read) then
-            if (x_select_debounced = '1') then
-                selected_value <= x_stored_value;
-            elsif (y_select_debounced = '1') then
-                selected_value <= y_stored_value;
-            elsif (z_select_debounced = '1') then
-                selected_value <= z_stored_value;
-
-            end if;
-
+        if rising_edge(clk) then
+            if (state = mode_read) then
+                if (x_select = '1') then
+                    selected_value <= x_stored_value;
+                elsif (y_select = '1') then
+                    selected_value <= y_stored_value;
+                elsif (z_select = '1') then
+                    selected_value <= z_stored_value;
+                end if;
+            end if;    
         end if;
 
     end process;
@@ -154,7 +133,7 @@ begin
                     
                 when mode_read => 
                     write_enable <= '0';
-                    ram_address <= iteration_select_debounced;
+                    ram_address <= iteration_select;
                     start_display <= '1';
             end case;
         end if;

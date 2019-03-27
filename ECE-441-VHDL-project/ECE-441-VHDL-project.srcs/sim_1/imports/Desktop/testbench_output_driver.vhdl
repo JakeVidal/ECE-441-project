@@ -67,9 +67,9 @@ begin
         
         data_ready <= '0', '1' after 10ns, '0' after 20ns;
         iteration_select <= "1110";
-        x_select <= '0', '1' after 30ns;
-        y_select <= '0';
-        z_select <= '0';
+        x_select <= '0', '1' after 30ns, '0' after 510ns;
+        y_select <= '0', '1' after 510ns, '0' after 1022ns;
+        z_select <= '0', '1' after 1022ns, '0' after 1534ns;
 
         wait;
     end process;
