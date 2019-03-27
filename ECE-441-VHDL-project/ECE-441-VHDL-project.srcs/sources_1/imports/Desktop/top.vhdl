@@ -5,10 +5,10 @@ use IEEE.NUMERIC_STD.ALL;
 entity top is
 	port (
 	       ----------------------INPUTS-----------------------------------------------
-           input_clk                : in STD_LOGIC;
-           undebounced_reset        : in STD_LOGIC;
-           input_button             : in STD_LOGIC;
-           sw                       : in STD_LOGIC_VECTOR (15 downto 0);
+           input_clk                    : in STD_LOGIC;
+           undebounced_reset_button     : in STD_LOGIC;
+           undebounced_input_button     : in STD_LOGIC;
+           undebounced_switches         : in STD_LOGIC_VECTOR (15 downto 0);
            
 	       ----------------------OUTPUTS---------------------------------------------- 
            led                      : out STD_LOGIC_VECTOR (15 downto 0);
@@ -19,6 +19,15 @@ end top;
 
 architecture behaviour of top is
 
+    component debouncer is
+        port ( 
+               clk_100MHz    : in  STD_LOGIC;
+               reset         : in  STD_LOGIC;
+               PB_in         : in  STD_LOGIC;    -- the input PB that is bouncy
+               PB_out        : out STD_LOGIC    -- the de-bounced output
+            );  
+    end component;
+    
     component input_driver is
         port (
             ----------------------INPUTS-----------------------------------------------
@@ -33,7 +42,6 @@ architecture behaviour of top is
             out_z_value             : out SIGNED (15 downto 0)            := x"0000";
             out_led                 : out STD_LOGIC_VECTOR (15 downto 0)  := x"0001";
             out_cordic_mode         : out STD_LOGIC                       := '0';
-            out_reset               : out STD_LOGIC                       := '0';
             out_start_cordic        : out STD_LOGIC                       := '0'
         );
     end component;
@@ -80,9 +88,15 @@ architecture behaviour of top is
         );
     end component;
     
-    signal reset                    : STD_LOGIC;
+    ----------------------SIGNAL FOR GROUND REFERENCE----------------------------------
+    signal zero                     : STD_LOGIC := '0';
     
-    ----------------------INPUT DRIVER TO CORDIC----------------------------------------
+    ----------------------USER INPUT TO SYSTEM-----------------------------------------
+    signal reset                    : STD_LOGIC;
+    signal input                    : STD_LOGIC;
+    signal switches                 : STD_LOGIC_VECTOR (15 downto 0);
+    
+    ----------------------INPUT DRIVER TO CORDIC---------------------------------------
     signal in_x_transfer            : SIGNED (15 downto 0);
     signal in_y_transfer            : SIGNED (15 downto 0);
     signal in_z_transfer            : SIGNED (15 downto 0);
@@ -98,18 +112,43 @@ architecture behaviour of top is
     signal complete_transfer        : STD_LOGIC;
     
 begin
+    
+    ---------------------- DEBOUNCER PORT MAPS ------------------------------------------
+    input_button_debouncer: debouncer port map (
+        clk_100MHz => input_clk,
+        reset => reset,
+        PB_in => undebounced_input_button,
+        PB_out => input
+    );
+    
+    reset_button_debouncer: debouncer port map (
+        clk_100MHz => input_clk,
+        reset => zero,
+        PB_in => undebounced_reset_button,
+        PB_out => reset
+    );
+    
+    generate_switches_debouncer: for i in 0 to 15 generate
+        switch_debouncer: debouncer port map (
+            clk_100MHz => input_clk,
+            reset => reset,
+            PB_in => undebounced_switches(i),
+            PB_out => switches(i)
+        );
+    end generate generate_switches_debouncer;
+    
+    ---------------------- MODULE PORT MAPS -----------------------------------------------
 
     input_driver_map: input_driver port map (
         clk                     => input_clk,
-        in_input_value          => sw,
-        in_input_button         => input_button,
-        in_reset_button         => undebounced_reset,
+        in_input_value          => switches,
+        in_input_button         => input,
+        in_reset_button         => reset,
         out_x_value             => in_x_transfer,
         out_y_value             => in_y_transfer,
         out_z_value             => in_z_transfer,
         out_led                 => led,
         out_cordic_mode         => cordic_mode,
-        out_reset               => reset,
         out_start_cordic        => start_cordic
     );              
 
@@ -137,10 +176,10 @@ begin
         z_result                => out_z_transfer,
         iteration               => iteration_transfer,
         data_ready              => complete_transfer,
-        x_select                => sw(9),
-        y_select                => sw(10),
-        z_select                => sw(11),
-        iteration_select        => sw(15 downto 12),
+        x_select                => switches(9),
+        y_select                => switches(10),
+        z_select                => switches(11),
+        iteration_select        => switches(15 downto 12),
         anode                   => anode,
         segment                 => segment
     );

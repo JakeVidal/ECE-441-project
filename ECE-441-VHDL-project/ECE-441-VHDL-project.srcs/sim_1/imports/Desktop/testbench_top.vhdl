@@ -24,9 +24,9 @@ architecture testbench of top_tb is
 begin
     UUT : entity work.top port map (
        input_clk                =>    input_clk,    
-       undebounced_reset        =>    undebounced_reset,
-       input_button             =>    input_button,
-       sw                       =>    sw,
+       undebounced_reset_button =>    undebounced_reset,
+       undebounced_input_button =>    input_button,
+       undebounced_switches     =>    sw,
        led                      =>    led,
        anode                    =>    anode,
        segment                  =>    segment 

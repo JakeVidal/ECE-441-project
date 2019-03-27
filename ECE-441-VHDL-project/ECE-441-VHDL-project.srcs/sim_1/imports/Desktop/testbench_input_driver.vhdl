@@ -95,7 +95,6 @@ architecture tb of input_driver_tb is
     signal initial_y                 : SIGNED (15 downto 0);
     signal initial_z                 : SIGNED (15 downto 0);
     signal start_cordic              : STD_LOGIC;
-    signal out_reset                 : STD_LOGIC;
     
     constant clk_period      : time := 10ns; --100MHz clock
     constant clk_half_period : time := clk_period / 2;
@@ -113,8 +112,7 @@ begin
         out_y_value         => initial_y,
         out_z_value         => initial_z,   
         out_cordic_mode     => cordic_mode, 
-        out_start_cordic    => start_cordic,
-        out_reset           => out_reset      
+        out_start_cordic    => start_cordic      
     );
 
     clk_process: process
