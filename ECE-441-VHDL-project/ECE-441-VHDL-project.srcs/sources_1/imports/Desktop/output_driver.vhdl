@@ -51,7 +51,6 @@ architecture behavioural of output_driver is
 
     ------------------------MEMORY ACCESS SIGNALS----------------------------------
     signal write_enable: STD_LOGIC := '0';
-    signal store_value: STD_LOGIC_VECTOR (15 downto 0);
     signal ram_address: STD_LOGIC_VECTOR (3 downto 0);
     signal x_stored_value, y_stored_value, z_stored_value: STD_LOGIC_VECTOR (15 downto 0);
     
