@@ -15,11 +15,17 @@ architecture testbench of top_tb is
       signal anode                       : STD_LOGIC_VECTOR (3 downto 0)    := "0000";
       signal segment                     : STD_LOGIC_VECTOR (6 downto 0)    := "0000000";
 
+      signal test_data_ready             : STD_LOGIC := '0';
+      signal test_x_result               : SIGNED (15 downto 0);
+      signal test_y_result               : SIGNED (15 downto 0);
+      signal test_z_result               : SIGNED (15 downto 0);
+      signal test_iteration              : UNSIGNED (3 downto 0);
+
       constant clk_period      : time := 10ns; --100MHz clock
       constant clk_half_period : time := clk_period / 2;
       constant start_time      : time := 600ns;
       constant cordic_time     : time := 350ns; -- ammount of time cordic takes to execute.
-      constant display_time    : time := 1000ns;
+      constant display_time    : time := 1280ns;
 
 begin
     UUT : entity work.top port map (
@@ -29,8 +35,12 @@ begin
        undebounced_switches     =>    sw,
        led                      =>    led,
        anode                    =>    anode,
-       segment                  =>    segment 
-          
+       segment                  =>    segment, 
+       test_data_ready          =>    test_data_ready,    
+       test_x_result            =>    test_x_result,
+       test_y_result            =>    test_y_result,
+       test_z_result            =>    test_z_result,
+       test_iteration           =>    test_iteration
     );
     
     clk_process :process
@@ -107,21 +117,47 @@ begin
         wait for 50ns;
         input_button <= '0';
         
-        -- IN STATE_END
-        -- CHANGE THE INPUT BUTTON A FEW TIMES TO MAKE SURE NOTHING HAPPENS
-        wait for 50ns;
-        input_button <= '1';
-        wait for 25ns;
-        input_button <= '0';
-        wait for 50ns;
-        input_button <= '1';
-        wait for 25ns;
-        input_button <= '0';
+        sw <= x"0000";
+        wait for 685ns;
         
-        sw(15 downto 12) <= "0000" after (display_time), "0010" after (4*display_time), "0100" after (7*display_time); -- iteration select
-        sw(9)  <= '1' after (display_time), '0' after (2*display_time), '1' after (4*display_time), '0' after (5*display_time), '1' after (7*display_time), '0' after (8*display_time); -- X, Y, Z select
-        sw(10) <= '0' after (display_time), '1' after (2*display_time), '0' after (3*display_time), '1' after (5*display_time), '0' after (6*display_time), '1' after (8*display_time), '0' after (9*display_time);
-        sw(11) <= '0' after (display_time), '1' after (3*display_time), '0' after (4*display_time), '1' after (6*display_time), '0' after (7*display_time), '1' after (9*display_time), '0' after (10*display_time);
+        sw(9) <= '1';
+        wait for display_time;
+        sw(9) <= '0';
+        sw(10) <= '1';
+        wait for display_time;
+        sw(10) <= '0';
+        sw(11) <= '1';
+        wait for display_time;
+        sw(11) <= '0';
+        
+        sw(15 downto 12) <= "0010";
+        
+        sw(9) <= '1';
+        wait for display_time;
+        sw(9) <= '0';
+        sw(10) <= '1';
+        wait for display_time;
+        sw(10) <= '0';
+        sw(11) <= '1';
+        wait for display_time;
+        sw(11) <= '0';
+        
+        sw(15 downto 12) <= "0100";
+        
+        sw(9) <= '1';
+        wait for display_time;
+        sw(9) <= '0';
+        sw(10) <= '1';
+        wait for display_time;
+        sw(10) <= '0';
+        sw(11) <= '1';
+        wait for display_time;
+        sw(11) <= '0';
+        
+--        sw(15 downto 12) <= "0010" after (4*display_time + 5ns), "0100" after (7*display_time + 5ns); -- iteration select
+--        sw(9)  <= '1' after (display_time + 5ns), '0' after (2*display_time + 5ns), '1' after (4*display_time + 5ns), '0' after (5*display_time + 5ns), '1' after (7*display_time + 5ns), '0' after (8*display_time + 5ns); -- X, Y, Z select
+--        sw(10) <= '1' after (2*display_time + 5ns), '0' after (3*display_time + 5ns), '1' after (5*display_time + 5ns), '0' after (6*display_time + 5ns), '1' after (8*display_time + 5ns), '0' after (9*display_time + 5ns);
+--        sw(11) <= '1' after (3*display_time + 5ns), '0' after (4*display_time + 5ns), '1' after (6*display_time + 5ns), '0' after (7*display_time + 5ns), '1' after (9*display_time + 5ns), '0' after (10*display_time + 5ns);
 
         wait;  -- indefinitely suspend process
     end process;
