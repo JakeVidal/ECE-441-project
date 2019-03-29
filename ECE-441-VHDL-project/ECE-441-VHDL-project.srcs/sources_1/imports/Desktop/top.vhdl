@@ -38,7 +38,6 @@ architecture behaviour of top is
     component input_driver is
         port (
             ----------------------INPUTS-----------------------------------------------
-            clk                     : in STD_LOGIC;
             in_input_value          : in STD_LOGIC_VECTOR (15 downto 0);
             in_input_button         : in STD_LOGIC;
             in_reset_button         : in STD_LOGIC;
