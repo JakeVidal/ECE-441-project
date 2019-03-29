@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="35" Path="C:/Users/Jake/Desktop/Coding/Projects/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.xpr">
+<Project Version="7" Minor="35" Path="C:/Users/amcote/Desktop/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="6baac21219ff402ab24a5797986a332b"/>
@@ -33,20 +33,20 @@
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSAVendor" Val="xilinx"/>
     <Option Name="DSANumComputeUnits" Val="60"/>
-    <Option Name="WTXSimLaunchSim" Val="136"/>
+    <Option Name="WTXSimLaunchSim" Val="140"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="64"/>
-    <Option Name="WTModelSimExportSim" Val="64"/>
-    <Option Name="WTQuestaExportSim" Val="64"/>
-    <Option Name="WTIesExportSim" Val="64"/>
-    <Option Name="WTVcsExportSim" Val="64"/>
-    <Option Name="WTRivieraExportSim" Val="64"/>
-    <Option Name="WTActivehdlExportSim" Val="64"/>
+    <Option Name="WTXSimExportSim" Val="66"/>
+    <Option Name="WTModelSimExportSim" Val="66"/>
+    <Option Name="WTQuestaExportSim" Val="66"/>
+    <Option Name="WTIesExportSim" Val="66"/>
+    <Option Name="WTVcsExportSim" Val="66"/>
+    <Option Name="WTRivieraExportSim" Val="66"/>
+    <Option Name="WTActivehdlExportSim" Val="66"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -129,6 +129,7 @@
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="top"/>
+        <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
@@ -147,8 +148,17 @@
     </FileSet>
     <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1">
       <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_input_driver.vhdl">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_input_driver.vhdl"/>
+          <Attr Name="ImportTime" Val="1552082087"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_output_driver.vhdl">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_output_driver.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -159,15 +169,6 @@
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_top.vhdl"/>
-          <Attr Name="ImportTime" Val="1552082087"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/imports/Desktop/testbench_input_driver.vhdl">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../../../testbench_input_driver.vhdl"/>
           <Attr Name="ImportTime" Val="1552082087"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -193,11 +194,10 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="output_driver_tb"/>
+        <Option Name="TopModule" Val="input_driver_tb"/>
         <Option Name="TopLib" Val="xil_defaultlib"/>
         <Option Name="TransportPathDelay" Val="0"/>
         <Option Name="TransportIntDelay" Val="0"/>
-        <Option Name="SimMode" Val="post-implementation"/>
         <Option Name="SrcSet" Val="sources_1"/>
         <Option Name="xsim.simulate.runtime" Val="10000ns"/>
       </Config>

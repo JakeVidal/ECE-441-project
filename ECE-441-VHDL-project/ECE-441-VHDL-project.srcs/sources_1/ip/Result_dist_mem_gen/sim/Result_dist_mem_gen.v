@@ -58,14 +58,16 @@ module Result_dist_mem_gen (
   d,
   clk,
   we,
-  spo
+  qspo_rst,
+  qspo
 );
 
 input wire [3 : 0] a;
 input wire [15 : 0] d;
 input wire clk;
 input wire we;
-output wire [15 : 0] spo;
+input wire qspo_rst;
+output wire [15 : 0] qspo;
 
   dist_mem_gen_v8_0_12 #(
     .C_FAMILY("artix7"),
@@ -82,11 +84,11 @@ output wire [15 : 0] spo;
     .C_HAS_QDPO_CLK(0),
     .C_HAS_QDPO_RST(0),
     .C_HAS_QDPO_SRST(0),
-    .C_HAS_QSPO(0),
+    .C_HAS_QSPO(1),
     .C_HAS_QSPO_CE(0),
-    .C_HAS_QSPO_RST(0),
+    .C_HAS_QSPO_RST(1),
     .C_HAS_QSPO_SRST(0),
-    .C_HAS_SPO(1),
+    .C_HAS_SPO(0),
     .C_HAS_WE(1),
     .C_MEM_INIT_FILE("no_coe_file_loaded"),
     .C_ELABORATION_DIR("./"),
@@ -110,13 +112,13 @@ output wire [15 : 0] spo;
     .qspo_ce(1'D1),
     .qdpo_ce(1'D1),
     .qdpo_clk(1'D0),
-    .qspo_rst(1'D0),
+    .qspo_rst(qspo_rst),
     .qdpo_rst(1'D0),
     .qspo_srst(1'D0),
     .qdpo_srst(1'D0),
-    .spo(spo),
+    .spo(),
     .dpo(),
-    .qspo(),
+    .qspo(qspo),
     .qdpo()
   );
 endmodule

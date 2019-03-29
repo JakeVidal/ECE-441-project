@@ -34,7 +34,8 @@ architecture behavioural of output_driver is
             d                         : in STD_LOGIC_VECTOR(15 DOWNTO 0);
             clk                       : in STD_LOGIC;
             we                        : in STD_LOGIC;
-            spo                       : out STD_LOGIC_VECTOR(15 DOWNTO 0)
+            qspo_rst                  : IN STD_LOGIC;
+            qspo                      : out STD_LOGIC_VECTOR(15 DOWNTO 0)
         );
     end component;
 
@@ -68,7 +69,8 @@ begin
     d               =>   STD_LOGIC_VECTOR(x_result),
     clk             =>   clk,
     we              =>   write_enable,
-    spo             =>   x_stored_value
+    qspo_rst        =>   reset,
+    qspo            =>   x_stored_value
     ); 
     
     y_result_storage: Result_dist_mem_gen port map (
@@ -76,7 +78,8 @@ begin
     d               =>   STD_LOGIC_VECTOR(y_result),
     clk             =>   clk,
     we              =>   write_enable,
-    spo             =>   y_stored_value
+    qspo_rst        =>   reset,
+    qspo            =>   y_stored_value
     ); 
     
     z_result_storage: Result_dist_mem_gen port map (
@@ -84,7 +87,8 @@ begin
     d               =>   STD_LOGIC_VECTOR(z_result),
     clk             =>   clk,
     we              =>   write_enable,
-    spo             =>   z_stored_value
+    qspo_rst        =>   reset,
+    qspo            =>   z_stored_value
     ); 
 
     ------------------------------HEX DRIVER PORT MAP------------------------------
@@ -95,18 +99,19 @@ begin
 
         if (reset = '1') then
             selected_value <= x"0000";
-        end if;
-        
-        if rising_edge(clk) then
-            if (state = mode_read) then
-                if (x_select = '1') then
-                    selected_value <= x_stored_value;
-                elsif (y_select = '1') then
-                    selected_value <= y_stored_value;
-                elsif (z_select = '1') then
-                    selected_value <= z_stored_value;
-                end if;
-            end if;    
+        --end if;
+        else
+            if rising_edge(clk) then
+                if (state = mode_read) then
+                    if (x_select = '1') then
+                        selected_value <= x_stored_value;
+                    elsif (y_select = '1') then
+                        selected_value <= y_stored_value;
+                    elsif (z_select = '1') then
+                        selected_value <= z_stored_value;
+                    end if;
+                end if;    
+            end if;
         end if;
 
     end process;
@@ -117,24 +122,25 @@ begin
         if (reset = '1') then
             state <= mode_write;
             -- clear ram
-        end if;
-        
-        if rising_edge(clk) then
-            case state is
-                when mode_write => 
-                    write_enable <= data_ready;
-                    ram_address <= STD_LOGIC_VECTOR(iteration);
-                    start_display <= '0';
-                    
-                    if (iteration = "1111") then
-                        state <= mode_read;
-                    end if;
-                    
-                when mode_read => 
-                    write_enable <= '0';
-                    ram_address <= iteration_select;
-                    start_display <= '1';
-            end case;
+        --end if;
+        else
+            if rising_edge(clk) then
+                case state is
+                    when mode_write => 
+                        write_enable <= data_ready;
+                        ram_address <= STD_LOGIC_VECTOR(iteration);
+                        start_display <= '0';
+                        
+                        if (iteration = "1111") then
+                            state <= mode_read;
+                        end if;
+                        
+                    when mode_read => 
+                        write_enable <= '0';
+                        ram_address <= iteration_select;
+                        start_display <= '1';
+                end case;
+            end if;
         end if;
         
     end process;

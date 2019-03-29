@@ -22,8 +22,8 @@ end debouncer;
 
 architecture behavioural of debouncer is
 
-constant COUNT_MAX : integer := 1000000;   -- number of clocks to delay to get past bouncing periods (default is 100000), set to 1 for simulation
-signal count : integer := 0; -- the counter to implement the delays.  10 to 12ms is typical. 10000000=10ms
+constant COUNT_MAX : integer := 7500000;   -- number of clocks to delay to get past bouncing periods (default is 100000), set to 1 for simulation
+signal count : integer       := 7500000;   -- the counter to implement the delays.  10 to 12ms is typical. 10000000=10ms
 
 type   state_type is (wait_for_push, push_detected, wait_for_release, release_detected);  --state types for PB debouncer
 signal state : state_type := wait_for_push;  -- intialized to waiting for push of the PB

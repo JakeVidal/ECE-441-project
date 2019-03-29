@@ -33,6 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity input_driver is
     port (
         ----------------------INPUTS-----------------------------------------------
+        clk                     : in STD_LOGIC;
         in_input_value          : in STD_LOGIC_VECTOR (15 downto 0);
         in_input_button         : in STD_LOGIC;
         in_reset_button         : in STD_LOGIC;
@@ -58,7 +59,7 @@ begin
 
 ------------------STATE MACHINE------------------------------------
 
-    state_machine: process(in_reset_button, in_input_button) is
+    state_machine: process(clk, in_reset_button, in_input_button) is
     begin
         -- If the reset button is pressed, at ANY time, reset the mode to mode_begin, which is our starting mode
         if (in_reset_button = '1') then
@@ -73,73 +74,75 @@ begin
             --start_cordic_timer_signal_send <= '0';
             
             out_led <= x"0001"; 
-        end if; 
-         
-        -- State machine transitions occur on the rising edge of the input button
-        -- all actions taken during the state are gated by the edge
-        -- all actions taken to prepare a state have to happen the state before
-        -- (e.g. lighting the LEDs)
-        -- NOTE on LEDs:    They never turn off until we reach the end state.
-        --                  In this sense they indicate progress thru state machine
-        if rising_edge(in_input_button) then 
-            
-            case state is
+        --end if; 
+        else  
+            -- State machine transitions occur on the rising edge of the input button
+            -- all actions taken during the state are gated by the edge
+            -- all actions taken to prepare a state have to happen the state before
+            -- (e.g. lighting the LEDs)
+            -- NOTE on LEDs:    They never turn off until we reach the end state.
+            --                  In this sense they indicate progress thru state machine
+            if rising_edge(in_input_button) then 
                 
-                when state_begin =>
-                    -- received signal to move to state_input_x
-                    -- prepare that state:
-                    -- turn on indicator LED
-                    out_led <= x"0002";
-                    state <= state_input_x;
+                case state is
                     
-                when state_input_x =>
-                    -- received signal to move to state_input_y
-                    -- save debounced input vector into x output
-                    out_x_value <= SIGNED(in_input_value);
-                    -- prepare the next state by turning on LED 2
-                    out_led <= x"0004";
-                    state <= state_input_y;
-                when state_input_y =>
-                    -- received signal to move to state_input_z
-                    -- save debounced input vector into y output
-                    out_y_value <= SIGNED(in_input_value);
-                    -- prepare the next state by turning on LED 3
-                    out_led <= x"0008";
-                    state <= state_input_z;
-                    
-                when state_input_z =>
-                    -- received signal to move to state_input_cordic_mode
-                    -- save debounced input vector into z output
-                    out_z_value <= SIGNED(in_input_value);
-                    -- prepare the next state by turning on LED 4
-                    out_led <= x"0010";
-                    state <= state_input_cordic_mode;
-                    
-                when state_input_cordic_mode =>
-                    -- received signal to move to state_start_cordic
-                    -- save LSB of input vector into out_cordic_mode
-                    out_cordic_mode <= in_input_value(0);
-                    -- prepare the next state by turning on LED 5
-                    out_led <= x"0020";
-                    state <= state_start_cordic;
-                    
-                when state_start_cordic =>
-                    -- received signal to start cordic
-                    -- set the start_cordic output high, and send a signal to start counting
-                    -- when the returned signal (start_cordic_timer_signal_recv, goes high
-                    -- since it is in the sensitivity list, this block runs again, but the "else"
-                    -- runs, and so out_start_cordic is set low, and then we enter the "end" state.
-    
-                        out_start_cordic <= '1';
-                        out_led <= x"0040";
-                        state <= state_end;       
-                    
-                when state_end =>
-                    -- Do nothing. No way to get out except reset
-                    
-            end case; -- case state is
+                    when state_begin =>
+                        -- received signal to move to state_input_x
+                        -- prepare that state:
+                        -- turn on indicator LED
+                        out_led <= x"0002";
+                        state <= state_input_x;
+                        
+                    when state_input_x =>
+                        -- received signal to move to state_input_y
+                        -- save debounced input vector into x output
+                        out_x_value <= SIGNED(in_input_value);
+                        -- prepare the next state by turning on LED 2
+                        out_led <= x"0004";
+                        state <= state_input_y;
+                        
+                    when state_input_y =>
+                        -- received signal to move to state_input_z
+                        -- save debounced input vector into y output
+                        out_y_value <= SIGNED(in_input_value);
+                        -- prepare the next state by turning on LED 3
+                        out_led <= x"0008";
+                        state <= state_input_z;
+                        
+                    when state_input_z =>
+                        -- received signal to move to state_input_cordic_mode
+                        -- save debounced input vector into z output
+                        out_z_value <= SIGNED(in_input_value);
+                        -- prepare the next state by turning on LED 4
+                        out_led <= x"0010";
+                        state <= state_input_cordic_mode;
+                        
+                    when state_input_cordic_mode =>
+                        -- received signal to move to state_start_cordic
+                        -- save LSB of input vector into out_cordic_mode
+                        out_cordic_mode <= in_input_value(0);
+                        -- prepare the next state by turning on LED 5
+                        out_led <= x"0020";
+                        state <= state_start_cordic;
+                        
+                    when state_start_cordic =>
+                        -- received signal to start cordic
+                        -- set the start_cordic output high, and send a signal to start counting
+                        -- when the returned signal (start_cordic_timer_signal_recv, goes high
+                        -- since it is in the sensitivity list, this block runs again, but the "else"
+                        -- runs, and so out_start_cordic is set low, and then we enter the "end" state.
+        
+                            out_start_cordic <= '1';
+                            out_led <= x"0040";
+                            state <= state_end;       
+                        
+                    when state_end =>
+                        -- Do nothing. No way to get out except reset
+                        
+                end case; -- case state is
             
-        end if; -- if rising_edge(reset_button_db)
+            end if; -- if rising_edge(reset_button_db)
+        end if;
         
     end process state_machine;
 

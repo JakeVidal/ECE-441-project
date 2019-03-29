@@ -1,10 +1,10 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
-// Date        : Wed Mar 27 16:02:49 2019
-// Host        : noah-yoga running 64-bit major release  (build 9200)
+// Date        : Fri Mar 29 11:49:04 2019
+// Host        : ws14-03 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
-//               D:/CourseProjects/ECE441/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Result_dist_mem_gen/Result_dist_mem_gen_sim_netlist.v
+//               C:/Users/amcote/Desktop/ECE-441-project/ECE-441-VHDL-project/ECE-441-VHDL-project.srcs/sources_1/ip/Result_dist_mem_gen/Result_dist_mem_gen_sim_netlist.v
 // Design      : Result_dist_mem_gen
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -19,21 +19,24 @@ module Result_dist_mem_gen
     d,
     clk,
     we,
-    spo);
+    qspo_rst,
+    qspo);
   input [3:0]a;
   input [15:0]d;
   input clk;
   input we;
-  output [15:0]spo;
+  input qspo_rst;
+  output [15:0]qspo;
 
   wire [3:0]a;
   wire clk;
   wire [15:0]d;
-  wire [15:0]spo;
+  wire [15:0]qspo;
+  wire qspo_rst;
   wire we;
   wire [15:0]NLW_U0_dpo_UNCONNECTED;
   wire [15:0]NLW_U0_qdpo_UNCONNECTED;
-  wire [15:0]NLW_U0_qspo_UNCONNECTED;
+  wire [15:0]NLW_U0_spo_UNCONNECTED;
 
   (* C_FAMILY = "artix7" *) 
   (* C_HAS_CLK = "1" *) 
@@ -54,11 +57,11 @@ module Result_dist_mem_gen
   (* c_depth = "16" *) 
   (* c_elaboration_dir = "./" *) 
   (* c_has_i_ce = "0" *) 
-  (* c_has_qspo = "0" *) 
+  (* c_has_qspo = "1" *) 
   (* c_has_qspo_ce = "0" *) 
-  (* c_has_qspo_rst = "0" *) 
+  (* c_has_qspo_rst = "1" *) 
   (* c_has_qspo_srst = "0" *) 
-  (* c_has_spo = "1" *) 
+  (* c_has_spo = "0" *) 
   (* c_mem_init_file = "no_coe_file_loaded" *) 
   (* c_parser_type = "1" *) 
   (* c_pipeline_stages = "0" *) 
@@ -79,11 +82,11 @@ module Result_dist_mem_gen
         .qdpo_clk(1'b0),
         .qdpo_rst(1'b0),
         .qdpo_srst(1'b0),
-        .qspo(NLW_U0_qspo_UNCONNECTED[15:0]),
+        .qspo(qspo),
         .qspo_ce(1'b1),
-        .qspo_rst(1'b0),
+        .qspo_rst(qspo_rst),
         .qspo_srst(1'b0),
-        .spo(spo),
+        .spo(NLW_U0_spo_UNCONNECTED[15:0]),
         .we(we));
 endmodule
 
@@ -92,8 +95,8 @@ endmodule
 (* C_HAS_D = "1" *) (* C_HAS_DPO = "0" *) (* C_HAS_DPRA = "0" *) 
 (* C_HAS_I_CE = "0" *) (* C_HAS_QDPO = "0" *) (* C_HAS_QDPO_CE = "0" *) 
 (* C_HAS_QDPO_CLK = "0" *) (* C_HAS_QDPO_RST = "0" *) (* C_HAS_QDPO_SRST = "0" *) 
-(* C_HAS_QSPO = "0" *) (* C_HAS_QSPO_CE = "0" *) (* C_HAS_QSPO_RST = "0" *) 
-(* C_HAS_QSPO_SRST = "0" *) (* C_HAS_SPO = "1" *) (* C_HAS_WE = "1" *) 
+(* C_HAS_QSPO = "1" *) (* C_HAS_QSPO_CE = "0" *) (* C_HAS_QSPO_RST = "1" *) 
+(* C_HAS_QSPO_SRST = "0" *) (* C_HAS_SPO = "0" *) (* C_HAS_WE = "1" *) 
 (* C_MEM_INIT_FILE = "no_coe_file_loaded" *) (* C_MEM_TYPE = "1" *) (* C_PARSER_TYPE = "1" *) 
 (* C_PIPELINE_STAGES = "0" *) (* C_QCE_JOINED = "0" *) (* C_QUALIFY_WE = "0" *) 
 (* C_READ_MIF = "0" *) (* C_REG_A_D_INPUTS = "0" *) (* C_REG_DPRA_INPUT = "0" *) 
@@ -138,7 +141,8 @@ module Result_dist_mem_gen_dist_mem_gen_v8_0_12
   wire [3:0]a;
   wire clk;
   wire [15:0]d;
-  wire [15:0]spo;
+  wire [15:0]qspo;
+  wire qspo_rst;
   wire we;
 
   assign dpo[15] = \<const0> ;
@@ -173,239 +177,248 @@ module Result_dist_mem_gen_dist_mem_gen_v8_0_12
   assign qdpo[2] = \<const0> ;
   assign qdpo[1] = \<const0> ;
   assign qdpo[0] = \<const0> ;
-  assign qspo[15] = \<const0> ;
-  assign qspo[14] = \<const0> ;
-  assign qspo[13] = \<const0> ;
-  assign qspo[12] = \<const0> ;
-  assign qspo[11] = \<const0> ;
-  assign qspo[10] = \<const0> ;
-  assign qspo[9] = \<const0> ;
-  assign qspo[8] = \<const0> ;
-  assign qspo[7] = \<const0> ;
-  assign qspo[6] = \<const0> ;
-  assign qspo[5] = \<const0> ;
-  assign qspo[4] = \<const0> ;
-  assign qspo[3] = \<const0> ;
-  assign qspo[2] = \<const0> ;
-  assign qspo[1] = \<const0> ;
-  assign qspo[0] = \<const0> ;
+  assign spo[15] = \<const0> ;
+  assign spo[14] = \<const0> ;
+  assign spo[13] = \<const0> ;
+  assign spo[12] = \<const0> ;
+  assign spo[11] = \<const0> ;
+  assign spo[10] = \<const0> ;
+  assign spo[9] = \<const0> ;
+  assign spo[8] = \<const0> ;
+  assign spo[7] = \<const0> ;
+  assign spo[6] = \<const0> ;
+  assign spo[5] = \<const0> ;
+  assign spo[4] = \<const0> ;
+  assign spo[3] = \<const0> ;
+  assign spo[2] = \<const0> ;
+  assign spo[1] = \<const0> ;
+  assign spo[0] = \<const0> ;
   GND GND
        (.G(\<const0> ));
   Result_dist_mem_gen_dist_mem_gen_v8_0_12_synth \synth_options.dist_mem_inst 
        (.a(a),
         .clk(clk),
         .d(d),
-        .spo(spo),
+        .qspo(qspo),
+        .qspo_rst(qspo_rst),
         .we(we));
 endmodule
 
 (* ORIG_REF_NAME = "dist_mem_gen_v8_0_12_synth" *) 
 module Result_dist_mem_gen_dist_mem_gen_v8_0_12_synth
-   (spo,
+   (qspo,
     clk,
     d,
     we,
-    a);
-  output [15:0]spo;
+    a,
+    qspo_rst);
+  output [15:0]qspo;
   input clk;
   input [15:0]d;
   input we;
   input [3:0]a;
+  input qspo_rst;
 
   wire [3:0]a;
   wire clk;
   wire [15:0]d;
-  wire [15:0]spo;
+  wire [15:0]qspo;
+  wire qspo_rst;
   wire we;
 
   Result_dist_mem_gen_spram \gen_sp_ram.spram_inst 
        (.a(a),
         .clk(clk),
         .d(d),
-        .spo(spo),
+        .qspo(qspo),
+        .qspo_rst(qspo_rst),
         .we(we));
 endmodule
 
 (* ORIG_REF_NAME = "spram" *) 
 module Result_dist_mem_gen_spram
-   (spo,
+   (qspo,
     clk,
     d,
     we,
-    a);
-  output [15:0]spo;
+    a,
+    qspo_rst);
+  output [15:0]qspo;
   input clk;
   input [15:0]d;
   input we;
   input [3:0]a;
+  input qspo_rst;
 
   wire [3:0]a;
   wire clk;
   wire [15:0]d;
+  wire [15:0]qspo_input;
   (* RTL_KEEP = "true" *) wire [15:0]qspo_int;
-  wire [15:0]spo;
+  wire qspo_rst;
   wire we;
 
+  assign qspo[15:0] = qspo_int;
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[0] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[0]),
-        .Q(qspo_int[0]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[0]),
+        .Q(qspo_int[0]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[10] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[10]),
-        .Q(qspo_int[10]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[10]),
+        .Q(qspo_int[10]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[11] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[11]),
-        .Q(qspo_int[11]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[11]),
+        .Q(qspo_int[11]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[12] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[12]),
-        .Q(qspo_int[12]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[12]),
+        .Q(qspo_int[12]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[13] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[13]),
-        .Q(qspo_int[13]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[13]),
+        .Q(qspo_int[13]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[14] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[14]),
-        .Q(qspo_int[14]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[14]),
+        .Q(qspo_int[14]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[15] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[15]),
-        .Q(qspo_int[15]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[15]),
+        .Q(qspo_int[15]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[1] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[1]),
-        .Q(qspo_int[1]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[1]),
+        .Q(qspo_int[1]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[2] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[2]),
-        .Q(qspo_int[2]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[2]),
+        .Q(qspo_int[2]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[3] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[3]),
-        .Q(qspo_int[3]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[3]),
+        .Q(qspo_int[3]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[4] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[4]),
-        .Q(qspo_int[4]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[4]),
+        .Q(qspo_int[4]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[5] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[5]),
-        .Q(qspo_int[5]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[5]),
+        .Q(qspo_int[5]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[6] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[6]),
-        .Q(qspo_int[6]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[6]),
+        .Q(qspo_int[6]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[7] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[7]),
-        .Q(qspo_int[7]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[7]),
+        .Q(qspo_int[7]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[8] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[8]),
-        .Q(qspo_int[8]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[8]),
+        .Q(qspo_int[8]));
   (* KEEP = "yes" *) 
   (* equivalent_register_removal = "no" *) 
-  FDRE #(
+  FDCE #(
     .INIT(1'b0)) 
     \qspo_int_reg[9] 
        (.C(clk),
         .CE(1'b1),
-        .D(spo[9]),
-        .Q(qspo_int[9]),
-        .R(1'b0));
+        .CLR(qspo_rst),
+        .D(qspo_input[9]),
+        .Q(qspo_int[9]));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
   RAM32X1S #(
     .INIT(32'h00000000)) 
@@ -416,7 +429,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[0]),
-        .O(spo[0]),
+        .O(qspo_input[0]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -429,7 +442,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[10]),
-        .O(spo[10]),
+        .O(qspo_input[10]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -442,7 +455,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[11]),
-        .O(spo[11]),
+        .O(qspo_input[11]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -455,7 +468,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[12]),
-        .O(spo[12]),
+        .O(qspo_input[12]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -468,7 +481,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[13]),
-        .O(spo[13]),
+        .O(qspo_input[13]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -481,7 +494,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[14]),
-        .O(spo[14]),
+        .O(qspo_input[14]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -494,7 +507,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[15]),
-        .O(spo[15]),
+        .O(qspo_input[15]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -507,7 +520,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[1]),
-        .O(spo[1]),
+        .O(qspo_input[1]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -520,7 +533,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[2]),
-        .O(spo[2]),
+        .O(qspo_input[2]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -533,7 +546,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[3]),
-        .O(spo[3]),
+        .O(qspo_input[3]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -546,7 +559,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[4]),
-        .O(spo[4]),
+        .O(qspo_input[4]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -559,7 +572,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[5]),
-        .O(spo[5]),
+        .O(qspo_input[5]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -572,7 +585,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[6]),
-        .O(spo[6]),
+        .O(qspo_input[6]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -585,7 +598,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[7]),
-        .O(spo[7]),
+        .O(qspo_input[7]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -598,7 +611,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[8]),
-        .O(spo[8]),
+        .O(qspo_input[8]),
         .WCLK(clk),
         .WE(we));
   (* XILINX_LEGACY_PRIM = "RAM16X1S" *) 
@@ -611,7 +624,7 @@ module Result_dist_mem_gen_spram
         .A3(a[3]),
         .A4(1'b0),
         .D(d[9]),
-        .O(spo[9]),
+        .O(qspo_input[9]),
         .WCLK(clk),
         .WE(we));
 endmodule
