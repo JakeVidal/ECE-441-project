@@ -33,7 +33,6 @@ use IEEE.NUMERIC_STD.ALL;
 entity input_driver is
     port (
         ----------------------INPUTS-----------------------------------------------
-        clk                     : in STD_LOGIC;
         in_input_value          : in STD_LOGIC_VECTOR (15 downto 0);
         in_input_button         : in STD_LOGIC;
         in_reset_button         : in STD_LOGIC;
@@ -59,7 +58,7 @@ begin
 
 ------------------STATE MACHINE------------------------------------
 
-    state_machine: process(clk, in_reset_button, in_input_button) is
+    state_machine: process(in_reset_button, in_input_button) is
     begin
         -- If the reset button is pressed, at ANY time, reset the mode to mode_begin, which is our starting mode
         if (in_reset_button = '1') then
