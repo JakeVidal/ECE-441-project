@@ -147,7 +147,6 @@ begin
     ---------------------- MODULE PORT MAPS -----------------------------------------------
 
     input_driver_map: input_driver port map (
-        clk                     => input_clk,
         in_input_value          => switches,
         in_input_button         => input,
         in_reset_button         => reset,
