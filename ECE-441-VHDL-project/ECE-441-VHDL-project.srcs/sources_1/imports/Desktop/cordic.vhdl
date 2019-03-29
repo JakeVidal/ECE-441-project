@@ -61,6 +61,7 @@ begin
 	begin
 		if (in_reset = '1') then
 		    state <= mode_idle; 
+		    x_current     <= (others => '0'); 
             y_current     <= (others => '0'); 
             z_current     <= (others => '0'); 
             out_x_result  <= (others => '0'); 
@@ -156,6 +157,7 @@ begin
                         state <= mode_calculate;
                     end if;   
                 when mode_completed =>
+                    x_current     <= (others => '0'); 
                     y_current     <= (others => '0'); 
                     z_current     <= (others => '0'); 
                     out_x_result  <= (others => '0'); 
