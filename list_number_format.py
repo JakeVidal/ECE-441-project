@@ -1,6 +1,4 @@
-
 import math
-
 
 thetas = []
 print("Thetas:")
@@ -10,7 +8,6 @@ for i in range(0, 16):
 	thetas.append(theta)
 	print(theta)
 	
-#thetas = [0.7854, 0.4636, 0.245, 0.1244, 0.0624, 0.0312, 0.0156, 0.0078, 0.0039, 0.002, 0.00098, 0.00049, 0.00024, 0.00012, 0.000061, 0.000031]
 
 hex_thetas = []
 print("Hex value bit shifted thetas")
@@ -28,6 +25,9 @@ for theta in thetas:
 	hex_thetas.append(output_value & 0xffff)
 	output_value = hex(output_value)
 	print(output_value)
+	
+	
+#thetas = [0.7854, 0.4636, 0.245, 0.1244, 0.0624, 0.0312, 0.0156, 0.0078, 0.0039, 0.002, 0.00098, 0.00049, 0.00024, 0.00012, 0.000061, 0.000031]
 	
 testdata = 0x2183
 print(hex(testdata))
