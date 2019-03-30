@@ -23,7 +23,7 @@ architecture testbench of cordic_tb is
       
       constant clk_period      : time := 10ns; --100MHz clock
       constant clk_half_period : time := clk_period / 2;
-      constant cordic_time     : time := 350ns; -- ammount of time cordic takes to execute.
+      constant cordic_time     : time := 350ns; -- ammount of time cordic takes to execute, with extra time.
 
 begin
     UUT : entity work.CORDIC port map (
@@ -43,6 +43,7 @@ begin
        out_iteration_complete    =>    out_iteration_complete 
     );
     
+    -- process that generates the clock used for the simulation
     clk_process :process
     begin
          in_clock <= '0';
@@ -53,11 +54,15 @@ begin
     --in_clock <= not in_clock after clk_half_period; -- tick the clock every 10ns (High for 5ns, Low for 5ns)
     
     testbench: process
+    -- Running through the 8 selections posted on the project website
     begin
-        -- Rotation
-    
+        -- keep the start signal high
+        in_start <= '1';
+        
+        -- first four tests are cordic_mode = 0 = rotation
         in_cordic_mode <= '0', '1' after (4 * cordic_time);
         
+        -- Load in the new data for every cordic cycle
         in_x_initial <= x"4000" after (0 * cordic_time),
                         x"376D" after (1 * cordic_time),
                         x"2000" after (2 * cordic_time),
@@ -68,7 +73,6 @@ begin
                         x"2000" after (7 * cordic_time),
                         x"376D" after (8 * cordic_time);
                         
-        
         in_y_initial <= x"0000" after (0 * cordic_time),
                         x"2000" after (1 * cordic_time),
                         x"376D" after (2 * cordic_time),
@@ -81,7 +85,7 @@ begin
                         
         in_z_initial <= x"2183" after (0 * cordic_time),                                                   
                         x"10C1" after (1 * cordic_time),
-                        x"10C1" after (2 * cordic_time), -- x"4305"
+                        x"4305" after (2 * cordic_time),
                         x"2183" after (3 * cordic_time),
                         
                         x"0000" after (5 * cordic_time),
@@ -89,8 +93,8 @@ begin
                         x"0000" after (7 * cordic_time),
                         x"0000" after (8 * cordic_time);
         
-        
-        in_start <= '0', '1' after (0 * cordic_time + 10ns), '0' after (0 * cordic_time + 20ns),
+        -- Reset cordic to run next test.
+        in_reset <= '0', '1' after (0 * cordic_time + 10ns), '0' after (0 * cordic_time + 20ns),
                          '1' after (1 * cordic_time + 10ns), '0' after (1 * cordic_time + 20ns),
                          '1' after (2 * cordic_time + 10ns), '0' after (2 * cordic_time + 20ns),
                          '1' after (3 * cordic_time + 10ns), '0' after (3 * cordic_time + 20ns),
@@ -99,8 +103,7 @@ begin
                          '1' after (7 * cordic_time + 10ns), '0' after (7 * cordic_time + 20ns),
                          '1' after (8 * cordic_time + 10ns), '0' after (8 * cordic_time + 20ns);
                          
-                         
-        
+
         wait;  -- indefinitely suspend process
     end process;
 end testbench;
