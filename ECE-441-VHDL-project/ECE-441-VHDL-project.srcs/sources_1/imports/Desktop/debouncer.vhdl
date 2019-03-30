@@ -88,9 +88,9 @@ process (state) -- PROCESS to define the Moore outputs of the debouncer state ma
 begin 
    case state is
       when wait_for_push => PB_out <= '0';
-      when push_detected => PB_out <= '0';	
-      when wait_for_release => PB_out <= '1';	
-      when release_detected => PB_out <= '0';	
+      when push_detected => PB_out <= '0';  
+      when wait_for_release => PB_out <= '1';   
+      when release_detected => PB_out <= '0';   
    end case;
 end process;
 

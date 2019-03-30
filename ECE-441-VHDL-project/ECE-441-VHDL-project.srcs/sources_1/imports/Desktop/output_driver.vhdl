@@ -28,7 +28,7 @@ end output_driver;
 
 architecture behavioural of output_driver is
 
-	component Result_dist_mem_gen is
+    component Result_dist_mem_gen is
         port (
             a                         : in STD_LOGIC_VECTOR(3 DOWNTO 0);
             d                         : in STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -64,7 +64,7 @@ architecture behavioural of output_driver is
 begin
 
     -------------------------------MEMORY PORT MAPS--------------------------------
-	x_result_storage: Result_dist_mem_gen port map (
+    x_result_storage: Result_dist_mem_gen port map (
     a               =>   ram_address,
     d               =>   STD_LOGIC_VECTOR(x_result),
     clk             =>   clk,

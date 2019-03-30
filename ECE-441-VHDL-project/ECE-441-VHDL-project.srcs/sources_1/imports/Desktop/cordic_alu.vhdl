@@ -9,16 +9,16 @@ use ieee.numeric_std.all;
 entity cordic_alu is 
 
     Port (
-        trigger		:	in	std_logic;
-        x_in        :	in	signed ( 15 downto 0 );
-        y_in        :   in	signed ( 15 downto 0 );
-        z_in        :   in	signed ( 15 downto 0 );
+        trigger     :   in  std_logic;
+        x_in        :   in  signed ( 15 downto 0 );
+        y_in        :   in  signed ( 15 downto 0 );
+        z_in        :   in  signed ( 15 downto 0 );
         theta       :   in  signed ( 15 downto 0 );
-        i		    :   in 	std_logic_vector (  3 downto 0 );
-        mu			:	in	std_logic;
-        x_out       :	out	signed ( 15 downto 0 )                := (others => '0');
-        y_out       :	out	signed ( 15 downto 0 )                := (others => '0');
-        z_out       :	out	signed ( 15 downto 0 )                := (others => '0')
+        i           :   in  std_logic_vector (  3 downto 0 );
+        mu          :   in  std_logic;
+        x_out       :   out signed ( 15 downto 0 )                := (others => '0');
+        y_out       :   out signed ( 15 downto 0 )                := (others => '0');
+        z_out       :   out signed ( 15 downto 0 )                := (others => '0')
     );
 end cordic_alu;
 
@@ -29,7 +29,7 @@ begin
 
     x_calc: process ( trigger ) is
         variable tempx: signed (15 downto 0);
-    begin	
+    begin   
         if rising_edge(trigger) then
             
             tempx := shift_right(y_in, to_integer(unsigned(i)));

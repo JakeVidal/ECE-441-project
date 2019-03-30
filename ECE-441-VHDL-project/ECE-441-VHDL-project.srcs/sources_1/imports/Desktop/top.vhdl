@@ -3,14 +3,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity top is
-	port (
-	       ----------------------INPUTS-----------------------------------------------
+    port (
+           ----------------------INPUTS-----------------------------------------------
            input_clk                    : in STD_LOGIC;
            undebounced_reset_button     : in STD_LOGIC;
            undebounced_input_button     : in STD_LOGIC;
            undebounced_switches         : in STD_LOGIC_VECTOR (15 downto 0);
            
-	       ----------------------OUTPUTS---------------------------------------------- 
+           ----------------------OUTPUTS---------------------------------------------- 
            led                      : out STD_LOGIC_VECTOR (15 downto 0);
            anode                    : out STD_LOGIC_VECTOR (3 downto 0);
            segment                  : out STD_LOGIC_VECTOR (6 downto 0)
@@ -21,7 +21,7 @@ entity top is
            --test_y_result            : out SIGNED (15 downto 0);
            --test_z_result            : out SIGNED (15 downto 0);
            --test_iteration           : out UNSIGNED (3 downto 0)
-		);
+        );
 end top;
 
 architecture behaviour of top is
