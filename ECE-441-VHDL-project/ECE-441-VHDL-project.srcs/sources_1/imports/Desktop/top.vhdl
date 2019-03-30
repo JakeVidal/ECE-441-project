@@ -13,14 +13,14 @@ entity top is
 	       ----------------------OUTPUTS---------------------------------------------- 
            led                      : out STD_LOGIC_VECTOR (15 downto 0);
            anode                    : out STD_LOGIC_VECTOR (3 downto 0);
-           segment                  : out STD_LOGIC_VECTOR (6 downto 0)
+           segment                  : out STD_LOGIC_VECTOR (6 downto 0);
            
            ---------------------TEST OUTPUTS------------------------------------------
-           --test_data_ready          : out STD_LOGIC;
-           --test_x_result            : out SIGNED (15 downto 0);
-           --test_y_result            : out SIGNED (15 downto 0);
-           --test_z_result            : out SIGNED (15 downto 0);
-           --test_iteration           : out UNSIGNED (3 downto 0)
+           test_data_ready          : out STD_LOGIC;
+           test_x_result            : out SIGNED (15 downto 0);
+           test_y_result            : out SIGNED (15 downto 0);
+           test_z_result            : out SIGNED (15 downto 0);
+           test_iteration           : out UNSIGNED (3 downto 0)
 		);
 end top;
 
@@ -189,10 +189,10 @@ begin
         segment                 => segment
     );
 
-    --test_data_ready <= complete_transfer;
-    --test_x_result   <= out_x_transfer;
-    --test_y_result   <= out_y_transfer;
-    --test_z_result   <= out_z_transfer; 
-    --test_iteration  <= iteration_transfer;
+    test_data_ready <= complete_transfer;
+    test_x_result   <= out_x_transfer;
+    test_y_result   <= out_y_transfer;
+    test_z_result   <= out_z_transfer; 
+    test_iteration  <= iteration_transfer;
     
 end behaviour;

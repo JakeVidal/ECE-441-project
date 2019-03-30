@@ -23,8 +23,6 @@ architecture testbench of top_tb is
 
       constant clk_period      : time := 10ns; --100MHz clock
       constant clk_half_period : time := clk_period / 2;
-      constant start_time      : time := 600ns;
-      constant cordic_time     : time := 350ns; -- ammount of time cordic takes to execute.
       constant display_time    : time := 1280ns;
 
 begin
@@ -55,9 +53,9 @@ begin
     testbench: process
     begin
     
-        undebounced_reset <= '0';
-        sw <= x"0000";
-        input_button <= '0';
+--        undebounced_reset <= '0';
+--        sw <= x"0000";
+--        input_button <= '0';
         
         -- TRANSITION FROM BEGIN TO INPUT_X
         -- at 50ns move to state state_input_x
@@ -102,7 +100,7 @@ begin
         -- TRANSITION FROM INPUT_CORDIC_MODE to START_CORDIC and save CORDIC_MODE
         wait for 25ns;
         -- at 125ns, place a value on input vector
-        sw <= x"0011"; -- check that we get the LSB and not the whole thing
+        sw <= x"0000"; -- check that we get the LSB and not the whole thing
         wait for 25ns;
         -- at 150ns, move save value and move to state_input_y
         input_button <= '1';
@@ -117,8 +115,13 @@ begin
         wait for 50ns;
         input_button <= '0';
         
+        wait for 50ns;
+        input_button <= '1';
+        wait for 50ns; 
+        input_button <= '0';
+        
         sw <= x"0000";
-        wait for 685ns;
+        wait for 585ns;
         
         sw(9) <= '1';
         wait for display_time;

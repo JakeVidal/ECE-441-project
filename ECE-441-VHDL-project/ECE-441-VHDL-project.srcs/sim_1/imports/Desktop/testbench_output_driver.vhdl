@@ -60,9 +60,9 @@ begin
         -- note that this timing relies on a hex driver altered to have a much faster refresh rate
         reset <= '0';
         
-        x_result <= x"DEAD";
-        y_result <= x"BEEF";
-        z_result <= x"FACE";
+        x_result <= x"ABAB";
+        y_result <= x"CDCD";
+        z_result <= x"EFEF";
         iteration <= "1110", "1111" after 20ns;
         
         data_ready <= '0', '1' after 10ns, '0' after 20ns;
