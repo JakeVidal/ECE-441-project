@@ -1,0 +1,28 @@
+{signal: [
+  [ 'Inputs',
+   {name: 'CLK', wave:         "p........"},
+   {name: 'RESET', wave:       "l|..H|l.."},
+  ],
+   {},
+  [ 'Internal',
+   {name: 'STATE', wave:       "x|..=|...", data: [ "IDLE"]},
+   {name: 'ITERATION', wave:   "x|..=|...", data: [ "0x0000"]},
+   {name: 'X_ALU_INPUT', wave: "x|..=|...", data: [ "0x0000"]},
+   {name: 'Y_ALU_INPUT', wave: "x|..=|...", data: [ "0x0000"]},
+   {name: 'Z_ALU_INPUT', wave: "x|..=|...", data: [ "0x0000"]},
+   {name: 'X_CURRENT', wave:   "x|..=|...", data: [ "0x0000"]},
+   {name: 'Y_CURRENT', wave:   "x|..=|...", data: [ "0x0000"]},
+   {name: 'Z_CURRENT', wave:   "x|..=|...", data: [ "0x0000"]},
+   {name: 'THETA', wave:       "x|..=|...", data: [ "0x0000"]},
+   {name: 'MU', wave:          "h|..l|...", }
+   
+  ],
+   {},
+  [ 'Outputs',
+   {name: 'X_RESULT', wave:    "x|..=|...", data: [ "0x0000"]},
+   {name: 'Y_RESULT', wave:    "x|..=|...", data: [ "0x0000"]},
+   {name: 'Z_RESULT', wave:    "x|..=|...", data: [ "0x0000"]},
+   {name: 'ITERATION', wave:   "x|..=|...", data: [ "0x0000"]},
+   {name: 'DATA_READY', wave:  "h|..l|...", }
+  ],
+]}
