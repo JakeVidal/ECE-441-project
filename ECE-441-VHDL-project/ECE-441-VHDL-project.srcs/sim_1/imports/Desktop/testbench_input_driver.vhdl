@@ -7,7 +7,6 @@ entity input_driver_tb is
 end input_driver_tb;
 
 architecture tb of input_driver_tb is
-    signal clk                       : STD_LOGIC;
     signal in_reset                  : STD_LOGIC;
     signal input_button              : STD_LOGIC;
 
@@ -26,8 +25,7 @@ architecture tb of input_driver_tb is
 begin
 
     UUT : entity work.input_driver port map (
-    --  input_driver sig    tb signals
-        clk                 => clk,                               
+    --  input_driver sig    tb signals                       
         in_reset_button     => in_reset,
         in_input_button     => input_button,               
         in_input_value      => input_vector,         
@@ -38,15 +36,6 @@ begin
         out_cordic_mode     => cordic_mode, 
         out_start_cordic    => start_cordic      
     );
-
-    clk_process: process
-    begin
-         clk <= '0';
-         wait for clk_half_period;  --for half of clock period clk stays at '0'.
-         clk <= '1';
-         wait for clk_half_period;  --for next half of clock period clk stays at '1'.
-    end process;
-    --in_clock <= not in_clock after clk_half_period; -- tick the clock every 10ns (High for 5ns, Low for 5ns)
 
     testbench: process
     begin

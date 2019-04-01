@@ -99,9 +99,9 @@ begin
 
         if (reset = '1') then
             selected_value <= x"0000";
-        --end if;
+
         else
-            if rising_edge(clk) then
+            if rising_edge(clk) then -- use the user inputs to determine which RAM module to read a value from 
                 if (state = mode_read) then
                     if (x_select = '1') then
                         selected_value <= x_stored_value;
@@ -121,21 +121,20 @@ begin
 
         if (reset = '1') then
             state <= mode_write;
-            -- clear ram
-        --end if;
+
         else
-            if rising_edge(clk) then
+            if rising_edge(clk) then 
                 case state is
-                    when mode_write => 
+                    when mode_write => -- When the CORDIC is processing, feed inputs from the CORDIC into the RAM
                         write_enable <= data_ready;
                         ram_address <= STD_LOGIC_VECTOR(iteration);
                         start_display <= '0';
                         
-                        if (iteration = "1111") then
+                        if (iteration = "1111") then -- after the CORDIC completes its last iteration, change states
                             state <= mode_read;
                         end if;
                         
-                    when mode_read => 
+                    when mode_read => -- Once the CORDIC is done processing, route user inputs into the RAM
                         write_enable <= '0';
                         ram_address <= iteration_select;
                         start_display <= '1';

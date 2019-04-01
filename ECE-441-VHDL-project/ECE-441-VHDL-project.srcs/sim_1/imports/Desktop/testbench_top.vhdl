@@ -35,12 +35,12 @@ begin
        undebounced_switches     =>    sw,
        led                      =>    led,
        anode                    =>    anode,
-       segment                  =>    segment, 
-       test_data_ready          =>    test_data_ready,    
-       test_x_result            =>    test_x_result,
-       test_y_result            =>    test_y_result,
-       test_z_result            =>    test_z_result,
-       test_iteration           =>    test_iteration
+       segment                  =>    segment 
+       --test_data_ready          =>    test_data_ready,    
+       --test_x_result            =>    test_x_result,
+       --test_y_result            =>    test_y_result,
+       --test_z_result            =>    test_z_result,
+       --test_iteration           =>    test_iteration
     );
     
     clk_process :process
@@ -119,7 +119,7 @@ begin
         
         sw <= x"0000";
         wait for 685ns;
-        
+        -- View the x input of the first CORDIC iteration
         sw(9) <= '1';
         wait for display_time;
         sw(9) <= '0';
@@ -131,7 +131,7 @@ begin
         sw(11) <= '0';
         
         sw(15 downto 12) <= "0010";
-        
+        -- View the y input of the first CORDIC iteration
         sw(9) <= '1';
         wait for display_time;
         sw(9) <= '0';
@@ -143,7 +143,7 @@ begin
         sw(11) <= '0';
         
         sw(15 downto 12) <= "0100";
-        
+        -- View the z input of the first CORDIC iteration
         sw(9) <= '1';
         wait for display_time;
         sw(9) <= '0';
@@ -153,11 +153,6 @@ begin
         sw(11) <= '1';
         wait for display_time;
         sw(11) <= '0';
-        
---        sw(15 downto 12) <= "0010" after (4*display_time + 5ns), "0100" after (7*display_time + 5ns); -- iteration select
---        sw(9)  <= '1' after (display_time + 5ns), '0' after (2*display_time + 5ns), '1' after (4*display_time + 5ns), '0' after (5*display_time + 5ns), '1' after (7*display_time + 5ns), '0' after (8*display_time + 5ns); -- X, Y, Z select
---        sw(10) <= '1' after (2*display_time + 5ns), '0' after (3*display_time + 5ns), '1' after (5*display_time + 5ns), '0' after (6*display_time + 5ns), '1' after (8*display_time + 5ns), '0' after (9*display_time + 5ns);
---        sw(11) <= '1' after (3*display_time + 5ns), '0' after (4*display_time + 5ns), '1' after (6*display_time + 5ns), '0' after (7*display_time + 5ns), '1' after (9*display_time + 5ns), '0' after (10*display_time + 5ns);
 
         wait;  -- indefinitely suspend process
     end process;
